@@ -1,0 +1,3 @@
+/home/miso22/BP/Bakalarka/examples/posix_demo/build/CMakeFiles/posix_demo.dir
+/home/miso22/BP/Bakalarka/examples/posix_demo/build/CMakeFiles/edit_cache.dir
+/home/miso22/BP/Bakalarka/examples/posix_demo/build/CMakeFiles/rebuild_cache.dir

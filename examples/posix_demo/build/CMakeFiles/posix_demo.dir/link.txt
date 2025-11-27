@@ -1,0 +1,1 @@
+/usr/bin/cc -rdynamic CMakeFiles/posix_demo.dir/main.c.o -o posix_demo  -lcontext_lib 
