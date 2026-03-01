@@ -5,14 +5,14 @@
 @brief: initial file for testing and running library
 */
 #include "../../include/main/context_manager.h"
+#include "../../platform/posix/context_lib_port.h"
 #include <stdio.h> //this would be better if wasn't here
+#include <stdbool.h> //this would be better if it wasn't here
 
-void lib_init()
-{}
+//oh no why my code not working ooga booga
 
-//this is generalized function, containing logic that does some work
-void blink_led() 
-{
-   puts("PLATFORM INDEPENDEND LOGIC");
-   platform_toggle_led();  //this is call  to the function that must be implemented for specific platform
-}
+
+/*
+* this file currently doesn't contain anything as it is used for ongoing development
+* and finished stuff gets moved to other files
+*/

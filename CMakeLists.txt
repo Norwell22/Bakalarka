@@ -3,6 +3,12 @@ project(MyLib C)
 
 add_library(context_lib
     src/main/context_manager.c
+    src/main/l1_private.c
+    src/main/l1_public.c
+    src/main/l2_private.c
+    src/main/l2_public.c
+    src/main/l3.c
+    src/main/helper_functions.c
     platform/posix/context_lib_port.c
 )
 
