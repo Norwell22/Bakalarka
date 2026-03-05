@@ -9,6 +9,7 @@ Very important will be architecture choice
 Don't forget to allow/block raw functions
 Turn logging on-off
 Probably some lightweight version
+Turn on off L2 and L3
 
 ## Layer 1
 Layer 1 refers to most low-level library layer. Its goal is basically to move data from one place to another
@@ -50,6 +51,12 @@ In one sentence: now I can write and load data across different memory areas wit
  - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
  - L3 meta-meta data: **current mode**, **number of areas**
  - change it so that end address is actually end address
+ - with all that recursive crap deal in form of table: [area-mode-target area]
+ - load function should merge consecutive blocks with id=0
+ - TODO: if save function runs into its own ID, it should probably break or overwrite it
+ - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
+ - share library with Strnadel
+ - add tests for different types of context
 
 ## Requirements
  - deal with CMake version
@@ -65,3 +72,9 @@ In one sentence: now I can write and load data across different memory areas wit
         loading, its a problem
  - similarily, problem with A->B->C loading in case A and B are turned off: for every saved/loading area, there needs to be proper algorithm for choosing destination. That should not be super hard and should fix the problem quite well.
  - it will probably pose a big issue to reinitialize destination areas after they are deleted: in turn_on, this should probably happen
+ ## Versioning
+ MAJOR:MINOR:PATCH
+ MAJOR: if you change API in significant way, for non finished project use 0
+ MINOR: if you add some big functionality
+ PATCH: change to implementation of something, bug fix etc.
+

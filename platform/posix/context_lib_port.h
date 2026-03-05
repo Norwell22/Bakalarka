@@ -27,6 +27,8 @@ extern cl_int_t CL_PROTECTED_MEM[10];
 extern cl_int_t LRAM[1024];
 //saving data into HRAM specifically should be possible using __attribute__
 extern cl_int_t HRAM[1024];
+// beetter protected  register file
+extern cl_int_t REGISTER_FILE2[256];
 //saving data into register file will be done using direct write
 extern cl_int_t REGISTER_FILE[128];
 //saving data into outside memory will be done using special function
@@ -35,6 +37,11 @@ extern cl_int_t OUTSIDE2[256];
 
 
 // add peripherals here
+extern cl_int_t GPIO_REGS[16];
+extern cl_int_t UART0_REGS[8];
+extern cl_int_t SPI0_REGS[6];
+extern cl_int_t I2C0_REGS[6];
+extern cl_int_t TIMER0_REGS[10];
 
 // In real scenario, these definitions would be replaced by:
 // extern cl_int_t MA
@@ -43,12 +50,17 @@ extern cl_int_t OUTSIDE2[256];
 // metadata which should be saved into RF
 extern const Cl_memory_area_t ma255;
 
+// better protected register file
+extern const Cl_memory_area_t ma2;
+
 // Register file memory
 extern const Cl_memory_area_t ma1;
 
 // LRAM memory: pretty stable
 extern const Cl_memory_area_t ma10;
 extern const Cl_memory_area_t ma11;
+extern const Cl_memory_area_t ma12;
+extern const Cl_memory_area_t ma13;
 
 
 // HRAM memory: deleted quite often
