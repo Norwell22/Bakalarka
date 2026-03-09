@@ -1,5 +1,5 @@
-#ifndef INCLUDE_TYPES
-#define INCLUDE_TYPES
+#ifndef CL_INCLUDE_TYPES
+#define CL_INCLUDE_TYPES
 
 /*! 
  * \file      types.h
@@ -162,6 +162,7 @@ typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom
 * \todo This should be refactored: SEND and CUSTOM_SEND merged and name should be
 * changed as this is used for both save and load
 * \todo Port creator or user should probably have option to expand this enum.
+* \todo This could probably be moved into \c context_lib_port.h
 */
 enum Bare_save_type{ RAM_WRITE, SEND, CUSTOM_SEND};
 

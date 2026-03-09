@@ -57,6 +57,11 @@ In one sentence: now I can write and load data across different memory areas wit
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
  - share library with Strnadel
  - add tests for different types of context
+ - make public/private division
+ - for some change mode, maybe clear_mem_area should be called
+ - deal with load/store between different area types
+ - deal with function return types
+ - deal with error handling
 
 ## Requirements
  - deal with CMake version
@@ -78,3 +83,9 @@ In one sentence: now I can write and load data across different memory areas wit
  MINOR: if you add some big functionality
  PATCH: change to implementation of something, bug fix etc.
 
+## AI
+- ChatGPT + Copilot
+- Used for writing several helper functions which are all clearly marked in Doxygen documentation
+- Used as information source: less-known C constructs, best practice for Doxygen
+- Used for writing part of test cases
+- Copilot used when writing tests

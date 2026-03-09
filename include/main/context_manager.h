@@ -1,5 +1,5 @@
-#ifndef CONTEXT_LIB
-#define CONTEXT_LIB
+#ifndef CL_CONTEXT_LIB
+#define CL_CONTEXT_LIB
 
 #include <stdio.h>
 #include "l1.h"

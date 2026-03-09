@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include "context_lib_port.h"
-// #include "../../include/context_manager.h"
 
 /*
 ============ L1 send/receive functions ===========
