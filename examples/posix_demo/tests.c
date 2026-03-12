@@ -1,9 +1,22 @@
-#include <stdio.h>
-#include "../../platform/posix/context_lib_port.h"
+/*! 
+ * \file      tests.c
+ * \brief     Testbench for general version of this library
+ * \details   
+ * Dependencies:
+ - "../../include/main/context_manager.h"
+ - "use_cases.h"
+ * While big part of this library depends on specifics of microcontrollers and their memories,
+ * many functions are designed to be platform independent. This file provides moderately large
+ * set of tests for those functions 
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \pre       Needs to include config.h with valid configuration declarations (TODO)
+ * \note Tests are designed using \a posix pseudo port in mind.
+ * \note While I designed tests in this file, many of them were written using GPT or Copilot
+ * \todo Break this file into several smaller ones
+ */
 #include "../../include/main/context_manager.h"
 #include "use_cases.h"
-
-// while I designed tests in this file, many of them were written using AI (GPT or Copilot)
 
 /*
 ==== Testbench for L1 + L2 ====

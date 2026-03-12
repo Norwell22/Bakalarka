@@ -1,17 +1,18 @@
-// #include "../../platform/posix/context_lib_port.h" now directly included in context_manager.h
-#include <stdio.h>
-// #include "../../platform/posix/context_lib_port.h"
+/*! 
+ * \file      main.c
+ * \brief     Simple file for library testing
+ * \details   
+ * Dependencies:
+ - "../../include/main/context_manager.h"
+ - "use_cases.h"
+ * Helper file used for developing and testing general version of this library
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \pre       Needs to include config.h with valid configuration declarations (TODO)
+ * \note __attribute__((section(".hram_section"))) uint8_t buffer[1024]
+ */
 #include "../../include/main/context_manager.h"
 #include "use_cases.h"
-
-
-/*
-@NOTE
-__attribute__((section(".hram_section"))) uint8_t buffer[1024]
-*/
-
-
-
 
 
 int main() {

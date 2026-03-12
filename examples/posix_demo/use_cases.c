@@ -1,4 +1,19 @@
-
+/*! 
+ * \file      use_cases.c
+ * \brief     Set of expected use cases for this library
+ * \details   
+ * Dependencies:
+ - "../../include/main/context_manager.h"
+ - "use_cases.h"
+ * This file is part of library testbench, expanding upon \c tests.c file. While
+ * that file focused mostly on 
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \pre       Needs to include config.h with valid configuration declarations (TODO)
+ * \note Tests are designed using \a posix pseudo port in mind.
+ * \note While I designed tests in this file, many of them were written using GPT or Copilot
+ * \todo Break this file into several smaller ones
+ */
 #include <stdio.h>
 // #include "../../platform/posix/context_lib_port.h"
 #include "../../include/main/context_manager.h"
