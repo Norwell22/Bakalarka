@@ -1,4 +1,14 @@
-
+/*! 
+ * \file      discarded.c
+ * \brief     Functions written but at the end not used
+ * \details   
+ * Contains set of \a save \a array functions that were not used
+ * because more complex versions of them are part of second layer of this
+ * library
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \todo Get rid of this file
+ */
 
 /*
 from l1_public.c, functions for saving and loading arrays. 

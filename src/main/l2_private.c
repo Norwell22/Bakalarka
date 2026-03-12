@@ -1,11 +1,17 @@
-
-#include "../../include/main/context_manager.h"
+/*! 
+ * \file      l2_private.c
+ * \brief     Part of functions implementing second library layer
+ * \details   
+ * Helper functions for second library
+ * Dependencies:
+ * - "../../include/main/l1.h"
+ * - "../../include/main/l2.h"
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \todo Merge with \c l2_public.c
+ */
 #include "../../include/main/l2.h"
 #include "../../include/main/l1.h"
-// #include "../../platform/posix/context_lib_port.h"
-#include <stdio.h> //this would be better if wasn't here
-#include <stdbool.h> //this would be better if it wasn't here
-
 
 
 cl_save_f_t sel_save_f(enum Bare_save_type save_type)
@@ -32,8 +38,6 @@ cl_load_f_t sel_load_f(enum Bare_save_type save_type)
     }
 }
 
-
-
 cl_int_t fill_block(cl_save_f_t save_f,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d)
 {
     cl_int_t loaded_blocks = 0;
@@ -53,7 +57,6 @@ cl_int_t fill_block(cl_save_f_t save_f,cl_addr_t start_src_a, cl_addr_t end_src_
     }
 }
 
-
 cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d)
 {
     cl_int_t loaded_blocks = 0;
@@ -66,7 +69,6 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
             printf("DEBUG\tload_block\tSome elements were NOT loaded\n");
             return loaded_blocks;
         }
-        // printf("putting %ld where %ld was before\n",*start_dst_a,*start_src_a);
         load_f(start_src_a,start_dst_a,custom_d);
         start_src_a++;
         start_dst_a++;
@@ -74,38 +76,36 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
     }
 }
 
-
 cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type,void *custom_d,uint8_t erase)
 {
     printf("INFO\tload_mem_area\tContext loading from area %ld to %ld started\n",src_area.id,dst_area.id);
     cl_save_f_t save_f = sel_save_f(save_type); // choose low-level technique for storing data
     cl_load_f_t load_f = sel_load_f(save_type); // choose low-level technique for loading data
 
+    cl_int_t block_id, i_next_block_addr, loaded_e;
     cl_int_t id = dst_area.id;
-    cl_int_t block_id;
-    cl_addr_t block_addr = src_area.start_addr;
     cl_addr_t next_block_addr;
-    cl_int_t i_next_block_addr;
+    cl_addr_t block_addr = src_area.start_addr;
     cl_addr_t dst_addr = dst_area.start_addr;
-    cl_int_t loaded_e;
-    while (block_addr < src_area.end_addr){
-        load_f(&block_id,block_addr,custom_d);
-        load_f(&i_next_block_addr, block_addr + 1,custom_d);
+
+    // iterate once for every block 
+    while (block_addr < src_area.end_addr){ // if end of source area is reached, some elements could not be stored
+        load_f(&block_id,block_addr,custom_d); // load id of current block
+        load_f(&i_next_block_addr, block_addr + 1,custom_d); //! load end of the block address 
         next_block_addr = (cl_addr_t)i_next_block_addr;
         printf("DEBUG\tload_mem_area\tCurrent block: ID-%ld Next block address-%ld\n",block_id,(cl_int_t)next_block_addr);
-        if(block_id == id){
-            //dst_addr += load_block(load_f,block_addr + 2,next_block_addr,dst_addr,dst_area.end_addr,custom_d);
+        if(block_id == id){ // matching id, read data in this block
             dst_addr += load_block(load_f, dst_addr,dst_area.end_addr,block_addr + 2,next_block_addr,custom_d);
-            //loaded_e += load_block(load_f,block_addr + 2,next_block_addr,dst_addr,dst_area.end_addr,custom_d);
+            // mark block as invalid (for load, not for read functions)
             if (erase){
                 save_f(0x0,block_addr,custom_d);
             }
-            if (dst_addr == dst_area.end_addr){
+            if (dst_addr == dst_area.end_addr){ // all elements were loaded
                 puts("INFO\tload_mem_area\tSuccessfully loaded all elements\n\n\n");
                 return 0;
             }
         }
-        else{
+        else{ // not matching id, simply skip to next block
             block_addr = next_block_addr;
         }
     }

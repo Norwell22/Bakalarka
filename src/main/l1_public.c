@@ -1,9 +1,21 @@
-#include "../../include/main/context_manager.h"
-#include "../../platform/posix/context_lib_port.h"
-#include <stdio.h> //this would be better if wasn't here
-#include <stdbool.h> //this would be better if it wasn't here
+/*! 
+ * \file      l1_public.c
+ * \brief     Part of functions implementing first library layer
+ * \details   
+ * Dependencies:
+ * - "../../include/main/l1.h"
+ * Implementation for low-level functions needed for this library. For more information
+ * refer to its header file. As for their implementation itself, functions generally just 
+ * read, write and shuffle some bytes
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \todo Merge with \c l1_private.c
+ */
+#include "../../include/main/l1.h"
 
-
+/* 
+* Save functions 
+*/
 
 cl_int_t cl_raw_save_B(uint8_t B, uint8_t *addr, void *not_used)
 {
@@ -22,7 +34,6 @@ cl_int_t cl_raw_custom_send_B(uint8_t B, uint8_t *addr, void *custom_other_data)
    custom_send_byte( B, addr,custom_other_data);
    return 0;
 }
-
 
 cl_int_t cl_raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used)
 {
@@ -65,7 +76,9 @@ cl_int_t cl_raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
     return 0;
 }
 
-
+/*
+* Send functions
+*/
 
 cl_int_t cl_raw_send_w(uint32_t w, uint32_t *addr, void *not_used)
 {
@@ -100,8 +113,6 @@ cl_int_t cl_raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
     return 0;
 }
 
-
-
 cl_int_t cl_raw_send_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
@@ -124,8 +135,6 @@ cl_int_t cl_raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_d
     return 0;
 }
 
-
-//receiving
 cl_int_t cl_raw_load_B(uint8_t *B, uint8_t *addr, void *not_used)
 {
    load_byte( B, addr);
@@ -143,7 +152,6 @@ cl_int_t cl_raw_custom_rcv_B(uint8_t *B, uint8_t *addr, void *custom_other_data)
    custom_rcv_byte( B, addr,custom_other_data);
    return 0;
 }
-
 
 cl_int_t cl_raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used)
 {
@@ -167,8 +175,6 @@ cl_int_t cl_raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *not_used)
     return 0;
 }
 
-
-
 cl_int_t cl_raw_custom_rcv_hw(uint16_t *hw, uint16_t *addr, void *custom_other_data)
 {
     uint8_t *src = (uint8_t*)addr;
@@ -179,7 +185,6 @@ cl_int_t cl_raw_custom_rcv_hw(uint16_t *hw, uint16_t *addr, void *custom_other_d
     *hw =  (uint16_t)b0 | ((uint16_t)b1 << 8);
     return 0;
 }
-
 
 cl_int_t cl_raw_load_w(uint32_t *w, uint32_t *addr, void *not_used)
 {
@@ -276,3 +281,107 @@ cl_int_t cl_raw_custom_rcv_dw(uint64_t *dw, uint64_t *addr, void *custom_other_d
                | ((uint64_t)b4 << 32) | ((uint64_t)b5 << 40)  | ((uint64_t)b6 << 48) | ((uint64_t)b7 << 56);
     return 0;
 }
+
+
+// save element functions are chosen based on architecture size
+#if ARCHITECTURE_BUS_SIZE == 8
+cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_save_B(e,addr,not_used);
+}
+cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_send_B(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_send_B(e,addr,custom_other_data);
+}
+cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_load_B(e,addr,not_used);
+}
+cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_rcv_B(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_rcv_B(e,addr,custom_other_data);
+}
+#elif ARCHITECTURE_BUS_SIZE == 16
+cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_save_hw(e,addr,not_used);
+}
+cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_send_hw(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_send_hw(e,addr,custom_other_data);
+}
+cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_load_hw(e,addr,not_used);
+}
+cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_rcv_hw(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_rcv_hw(e,addr,custom_other_data);
+}
+#elif ARCHITECTURE_BUS_SIZE == 32
+cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_save_w(e,addr,not_used);
+}
+cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_send_w(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_send_w(e,addr,custom_other_data);
+}
+cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_load_w(e,addr,not_used);
+}
+cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_rcv_w(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_rcv_w(e,addr,custom_other_data);
+}
+#elif ARCHITECTURE_BUS_SIZE == 64
+cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_save_dw(e,addr,not_used);
+}
+cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_send_dw(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_send_dw(e,addr,custom_other_data);
+}
+cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_load_dw(e,addr,not_used);
+}
+cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
+{
+    return cl_raw_rcv_dw(e,addr,not_used);
+}
+cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
+{
+    return cl_raw_custom_rcv_dw(e,addr,custom_other_data);
+}
+#endif

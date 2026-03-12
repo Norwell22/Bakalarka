@@ -62,6 +62,12 @@ In one sentence: now I can write and load data across different memory areas wit
  - deal with load/store between different area types
  - deal with function return types
  - deal with error handling
+ - add proper logging
+ - for some functions check if size of area is at least 2
+ - add dynamic block merging to load-block
+ - can address go from high to low??
+ - rething protect/unprotect memory functions
+ - break large functions into smaller ones
 
 ## Requirements
  - deal with CMake version

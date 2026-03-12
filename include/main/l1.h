@@ -25,6 +25,20 @@
  */
 #include "../../platform/posix/context_lib_port.h"
 
+
+/*!
+* \name Save/load byte
+* @{
+* \brief Lowest level data storage functions
+*
+* These functions serve for \c save versions of functions manipulating
+* with data. They simply copy given byte to given address. 
+* \note They may be reimplemented although it is not advised 
+*/
+cl_int_t save_byte(uint8_t b, uint8_t *addr);
+cl_int_t load_byte(uint8_t *b, uint8_t *addr);
+/*! @}*/
+
 /*!
 * \name Saving functions
 * @{

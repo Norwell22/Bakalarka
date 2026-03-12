@@ -1,16 +1,21 @@
-#include "../../include/main/context_manager.h"
+/*! 
+ * \file      l1_private.c
+ * \brief     Part of functions implementing first library layer
+ * \details   
+ * Dependencies:
+ * - "../../include/main/l1.h"
+ * Implementation of two lowest-level, possibly user implemented functions
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \todo Merge with \c l1_public.c
+ */
 #include "../../include/main/l1.h"
-#include "../../platform/posix/context_lib_port.h"
-#include <stdio.h> //this would be better if wasn't here
-#include <stdbool.h> //this would be better if it wasn't here
-
 
 __attribute__((weak)) cl_int_t save_byte(uint8_t b, uint8_t *addr)
 {
    *addr = b; 
    return 0;
 }
-
 
 __attribute__((weak)) cl_int_t load_byte(uint8_t *b, uint8_t *addr)
 {

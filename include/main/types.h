@@ -17,6 +17,7 @@
  */
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 
 /*!
@@ -238,34 +239,71 @@ struct peripheral_backup {
     const Cl_memory_area_t *backup_area;
 };
 
+/*!
+* \brief Size of \c memory_areas table
+*/
 extern const cl_int_t memory_areas_table_size;  
 /*!
-* \note Refer to \c platform/posix/context_lib_port.c for informations
+* \brief Array containing every memory area defined by user
+* 
+* This array needs to be implemented by the user inside \c context_lib_port.c
+* file.
+* \todo Consider removing this
 */
 extern const Cl_memory_area_t *memory_areas[];
 
+/*!
+* \brief Size of \c peripheral_areas table
+*/
 extern const cl_int_t peripheral_areas_table_size;
 /*!
-* \note Refer to \c platform/posix/context_lib_port.c for informations
+* \brief Array containing every peripheral area defined by user
+* 
+* This array needs to be implemented by the user inside \c context_lib_port.c
+* file.
+* \todo Consider removing this
 */
 extern const Cl_peripheral_area_t *peripheral_areas[];
 
+/*!
+* \brief Size of \c area_mode table
+*/
 extern const cl_int_t  area_mode_table_size;
 /*!
-* \note Refer to \c platform/posix/context_lib_port.c for informations
+* \brief Table that informs library about what memory areas run in certain modes.
+* 
+* In most frugal power modes, some parts of microcontroller memory are turned off. Into this
+* table, \b port \b creator should put ranges of memory map and information whether they are powered
+* in certain power mode or not. Based on those ranges, \c cl_change_mode function determines what 
+* memory/peripheral areas should be protected. 
+* \note This table can only contain RUN and modes that actually turn some part of memory off. Low-power run 
+* for example is absolutely unnecessary here.
 */
 extern const struct area_in_mode area_mode_table[];
 
+/*!
+* \brief Size of \c area_backup_table
+*/
 extern const cl_int_t area_backup_table_size;
 /*!
-* \note Refer to \c platform/posix/context_lib_port.c for informations
+* \brief Table that maps protected memory to place where it should
+* be protected
+*
+* This table should be implemented by \b user in \c context_lib_port.c. For every memory area
+* that user wants to protect, one entry with better protected memory part should be created.
+* \note See examples in \c context_lib_port.c files
+* \todo Implement recursive data protection
 */
 extern const struct area_backup area_backup_table[];
 
+/*!
+* \brief Size of \c peripheral_backup_table
+*/
 extern const cl_int_t peripheral_backup_table_size;
 /*!
-* \note Refer to \c platform/posix/context_lib_port.c for informations
+* \note Same thing as \c area_backup, just for peripherals
 */
 extern const struct peripheral_backup peripheral_backup_table[];
+
 
 #endif

@@ -1,12 +1,18 @@
-
-#include "../../include/main/context_manager.h"
+/*! 
+ * \file      l2_public.c
+ * \brief     Part of functions implementing second library layer
+ * \details   
+ * Main functions for saving and loading memory areas.
+ * Dependencies:
+ * - "../../include/main/l1.h"
+ * - "../../include/main/l2.h"
+ * \author    Michal Zidzik
+ * \date      02.03.2026
+ * \todo Merge with \c l2_private.c
+ * \todo Implement \a peripheral functions
+ */
 #include "../../include/main/l2.h"
 #include "../../include/main/l1.h"
-#include "../../platform/posix/context_lib_port.h"
-#include <stdio.h> //this would be better if wasn't here
-#include <stdbool.h> //this would be better if it wasn't here
-
-
 
 cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type, void *custom_d)
 {
@@ -18,21 +24,14 @@ cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type
     }
     cl_addr_t current_addr = area.start_addr;
     while( current_addr != area.end_addr){
+        // fill whole area with zeroes
         cl_raw_save_e(0x0,current_addr,custom_d);
         current_addr += 1;
     }
+    // second element should be end address
     save_f((cl_int_t)area.end_addr, area.start_addr + 1,custom_d);
     printf("INFO\tclear_mem_area\tArea %ld set to [0,<end_addr>,0,0...]\n\n\n",area.id);
 }
-
-
-
-/*
-function saves one memory area into another in a form of block
-TODO: add dynamic empty block merging
-TODO: add metadata
-TODO: can addresses go from high to low??
-*/
 
 cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , enum Bare_save_type save_type, void *custom_d)
 {
@@ -40,17 +39,17 @@ cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area ,
     cl_save_f_t save_f = sel_save_f(save_type); // choose low-level technique for storing data
     cl_load_f_t load_f = sel_load_f(save_type); // choose low-level technique for loading data
 
-    cl_addr_t target_addr = dst_area.start_addr; // pointer to destination array, where we want to store data
-    cl_addr_t source_addr = src_area.start_addr; // pointer to source array, with data we want to store
+    cl_addr_t target_addr = dst_area.start_addr; // pointer to area where data are to be stored
+    cl_addr_t source_addr = src_area.start_addr; // pointer to area with source data
 
-    cl_int_t cur_id = 0; // id loaded for this block: 0 means empty or emptied area
+    cl_int_t cur_id = 0; // id of current block
     cl_int_t p_next_block_start;
     cl_addr_t next_block_start = 0; // address that marks end of current data block
     cl_int_t free_space; // free space from start to end of block
     cl_int_t saved_elements = 0; // number of data elements saved in current iteration
 
     while(target_addr < dst_area.end_addr){ // end when reached end of destination area
-        // one iteration means processing one block
+        // one iteration processes one block
         // start by loading current block metadata
         load_f(&cur_id, target_addr,custom_d);
         load_f(&p_next_block_start,target_addr + 1, custom_d);
