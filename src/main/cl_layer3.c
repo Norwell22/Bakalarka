@@ -11,9 +11,10 @@
  * \todo Merge with \c l2_private.c
  * \todo Implement \a peripheral functions
  */
-#include "../../include/main/l2.h"
 #include "../../include/main/cl_layer1.h"
-#include "../../include/main/l3.h"
+#include "../../include/main/cl_layer2.h"
+#include "../../include/main/cl_layer3.h"
+
 
 bool is_protected(cl_int_t id)
 {

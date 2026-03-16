@@ -166,6 +166,9 @@ Default protect
  - refactor with current_mode variable
  - write init (cl_protect_all, clear_mem_area,
  - when saving and stumbling upon same ID, rewrite it
+ - it would be cool if CL in public things could be generalized
+ - add `#ifndef` clause to l3.h
+ - after everything, go through comments once more
 
 ## Requirements
  - deal with CMake version
