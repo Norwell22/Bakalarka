@@ -919,13 +919,13 @@ void l3_test2()
 
 void l3_test1()
 {
-    // l3_t11(); v0.5.0 : success
-    // l3_t12(); v0.5.0 : success
-    // l3_t13(); v0.5.0 : success
-    // l3_t14(); v0.5.0 : success
-    // l3_t15(); v0.5.0 : success
-    // l3_t16(); v0.5.0 : success
-    // l3_t17(); v0.5.0 : success
+    // l3_t11(); //v0.5.0 : success
+    // l3_t12(); //v0.5.0 : success
+    // l3_t13(); //v0.5.0 : success
+    // l3_t14(); //v0.5.0 : success
+    // l3_t15(); //v0.5.0 : success
+    // l3_t16(); //v0.5.0 : success
+    l3_t17(); //v0.5.0 : success
 }
 
 /* === Testbench for L3
@@ -952,6 +952,6 @@ cl_int_t main()
     // l2_test2();
     // l2_test3();
     // l2_test4();
-    // l3_test1();
-    l3_test2();
+    l3_test1();
+    // l3_test2();
 }

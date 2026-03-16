@@ -15,20 +15,12 @@
  * \date      02.03.2026
  * \pre       Needs to include config.h with valid configuration declarations (TODO)
  */
+#include "config.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 
-/*!
-* \brief Bus size of CPU used in target mcu
-* 
-* Possible values are 8,16,32 or 64.
-* Default value is 32 and this is also the only value for which
-* the library have been extensively tested.
-* \todo Move this into config.h file
-*/
-#define ARCHITECTURE_BUS_SIZE 64
 
 /*! 
 * \typedef cl_addr_t

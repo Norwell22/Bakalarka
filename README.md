@@ -116,29 +116,21 @@ TODO
 - `git tag v<num.num.num>`
 - `git push origin v<num.num.num>`
 
-## Configuration file
-
-Very important will be architecture choice
-Don't forget to allow/block raw functions
-Turn logging on-off
-Probably some lightweight version
-Turn on off L2 and L3
-Default protect
 
 ## TODOs
- - write conf file **NOW**
- - check Endianess, probably deal with it in config
+ - write conf file
  - deal with floating point data somehow, probably add functions like for B,HW,W,DW
+ - test saving of different data types
  - write proper testbench
  - make proper voluntary logging
- - last address of context should not be part of it
+ - last address of context should not be part of it **AAAAAA**
  - write example code to showcase to Strnadel
  - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
  - it would probably be better if areas itself also contained ways to write into them (load/send/custom_send)
  - metadata should also contain current_mode as this simplifies user interface 
  - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
  - L3 meta-meta data: **current mode**, **number of areas**
- - change it so that end address is actually end address
+ - change it so that end address is actually end address **AAAAAA**
  - load function should merge consecutive blocks with id=0
  - TODO: if save function runs into its own ID, it should probably break or overwrite it
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
@@ -165,8 +157,10 @@ Default protect
  - it would be cool if CL in public things could be generalized
  - add `#ifndef` clause to l3.h
  - after everything, go through comments once more
+ - merge SEND and CUSTOM_SEND
 
-## Requirements
+## Requirements and technical notes
+ - Library works with data stored in Little endian format.
  - deal with CMake version
  - GCC at least 4.4
  - (?? 1B == 8b ??)

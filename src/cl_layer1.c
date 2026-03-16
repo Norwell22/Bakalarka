@@ -80,11 +80,12 @@ cl_int_t raw_custom_send_hw(uint16_t hw, uint16_t *addr, void *custom_other_data
 cl_int_t raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 4; i++){
-      b = (uint8_t)(w >> (i*8) & 0xFF);
-      save_byte(b,dst + i);
-    }
+
+    save_byte((uint8_t)( w        & 0xFF), dst);
+    save_byte((uint8_t)((w >> 8 ) & 0xFF), dst + 1);
+    save_byte((uint8_t)((w >> 16) & 0xFF), dst + 2);
+    save_byte((uint8_t)((w >> 24) & 0xFF), dst + 3);
+
     return 0;
 }
 
@@ -95,55 +96,62 @@ cl_int_t raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
 cl_int_t raw_send_w(uint32_t w, uint32_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 4; i++){
-      b = (uint8_t)(w >> (i*8) & 0xFF);
-      send_byte(b,dst + i);
-    }
+    send_byte((uint8_t)( w        & 0xFF), dst);
+    send_byte((uint8_t)((w >> 8 ) & 0xFF), dst + 1);
+    send_byte((uint8_t)((w >> 16) & 0xFF), dst + 2);
+    send_byte((uint8_t)((w >> 24) & 0xFF), dst + 3);
     return 0;
 }
 
 cl_int_t raw_custom_send_w(uint32_t w, uint32_t *addr, void *custom_other_data)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 4; i++){
-      b = (uint8_t)(w >> (i*8) & 0xFF);
-      custom_send_byte(b,dst + i,custom_other_data);
-    }
+    custom_send_byte((uint8_t)( w        & 0xFF), dst,custom_other_data);
+    custom_send_byte((uint8_t)((w >> 8 ) & 0xFF), dst + 1,custom_other_data);
+    custom_send_byte((uint8_t)((w >> 16) & 0xFF), dst + 2,custom_other_data);
+    custom_send_byte((uint8_t)((w >> 24) & 0xFF), dst + 3,custom_other_data);
     return 0;
 }
 
 cl_int_t raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 8; i++){
-      b = (uint8_t)(dw >> (i*8) & 0xFF);
-      save_byte(b,dst + i);
-    }
+    save_byte((uint8_t)( dw        & 0xFF), dst);
+    save_byte((uint8_t)((dw >> 8 ) & 0xFF), dst + 1);
+    save_byte((uint8_t)((dw >> 16) & 0xFF), dst + 2);
+    save_byte((uint8_t)((dw >> 24) & 0xFF), dst + 3);
+    save_byte((uint8_t)( dw >> 32  & 0xFF), dst + 4);
+    save_byte((uint8_t)((dw >> 40) & 0xFF), dst + 5);
+    save_byte((uint8_t)((dw >> 48) & 0xFF), dst + 6);
+    save_byte((uint8_t)((dw >> 56) & 0xFF), dst + 7);
     return 0;
 }
 
 cl_int_t raw_send_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 8; i++){
-      b = (uint8_t)(dw >> (i*8) & 0xFF);
-      send_byte(b,dst + i);
-    }
+    send_byte((uint8_t)( dw        & 0xFF), dst);
+    send_byte((uint8_t)((dw >> 8 ) & 0xFF), dst + 1);
+    send_byte((uint8_t)((dw >> 16) & 0xFF), dst + 2);
+    send_byte((uint8_t)((dw >> 24) & 0xFF), dst + 3);
+    send_byte((uint8_t)( dw >> 32  & 0xFF), dst + 4);
+    send_byte((uint8_t)((dw >> 40) & 0xFF), dst + 5);
+    send_byte((uint8_t)((dw >> 48) & 0xFF), dst + 6);
+    send_byte((uint8_t)((dw >> 56) & 0xFF), dst + 7);
     return 0;
 }
 
 cl_int_t raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_data)
 {
     uint8_t *dst = (uint8_t*)addr;
-    uint8_t b,i;
-    for (i = 0; i < 8; i++){
-      b = (uint8_t)(dw >> (i*8) & 0xFF);
-      custom_send_byte(b,dst + i,custom_other_data);
-    }
+    custom_send_byte((uint8_t)( dw        & 0xFF), dst,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 8 ) & 0xFF), dst + 1,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 16) & 0xFF), dst + 2,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 24) & 0xFF), dst + 3,custom_other_data);
+    custom_send_byte((uint8_t)( dw >> 32  & 0xFF), dst + 4,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 40) & 0xFF), dst + 5,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 48) & 0xFF), dst + 6,custom_other_data);
+    custom_send_byte((uint8_t)((dw >> 56) & 0xFF), dst + 7,custom_other_data);
     return 0;
 }
 
