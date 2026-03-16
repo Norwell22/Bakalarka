@@ -30,10 +30,6 @@
 * \brief Lowest-level functions for data storage
 */
 
-/*!
-* \todo Merge this with custom_send_byte(), no need for two separate functions
-*/
-uint32_t send_byte(uint8_t b, uint8_t *addr); 
 
 /*!
 * \brief User specified function for storing one byte in non-standard way.
@@ -46,12 +42,8 @@ uint32_t send_byte(uint8_t b, uint8_t *addr);
 * \todo Library should also allow for adding similar functions
 * \note Port creator or user can implement this function to execute byte saving in any needed way
 */
-uint32_t custom_send_byte(uint8_t b, uint8_t *addr,void *other_data);
+uint32_t send_byte(uint8_t b, uint8_t *addr,void *other_d); 
 
-/*!
-* \todo Merge this with custom_rcv_byte(), no need for two separate functions
-*/
-uint32_t rcv_byte(uint8_t *b, uint8_t *addr);
 
 /*!
 * \brief User specified function for loading data in non-standard way.
@@ -64,7 +56,7 @@ uint32_t rcv_byte(uint8_t *b, uint8_t *addr);
 * \todo Library should also allow for adding similar functions
 * \note Port creator or user can implement this function to execute byte saving in any needed way
 */
-uint32_t custom_rcv_byte(uint8_t *b, uint8_t *addr, void *other_data);
+uint32_t rcv_byte(uint8_t *b, uint8_t *addr,void *other_d);
 /*! @}*/
 
 

@@ -157,7 +157,7 @@ typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom
 * \todo Port creator or user should probably have option to expand this enum.
 * \todo This could probably be moved into \c context_lib_port.h
 */
-enum Bare_save_type{ RAM_WRITE, SEND, CUSTOM_SEND};
+enum Bare_save_type{ RAM_WRITE, SEND};
 
 
 

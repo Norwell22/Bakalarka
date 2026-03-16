@@ -226,8 +226,6 @@ cl_save_f_t sel_save_f(enum Bare_save_type save_type)
             return cl_raw_save_e;
         case SEND:
             return cl_raw_send_e;
-        case CUSTOM_SEND:
-            return cl_raw_custom_send_e;
     }
 }
 
@@ -238,8 +236,6 @@ cl_load_f_t sel_load_f(enum Bare_save_type save_type)
             return cl_raw_load_e;
         case SEND:
             return cl_raw_rcv_e;
-        case CUSTOM_SEND:
-            return cl_raw_custom_rcv_e;
     }
 }
 

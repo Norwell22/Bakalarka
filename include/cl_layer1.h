@@ -33,8 +33,7 @@
 * \todo This would work better as a macro
 */
 cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data);
+cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *other_d);
 /*! @}*/
 
 
@@ -45,8 +44,7 @@ cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_dat
 * \todo This would work better as a macro
 */
 cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data);
+cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *other_d);
 /*! @} */
 
 #endif

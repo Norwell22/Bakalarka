@@ -18,29 +18,19 @@
 /*
 * L1 send/receive functions
 */
-uint32_t send_byte(uint8_t b, uint8_t *addr)
+uint32_t send_byte(uint8_t b, uint8_t *addr,void *other_d)
 {
     puts("ERROR: context_lib_port.c/send_byte was not implemented and therefore does nothing. Returning 1");
     return 1;
 }
 
-uint32_t custom_send_byte(uint8_t b, uint8_t *addr,void *other_data)
-{
-    puts("ERROR: context_lib_port.c/custom_send_byte was not implemented and therefore does nothing. Returning 1");
-    return 1;
-}
 
-uint32_t rcv_byte(uint8_t *b, uint8_t *addr)
+uint32_t rcv_byte(uint8_t *b, uint8_t *addr,void *other_d)
 {
     puts("ERROR: context_lib_port.c/rcv_byte was not implemented and therefore does nothing. Returning 1");
     return 1;
 }
 
-uint32_t custom_rcv_byte(uint8_t *b, uint8_t *addr, void *other_data)
-{
-    puts("ERROR: context_lib_port.c/custom_rcv_byte was not implemented and therefore does nothing. Returning 1");
-    return 1;
-}
 
 /*
 * Layer 2 MCU memory simulation
