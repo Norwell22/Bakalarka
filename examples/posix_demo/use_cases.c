@@ -16,7 +16,7 @@
  */
 #include <stdio.h>
 // #include "../../platform/posix/context_lib_port.h"
-#include "../../include/main/context_manager.h"
+#include "context_manager.h"
 #include "use_cases.h"
 
 void print_lram()

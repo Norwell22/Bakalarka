@@ -7,9 +7,9 @@
  * \date      02.03.2026
  * \todo Merge with \c l2_private.c
  */
-#include "../../include/main/cl_layer2.h"
-#include "../../include/main/cl_layer2_priv.h"
-#include "../../include/main/cl_layer1.h"
+#include "cl_layer2.h"
+#include "cl_layer2_priv.h"
+#include "cl_layer1.h"
 
 cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type, void *custom_d)
 {

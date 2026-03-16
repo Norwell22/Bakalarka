@@ -10,47 +10,44 @@
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "../../include/main/cl_layer1.h"
-#include "../../include/main/cl_layer1_priv.h"
+#include "cl_layer1.h"
+//#include "../../include/main/cl_layer1_priv.h"
 
-/*
-* lowest-level functions, possibly user-implemented
-*/
-__attribute__((weak)) cl_int_t save_byte(uint8_t b, uint8_t *addr)
+static cl_int_t save_byte(uint8_t b, uint8_t *addr)
 {
    *addr = b; 
    return 0;
 }
-
-__attribute__((weak)) cl_int_t load_byte(uint8_t *b, uint8_t *addr)
+static cl_int_t load_byte(uint8_t *b, uint8_t *addr)
 {
    *b = *addr;
    return 0;
 }
 
+
 /* 
 * Save functions 
 */
 
-cl_int_t cl_raw_save_B(uint8_t B, uint8_t *addr, void *not_used)
+cl_int_t raw_save_B(uint8_t B, uint8_t *addr, void *not_used)
 {
    save_byte( B, addr);
    return 0;
 }
 
-cl_int_t cl_raw_send_B(uint8_t B, uint8_t *addr, void *not_used)
+cl_int_t raw_send_B(uint8_t B, uint8_t *addr, void *not_used)
 {
    send_byte( B, addr);
    return 0;
 }
 
-cl_int_t cl_raw_custom_send_B(uint8_t B, uint8_t *addr, void *custom_other_data)
+cl_int_t raw_custom_send_B(uint8_t B, uint8_t *addr, void *custom_other_data)
 {
    custom_send_byte( B, addr,custom_other_data);
    return 0;
 }
 
-cl_int_t cl_raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used)
+cl_int_t raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b0 = (uint8_t)(hw & 0xFF);
@@ -60,7 +57,7 @@ cl_int_t cl_raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_send_hw(uint16_t hw, uint16_t *addr, void *not_used)
+cl_int_t raw_send_hw(uint16_t hw, uint16_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b0 = (uint8_t)(hw & 0xFF);
@@ -70,7 +67,7 @@ cl_int_t cl_raw_send_hw(uint16_t hw, uint16_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_send_hw(uint16_t hw, uint16_t *addr, void *custom_other_data)
+cl_int_t raw_custom_send_hw(uint16_t hw, uint16_t *addr, void *custom_other_data)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b0 = (uint8_t)(hw & 0xFF);
@@ -80,7 +77,7 @@ cl_int_t cl_raw_custom_send_hw(uint16_t hw, uint16_t *addr, void *custom_other_d
     return 0;
 }
 
-cl_int_t cl_raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
+cl_int_t raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -95,7 +92,7 @@ cl_int_t cl_raw_save_w(uint32_t w, uint32_t *addr, void *not_used)
 * Send functions
 */
 
-cl_int_t cl_raw_send_w(uint32_t w, uint32_t *addr, void *not_used)
+cl_int_t raw_send_w(uint32_t w, uint32_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -106,7 +103,7 @@ cl_int_t cl_raw_send_w(uint32_t w, uint32_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_send_w(uint32_t w, uint32_t *addr, void *custom_other_data)
+cl_int_t raw_custom_send_w(uint32_t w, uint32_t *addr, void *custom_other_data)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -117,7 +114,7 @@ cl_int_t cl_raw_custom_send_w(uint32_t w, uint32_t *addr, void *custom_other_dat
     return 0;
 }
 
-cl_int_t cl_raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
+cl_int_t raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -128,7 +125,7 @@ cl_int_t cl_raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_send_dw(uint64_t dw, uint64_t *addr, void *not_used)
+cl_int_t raw_send_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -139,7 +136,7 @@ cl_int_t cl_raw_send_dw(uint64_t dw, uint64_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_data)
+cl_int_t raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_data)
 {
     uint8_t *dst = (uint8_t*)addr;
     uint8_t b,i;
@@ -150,25 +147,25 @@ cl_int_t cl_raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_d
     return 0;
 }
 
-cl_int_t cl_raw_load_B(uint8_t *B, uint8_t *addr, void *not_used)
+cl_int_t raw_load_B(uint8_t *B, uint8_t *addr, void *not_used)
 {
    load_byte( B, addr);
    return 0;
 }
 
-cl_int_t cl_raw_rcv_B(uint8_t *B, uint8_t *addr, void *not_used)
+cl_int_t raw_rcv_B(uint8_t *B, uint8_t *addr, void *not_used)
 {
    rcv_byte( B, addr);
    return 0;
 }
 
-cl_int_t cl_raw_custom_rcv_B(uint8_t *B, uint8_t *addr, void *custom_other_data)
+cl_int_t raw_custom_rcv_B(uint8_t *B, uint8_t *addr, void *custom_other_data)
 {
    custom_rcv_byte( B, addr,custom_other_data);
    return 0;
 }
 
-cl_int_t cl_raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used)
+cl_int_t raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -179,7 +176,7 @@ cl_int_t cl_raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *not_used)
+cl_int_t raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -190,7 +187,7 @@ cl_int_t cl_raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_rcv_hw(uint16_t *hw, uint16_t *addr, void *custom_other_data)
+cl_int_t raw_custom_rcv_hw(uint16_t *hw, uint16_t *addr, void *custom_other_data)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -201,7 +198,7 @@ cl_int_t cl_raw_custom_rcv_hw(uint16_t *hw, uint16_t *addr, void *custom_other_d
     return 0;
 }
 
-cl_int_t cl_raw_load_w(uint32_t *w, uint32_t *addr, void *not_used)
+cl_int_t raw_load_w(uint32_t *w, uint32_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -216,7 +213,7 @@ cl_int_t cl_raw_load_w(uint32_t *w, uint32_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_rcv_w(uint32_t *w, uint32_t *addr, void *not_used)
+cl_int_t raw_rcv_w(uint32_t *w, uint32_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -231,7 +228,7 @@ cl_int_t cl_raw_rcv_w(uint32_t *w, uint32_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_rcv_w(uint32_t *w, uint32_t *addr, void *custom_other_data)
+cl_int_t raw_custom_rcv_w(uint32_t *w, uint32_t *addr, void *custom_other_data)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0;
@@ -246,7 +243,7 @@ cl_int_t cl_raw_custom_rcv_w(uint32_t *w, uint32_t *addr, void *custom_other_dat
     return 0;
 }
 
-cl_int_t cl_raw_load_dw(uint64_t *dw, uint64_t *addr, void *not_used)
+cl_int_t raw_load_dw(uint64_t *dw, uint64_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0, b1, b2, b3, b4, b5, b6, b7;
@@ -263,7 +260,7 @@ cl_int_t cl_raw_load_dw(uint64_t *dw, uint64_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_rcv_dw(uint64_t *dw, uint64_t *addr, void *not_used)
+cl_int_t raw_rcv_dw(uint64_t *dw, uint64_t *addr, void *not_used)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0, b1, b2, b3, b4, b5, b6, b7;
@@ -280,7 +277,7 @@ cl_int_t cl_raw_rcv_dw(uint64_t *dw, uint64_t *addr, void *not_used)
     return 0;
 }
 
-cl_int_t cl_raw_custom_rcv_dw(uint64_t *dw, uint64_t *addr, void *custom_other_data)
+cl_int_t raw_custom_rcv_dw(uint64_t *dw, uint64_t *addr, void *custom_other_data)
 {
     uint8_t *src = (uint8_t*)addr;
     uint8_t b0, b1, b2, b3, b4, b5, b6, b7;
@@ -302,101 +299,101 @@ cl_int_t cl_raw_custom_rcv_dw(uint64_t *dw, uint64_t *addr, void *custom_other_d
 #if ARCHITECTURE_BUS_SIZE == 8
 cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_save_B(e,addr,not_used);
+    return raw_save_B(e,addr,not_used);
 }
-cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
+cl_int_t raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_send_B(e,addr,not_used);
+    return raw_send_B(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_send_B(e,addr,custom_other_data);
+    return raw_custom_send_B(e,addr,custom_other_data);
 }
 cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_load_B(e,addr,not_used);
+    return raw_load_B(e,addr,not_used);
 }
 cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_rcv_B(e,addr,not_used);
+    return raw_rcv_B(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_rcv_B(e,addr,custom_other_data);
+    return raw_custom_rcv_B(e,addr,custom_other_data);
 }
 #elif ARCHITECTURE_BUS_SIZE == 16
 cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_save_hw(e,addr,not_used);
+    return raw_save_hw(e,addr,not_used);
 }
 cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_send_hw(e,addr,not_used);
+    return raw_send_hw(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_send_hw(e,addr,custom_other_data);
+    return raw_custom_send_hw(e,addr,custom_other_data);
 }
 cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_load_hw(e,addr,not_used);
+    return raw_load_hw(e,addr,not_used);
 }
 cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_rcv_hw(e,addr,not_used);
+    return raw_rcv_hw(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_rcv_hw(e,addr,custom_other_data);
+    return raw_custom_rcv_hw(e,addr,custom_other_data);
 }
 #elif ARCHITECTURE_BUS_SIZE == 32
 cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_save_w(e,addr,not_used);
+    return raw_save_w(e,addr,not_used);
 }
 cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_send_w(e,addr,not_used);
+    return raw_send_w(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_send_w(e,addr,custom_other_data);
+    return raw_custom_send_w(e,addr,custom_other_data);
 }
 cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_load_w(e,addr,not_used);
+    return raw_load_w(e,addr,not_used);
 }
 cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_rcv_w(e,addr,not_used);
+    return raw_rcv_w(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_rcv_w(e,addr,custom_other_data);
+    return raw_custom_rcv_w(e,addr,custom_other_data);
 }
 #elif ARCHITECTURE_BUS_SIZE == 64
 cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_save_dw(e,addr,not_used);
+    return raw_save_dw(e,addr,not_used);
 }
 cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_send_dw(e,addr,not_used);
+    return raw_send_dw(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_send_dw(e,addr,custom_other_data);
+    return raw_custom_send_dw(e,addr,custom_other_data);
 }
 cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_load_dw(e,addr,not_used);
+    return raw_load_dw(e,addr,not_used);
 }
 cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    return cl_raw_rcv_dw(e,addr,not_used);
+    return raw_rcv_dw(e,addr,not_used);
 }
 cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data)
 {
-    return cl_raw_custom_rcv_dw(e,addr,custom_other_data);
+    return raw_custom_rcv_dw(e,addr,custom_other_data);
 }
 #endif

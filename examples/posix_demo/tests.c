@@ -15,7 +15,7 @@
  * \note While I designed tests in this file, many of them were written using GPT or Copilot
  * \todo Break this file into several smaller ones
  */
-#include "../../include/main/context_manager.h"
+#include "context_manager.h"
 #include "use_cases.h"
 
 /*

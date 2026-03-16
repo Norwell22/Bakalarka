@@ -22,7 +22,7 @@
  * \todo In current form, this file is too large and complex. It should
  * be more minimalistic.
  */
-#include "../../include/main/types.h"
+#include "types.h"
 
 /*!
 * \name Layer 1 functions

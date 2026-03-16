@@ -126,12 +126,8 @@ Turn on off L2 and L3
 Default protect
 
 ## TODOs
- - remove those stupid `main` and `common` folders **NOW**
  - write conf file **NOW**
- - fix ugly local includes **NOW**
- - check Endianess, probably deal with it in config **NOW**
- - make public/private division **NOW**
- - raw functions don't need to be part of API **NOW**
+ - check Endianess, probably deal with it in config
  - deal with floating point data somehow, probably add functions like for B,HW,W,DW
  - write proper testbench
  - make proper voluntary logging

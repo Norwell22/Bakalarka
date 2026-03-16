@@ -11,11 +11,12 @@
  * \pre       Needs to include config.h with valid configuration declarations (TODO)
  * \note __attribute__((section(".hram_section"))) uint8_t buffer[1024]
  */
-#include "../../include/main/context_manager.h"
+#include "context_manager.h"
 #include "use_cases.h"
 
 
 int main() {
     use_case1();
+    
     return 0;
 }
