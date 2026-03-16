@@ -365,15 +365,15 @@ void registers_print()
 // some tests were generated using AI
 void l2_test1()
 {
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma12,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma12,NULL);
     hram_fill1();
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     printf("1.1 EXPECTED: [100,<A>,0,1,2,3,4,0,<A>,0,0]\n");
     print_lram(0,11);
     printf("\n\n\n\n");
 
-    cl_save_mem_area(ma100,ma12,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma12,NULL);
     printf("1.2 EXPECTED: [100,<A>,0,1,2,0,0,0,0]\n");
     print_lram(120,129);
     printf("\n\n\n\n");
@@ -381,7 +381,7 @@ void l2_test1()
     cl_int_t arr3[20] = {55,(cl_int_t)(LRAM + 5),55,55,55,0,(cl_int_t)(LRAM + 10),0,0,0,0}; //1.3
     cl_int_t *parr3 = arr3;
     lram_fill2(parr3,0,20);
-    cl_save_mem_area(ma100,ma13,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma13,NULL);
     printf("1.3 EXPECTED: [55,<A>,55,55,55,100,<A>,0,1,2,3,0]\n");
     print_lram(0,14);
     printf("\n\n\n\n");
@@ -389,7 +389,7 @@ void l2_test1()
     cl_int_t arr4[20] = {0,(cl_int_t)(LRAM + 6),0,0,0,0,55,(cl_int_t)(LRAM + 10),55,55,55,0,(cl_int_t)(LRAM + 10)}; //1.4
     cl_int_t *parr4 = arr4;
     lram_fill2(parr4,0,20);
-    cl_save_mem_area(ma100,ma13,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma13,NULL);
     printf("1.4 EXPECTED: [100,<A>,0,1,2,3,55,<A>,55,55,55,0,<A>]\n");
     print_lram(0,14);
     printf("\n\n\n\n");
@@ -397,7 +397,7 @@ void l2_test1()
     cl_int_t arr5[20] = {0,(cl_int_t)(LRAM + 4),0,0,55,(cl_int_t)(LRAM + 7),55,0,(cl_int_t)(LRAM + 10),0,0};
     cl_int_t *parr5 = arr5;
     lram_fill2(parr5,0,20);
-    cl_save_mem_area(ma100,ma13,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma13,NULL);
     printf("1.5 EXPECTED: [100,<A>,0,1,55,<A>,55,100,<A>,2,3]\n");
     print_lram(0,14);
     printf("\n\n\n\n");
@@ -409,7 +409,7 @@ void l2_test1()
     };
     cl_int_t *parr6 = arr6;
     lram_fill2(parr6,0,20);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     printf("1.6 EXPECTED: [50,<A>,55,56,100,<A>,0,1,51,<A>,100,<A>,2,52,<A>,57,100,<A>,3,4,5]\n");
     print_lram(0,23);
     printf("\n\n\n\n");
@@ -420,7 +420,7 @@ void l2_test1()
     };
     cl_int_t *parr7 = arr7;
     lram_fill2(parr7,0,20);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     printf("1.7 EXPECTED: [100,<A>,0,1,2,50,<A>,55,100,<A>,3,4,0,<A>,51,<A>,56,0,<A>,0]\n");
     print_lram(0,20);
 
@@ -430,14 +430,14 @@ void l2_test1()
     };
     cl_int_t *parr8 = arr8;
     lram_fill2(parr8,0,25);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     printf("1.8 EXPECTED: [50,<A>,55,56,57,100,<A>,0,1,2,3,51,<A>,58,100,<A>,4,0,52,<A>,0,<A>,0,53,<A>]\n");
     print_lram(0,25);
 
     cl_int_t arr9[10] = {50,(cl_int_t)(LRAM + 10)};
     cl_int_t *parr9 = arr9;
     lram_fill2(parr9,0,10);
-    cl_save_mem_area(ma100,ma13,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma13,NULL);
     printf("1.9 EXPECTED: [50,<A>,0,0,0,0,0,0,0]\n");
     print_lram(0,10);
 }
@@ -447,7 +447,7 @@ void l2_test2()
     cl_int_t arr1[10] = {100,(cl_int_t)(LRAM + 7),0,1,2,3,4,0,(cl_int_t)(LRAM + 100)};
     cl_int_t *parr1 = arr1;
     lram_fill2(parr1,0,10);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("2.1 EXPECTED: [0,1,2,3,4]\n");
     print_hram(0,5);
     print_lram(0,10);
@@ -460,7 +460,7 @@ void l2_test2()
     };
     cl_int_t *parr3 = arr3;
     lram_fill2(parr3,0,25);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("2.3 EXPECTED: [100,101,102,103,104]\n");
     print_hram(0,5);
     print_lram(0,25);
@@ -474,7 +474,7 @@ void l2_test2()
     };
     cl_int_t *parr4 = arr4;
     lram_fill2(parr4,0,25);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("2.4 EXPECTED: [100,101,102,0,0]\n");
     print_hram(0,5);
     print_lram(0,25);
@@ -489,7 +489,7 @@ void l2_test2()
     };
     cl_int_t *parr5 = arr5;
     lram_fill2(parr5,0,27);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("2.5 EXPECTED: [100,101,102,103,104]\n");
     print_hram(0,5);
     print_lram(0,25);
@@ -505,7 +505,7 @@ void l2_test2()
     };
     cl_int_t *parr6 = arr6;
     lram_fill2(parr6,0,25);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("2.6 EXPECTED: [100,101,102,103,104]\n");
     print_hram(0,5);
     print_lram(0,25);
@@ -516,14 +516,14 @@ void l2_test3()
 {
     spi0_fill();
     print_spi0_regs();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     printf("MA201:%p\n",&ma201);
-    cl_save_peripheral(&ma201,ma10,RAM_WRITE,NULL);
+    cl_save_peripheral(&ma201,ma10,NULL);
     printf("3.1 EXPECTED: [201,<A>,2010,2011,2012,2013,...]\n");
     print_lram(0,20);
 
     spi0_clear();
-    cl_load_peripheral(&ma201,ma10,RAM_WRITE,NULL);
+    cl_load_peripheral(&ma201,ma10,NULL);
     printf("3.1 EXPECTED: [2010,2011,2012,2013...]\n");
     print_spi0_regs();
 
@@ -532,82 +532,82 @@ void l2_test3()
 void l2_test4()
 {
     hram_fill1();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     hram_clear();
-    cl_read_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_read_mem_area(ma100,ma10,NULL);
     printf("4.1 SAVE-READ EXPECTED: [0,1,2,3,4]\n");
     print_hram(0,5);
     print_lram(0,10);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("4.1 +LOAD EXPECTED: [0,1,2,3,4]\n");
     print_hram(0,5);
     print_lram(0,10);
 
     hram_clear();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_read_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_read_mem_area(ma100,ma10,NULL);
     printf("4.2 READ EXPECTED: [0,0,0,0,0]\n");
     print_hram(0,5);
     print_lram(0,10);
 
     hram_clear();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_read_mem_area(ma100,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_read_mem_area(ma100,ma10,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("4.3 READ-LOAD EXPECTED: [0,0,0,0,0]\n");
     print_hram(0,5);
     print_lram(0,10);
 
     hram_fill1();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma101,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
+    cl_save_mem_area(ma101,ma10,NULL);
     hram_clear();
-    cl_read_mem_area(ma101,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_read_mem_area(ma101,ma10,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("4.3 SAVE-SAVE-READ-LOAD EXPECTED: [0,1,2,3,4],[5,6,7,8,9]\n");
     print_hram(0,5);
     print_hram(10,15);
     print_lram(0,16);
 
     hram_fill1();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma101,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
+    cl_save_mem_area(ma101,ma10,NULL);
     hram_clear();
-    cl_load_mem_area(ma101,ma10,RAM_WRITE,NULL);
-    cl_read_mem_area(ma101,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma101,ma10,NULL);
+    cl_read_mem_area(ma101,ma10,NULL);
     printf("4.3 SAVE-SAVE-LOAD-READ EXPECTED: [0,0,0,0,0],[5,6,7,8,9]\n");
     print_hram(0,5);
     print_hram(10,15);
     print_lram(0,16);
 
     hram_fill1();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma101,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
+    cl_save_mem_area(ma101,ma10,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
     printf("4.3 LOAD-SAVE-SAVE EXPECTED: [101,<A>,5,6,7,8,9,100,<A>,0,1,2,3,4,0,<A>,0,0]\n");
     print_lram(0,13);
-    cl_load_mem_area(ma101,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma102,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma100,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma101,ma10,NULL);
+    cl_save_mem_area(ma102,ma10,NULL);
+    cl_load_mem_area(ma100,ma10,NULL);
     printf("4.3 +LOAD-SAVE-LOAD EXPECTED: [102,<A>,10,11,12,13,14,0,<A>,1,2,3,4,0,<A>\n");
     print_lram(0,16);
 
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma104,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma102,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma105,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma103,ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_save_mem_area(ma104,ma10,NULL);
+    cl_save_mem_area(ma102,ma10,NULL);
+    cl_save_mem_area(ma105,ma10,NULL);
+    cl_save_mem_area(ma103,ma10,NULL);
     printf("4.4 4xSAVE:\n");
     print_lram(0,16);
     hram_clear();
-    cl_load_mem_area(ma105,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma102,ma10,RAM_WRITE,NULL);
-    cl_read_mem_area(ma103,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma102,ma10,RAM_WRITE,NULL);
+    cl_load_mem_area(ma105,ma10,NULL);
+    cl_load_mem_area(ma102,ma10,NULL);
+    cl_read_mem_area(ma103,ma10,NULL);
+    cl_load_mem_area(ma102,ma10,NULL);
     printf("4.4 LOAD-LOAD-READ-LOAD EXPECTED [10,11,12,13,14][15,16,17,18,19,20][0,0,0,0,0,0,0][25,26,27,28,29]");
     print_hram(20,25);
     print_hram(30,36);
@@ -615,9 +615,9 @@ void l2_test4()
     print_hram(50,54);
     print_lram(0,40);
     hram_fill1();
-    cl_save_mem_area(ma100,ma10,RAM_WRITE,NULL);
-    cl_save_mem_area(ma101,ma10,RAM_WRITE,NULL);
-    cl_load_mem_area(ma103,ma10,RAM_WRITE,NULL);
+    cl_save_mem_area(ma100,ma10,NULL);
+    cl_save_mem_area(ma101,ma10,NULL);
+    cl_load_mem_area(ma103,ma10,NULL);
     printf("4.4 EXPECTED [104,<A>,20,21,22,23,24,25,26,100,<A>,0,1,2,3,4,101,<A>,5,6,7,8,0,<A>,15,16,17,18,19,20,101,<A>,9,0,<A>,0");
     print_lram(0,40);
 
@@ -626,7 +626,7 @@ void l2_test4()
 void l3_t11()
 {
     // 1.1 Protect memory, then save and load it repeatedly using area_off/area_on
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     cl_protect_memory(100);
     cl_area_off(100,STOP,NULL);
@@ -639,7 +639,7 @@ void l3_t11()
 void l3_t12()
 {
     // 1.2 Protect peripheral, then save and load it repeatedly using area_off/area_on
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     uart0_fill();
     cl_protect_memory(200);
     cl_area_off(200,RUN,NULL);
@@ -659,7 +659,7 @@ void l3_t12()
 void l3_t13()
 {
     // 1.3 Protect multiple ma's, then load and save them repeatedly using area_off/area_on
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     registers_fill();
     registers_print();
@@ -683,7 +683,7 @@ void l3_t13()
 void l3_t14()
 {
     // 1.4 Protect multiple ma's, then load and save them repeatedly using area_off_area on
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     registers_fill();
     cl_protect_memory(201);
     cl_protect_memory(202);
@@ -708,7 +708,7 @@ void l3_t14()
 void l3_t15()
 {
     // 1.5 Protect memory, then save and load it repeatedly using change_mode
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     cl_protect_memory(100);
     cl_change_mode(RUN,STOP,NULL);
@@ -727,7 +727,7 @@ void l3_t15()
 void l3_t16()
 {
     // 1.6 Protect peripheral, then save and load it repeatedly using change_mode
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma1,NULL);
     registers_fill();
     cl_protect_memory(204);
     cl_change_mode(RUN,VLLS,NULL);
@@ -744,7 +744,7 @@ void l3_t16()
 void l3_t17()
 {
     // 1.7 Protect multiple ma's, then load and save them repeatedly using change_mode
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     cl_protect_memory(102);
     cl_protect_memory(103);
@@ -775,8 +775,8 @@ void l3_t21()
 {
     // 2.1 With A->B->C, change into mode that turns off A and B
     // FAILED
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma1,NULL);
 
     hram_fill1();   // naplní A
 
@@ -804,9 +804,9 @@ void l3_t22()
 void l3_t23()
 {
     // 2.3 With A->B->C->D, change into mode that turns off A and B, then turn off C
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma2,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma1,NULL);
+    cl_clear_mem_area(ma2,NULL);
 
     hram_fill1();
 
@@ -826,9 +826,9 @@ void l3_t23()
 void l3_t24()
 {
     // 2.4 With A->B->C->D, change into mode that turns off A and B and C
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma2,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma1,NULL);
+    cl_clear_mem_area(ma2,NULL);
 
     hram_fill1();
 
@@ -867,8 +867,8 @@ void l3_t26() {
 void l3_t27() {
     // 2.7 With A->B->C, first turn off A, then turn off B
     // SUCCESS
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma1,NULL);
     hram_fill1();
     cl_protect_memory(100);
     cl_protect_memory(10);

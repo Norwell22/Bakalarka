@@ -40,7 +40,7 @@ cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
             continue;
         }
         printf("DEBUG cl_area_on: Found area with id %lu\n",id);
-        cl_load_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),RAM_WRITE,NULL);
+        cl_load_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         break;
     }
     for (i = 0; i < peripheral_backup_table_size; i++){
@@ -48,7 +48,7 @@ cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
             continue;
         }
         printf("DEBUG cl_area_on: Found peripheral with id %lu\n",id);
-        cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),RAM_WRITE,NULL);
+        cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         break;
     }
 }
@@ -69,7 +69,7 @@ cl_int_t cl_area_off( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
             continue;
         }
         printf("DEBUG cl_area_off: Found area with id %lu\n",id);
-        cl_save_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),RAM_WRITE,NULL);
+        cl_save_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         break;
     }
     for (i = 0; i < peripheral_backup_table_size; i++){
@@ -77,7 +77,7 @@ cl_int_t cl_area_off( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
             continue;
         }
         printf("DEBUG cl_area_off: Found peripheral with id %lu\n",id);
-        cl_save_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),RAM_WRITE,NULL);
+        cl_save_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         break;
     }
 }
@@ -162,92 +162,24 @@ cl_int_t cl_change_mode(enum Cl_power_mode_t from_mode, enum Cl_power_mode_t to_
         if (area_backup_table[i].mode == to_mode &&
              is_protected(area_backup_table[i].area->id) &&
             !area_backup_table[i].default_on){
-            cl_save_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),RAM_WRITE,NULL);
+            cl_save_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         }
         if (area_backup_table[i].mode == from_mode && 
             is_protected(area_backup_table[i].area->id) && 
             !area_backup_table[i].default_on){
-            cl_load_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),RAM_WRITE,NULL);
+            cl_load_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         }
     }
     for (i = 0; i < peripheral_backup_table_size; i++){
         if (peripheral_backup_table[i].mode == to_mode && 
             is_protected(peripheral_backup_table[i].area->id) && 
             !peripheral_backup_table[i].default_on){
-            cl_save_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),RAM_WRITE,NULL);
+            cl_save_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         }
         if (peripheral_backup_table[i].mode == from_mode 
             && is_protected(peripheral_backup_table[i].area->id) 
             && !peripheral_backup_table[i].default_on){
-            cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),RAM_WRITE,NULL);
+            cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         }
     }
 }
-/*
-cl_int_t cl_change_mode(enum Cl_power_mode_t from_mode, enum Cl_power_mode_t to_mode,void *custom_d)
-{
-    cl_int_t on_off_i = 0;
-    cl_int_t off_on_i = 0;
-    cl_addr_t on_off_mem[40][2] = {}; // list of areas that possibly go from on to off
-    cl_addr_t off_on_mem[40][2] = {}; // list of areas that possibly go from off to on
-
-    cl_addr_t start_a,end_a,stump_s,stump_e;
-    cl_int_t i,j,k;
-
-    for (i = 0; i < area_mode_table_size; i++){ // loop for every memory range
-        if (area_mode_table[i].mode == from_mode && area_mode_table[i].state == ON){
-            on_off_mem[on_off_i][0] = area_mode_table[i].start_address; // save first address of range
-            on_off_mem[on_off_i][1] = area_mode_table[i].end_address; // save last address of range
-            on_off_i++;
-        }
-        if (area_mode_table[i].mode == from_mode && area_mode_table[i].state == OFF){
-            off_on_mem[off_on_i][0] = area_mode_table[i].start_address; // save first address of range
-            off_on_mem[off_on_i][1] = area_mode_table[i].end_address; // save last address of range
-            off_on_i++;
-        }
-    }
-
-    for (i = 0; i < area_mode_table_size; i++){ // loop once more for ranges that go from ON <-> OFF
-        if (area_mode_table[i].mode == to_mode && area_mode_table[i].state == ON){
-            printf("DEBUG cl_change_mode: area on index %lu is possible OFF->ON area\n",i);
-            for (j = 0; j < off_on_i; j++){
-                if (find_match(off_on_mem[j][0],off_on_mem[j][1],area_mode_table[i].start_address,
-                        area_mode_table[i].end_address,&start_a,&end_a)){
-                    printf("DEBUG cl_change_mode: area matched with area from table with index %lu\n",j);
-                    for (k = 0; k < memory_areas_table_size; k++){
-                        if (find_match(start_a,end_a,memory_areas[k]->start_addr,memory_areas[k]->end_addr,&stump_s,&stump_e)){
-                            printf("INFO cl_change_mode: Turning on area with id %lu\n",memory_areas[k]->id);
-                            cl_area_on(memory_areas[k]->id,to_mode,custom_d);
-                        }
-                    }
-                }
-            }
-        }
-        if (area_mode_table[i].mode == to_mode && area_mode_table[i].state == OFF){
-            printf("\n\n\n");
-            printf("DEBUG cl_change_mode: area on index %lu is possible ON->OFF area\n",i);
-            for (j = 0; j < on_off_i; j++){
-                if (find_match(on_off_mem[j][0],on_off_mem[j][1],area_mode_table[i].start_address,
-                        area_mode_table[i].end_address,&start_a,&end_a)){
-                    printf("DEBUG cl_change_mode: area matched with area from table with index %lu\n",j);
-                    for (k = 0; k < memory_areas_table_size; k++){
-                        if (find_match(start_a,end_a,memory_areas[k]->start_addr,memory_areas[k]->end_addr,&stump_s,&stump_e)){
-                            printf("INFO cl_change_mode: Turning off area with id %lu\n",memory_areas[k]->id);
-                            cl_area_off(memory_areas[k]->id,to_mode,custom_d);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    printf("DEBUG cl_change_mode: on_off_mem: \n");
-    for(i = 0; i < 10; i++){
-        printf("[%p, %p]\n",on_off_mem[i][0],on_off_mem[i][1]);
-    }
-    printf("DEBUG cl_change_mode: off_on_mem: \n");
-    for(i = 0; i < 10; i++){
-        printf("[%p, %p]\n",off_on_mem[i][0],off_on_mem[i][1]);
-    }
-
-}
-*/

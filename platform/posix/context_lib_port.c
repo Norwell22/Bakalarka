@@ -1,5 +1,4 @@
 #include "context_lib_port.h"
-
 /*! 
  * \file      context_lib_port.c
  * \brief     Structures containing device-specific metadata and functions
@@ -10,7 +9,6 @@
  * Dependencies:
  * - "context_lib_port.h"
  * 
- * \todo Do include in some better way
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
@@ -52,21 +50,21 @@ cl_int_t GPIO_REGS[16];
 /*
 * Layer 2 memory areas
 */
-const Cl_memory_area_t ma255 = {255,CL_PROTECTED_MEM,CL_PROTECTED_MEM + 9};
-const Cl_memory_area_t ma1 = {1,REGISTER_FILE,REGISTER_FILE + 127};
-const Cl_memory_area_t ma2 = {2,REGISTER_FILE2,REGISTER_FILE2 + 255};
-const Cl_memory_area_t ma10 = {10,LRAM, LRAM + 99};
-const Cl_memory_area_t ma11 = {11,LRAM + 100, LRAM + 109};
-const Cl_memory_area_t ma12 = {12,LRAM + 120, LRAM + 124};
-const Cl_memory_area_t ma13 = {13,LRAM, LRAM + 10};
-const Cl_memory_area_t ma100 = {100, HRAM     , HRAM + 5};
-const Cl_memory_area_t ma101 = {101, HRAM + 10, HRAM + 15};
-const Cl_memory_area_t ma102 = {102, HRAM + 20, HRAM + 25};
-const Cl_memory_area_t ma103 = {103, HRAM + 30, HRAM + 36};
-const Cl_memory_area_t ma104 = {104, HRAM + 40, HRAM + 47};
-const Cl_memory_area_t ma105 = {105, HRAM + 50, HRAM + 54};
+const Cl_memory_area_t ma255 = {255,CL_PROTECTED_MEM,CL_PROTECTED_MEM + 9,CL_CPU};
+const Cl_memory_area_t ma1 = {1,REGISTER_FILE,REGISTER_FILE + 127,CL_CPU};
+const Cl_memory_area_t ma2 = {2,REGISTER_FILE2,REGISTER_FILE2 + 255,CL_CPU};
+const Cl_memory_area_t ma10 = {10,LRAM, LRAM + 99,CL_CPU};
+const Cl_memory_area_t ma11 = {11,LRAM + 100, LRAM + 109,CL_CPU};
+const Cl_memory_area_t ma12 = {12,LRAM + 120, LRAM + 124,CL_CPU};
+const Cl_memory_area_t ma13 = {13,LRAM, LRAM + 10,CL_CPU};
+const Cl_memory_area_t ma100 = {100, HRAM     , HRAM + 5,CL_CPU};
+const Cl_memory_area_t ma101 = {101, HRAM + 10, HRAM + 15,CL_CPU};
+const Cl_memory_area_t ma102 = {102, HRAM + 20, HRAM + 25,CL_CPU};
+const Cl_memory_area_t ma103 = {103, HRAM + 30, HRAM + 36,CL_CPU};
+const Cl_memory_area_t ma104 = {104, HRAM + 40, HRAM + 47,CL_CPU};
+const Cl_memory_area_t ma105 = {105, HRAM + 50, HRAM + 54,CL_CPU};
 
-const Cl_peripheral_area_t ma200 = {200, 8,
+const Cl_peripheral_area_t ma200 = {200, 8,CL_CPU,
     {
         (cl_addr_t)&UART0_REGS[0],(cl_addr_t)&UART0_REGS[1],
         (cl_addr_t)&UART0_REGS[2],(cl_addr_t)&UART0_REGS[3],
@@ -76,7 +74,7 @@ const Cl_peripheral_area_t ma200 = {200, 8,
 };
 
 const Cl_peripheral_area_t ma201 = {
-    201,6,
+    201,6,CL_CPU,
     {
         (cl_addr_t)&SPI0_REGS[0],(cl_addr_t)&SPI0_REGS[1],
         (cl_addr_t)&SPI0_REGS[2],(cl_addr_t)&SPI0_REGS[3],
@@ -84,7 +82,7 @@ const Cl_peripheral_area_t ma201 = {
     }
 };
 
-const Cl_peripheral_area_t ma202 = {202,6,
+const Cl_peripheral_area_t ma202 = {202,6,CL_CPU,
     {
         (cl_addr_t)&I2C0_REGS[0],(cl_addr_t)&I2C0_REGS[1],
         (cl_addr_t)&I2C0_REGS[2],(cl_addr_t)&I2C0_REGS[3],
@@ -92,7 +90,7 @@ const Cl_peripheral_area_t ma202 = {202,6,
     }
 };
 
-const Cl_peripheral_area_t ma203 = {203, 10,
+const Cl_peripheral_area_t ma203 = {203, 10,CL_CPU,
     {
         (cl_addr_t)&TIMER0_REGS[0],(cl_addr_t)&TIMER0_REGS[1],
         (cl_addr_t)&TIMER0_REGS[2],(cl_addr_t)&TIMER0_REGS[3],
@@ -102,7 +100,7 @@ const Cl_peripheral_area_t ma203 = {203, 10,
     }
 };
 
-const Cl_peripheral_area_t ma204 = {204,16,
+const Cl_peripheral_area_t ma204 = {204,16,CL_CPU,
     {
         (cl_addr_t)&GPIO_REGS[0],(cl_addr_t)&GPIO_REGS[1],
         (cl_addr_t)&GPIO_REGS[2],(cl_addr_t)&GPIO_REGS[3],

@@ -28,7 +28,7 @@
 * this content is necessary for correct data storage and must therefore be called
 * for every memory area that serves as storage destination
 */
-cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type, void *other_d);
+cl_int_t cl_clear_mem_area(Cl_memory_area_t area, void *other_d);
 
 /*!
 * \name Memory area management functions
@@ -42,7 +42,7 @@ cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type
 * It stores data in blocks, with each block being in format 
 * \code [<area_id>,<block_end_addr>,<data_B1>,<data_B2>,...] \endcode
 */
-cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , enum Bare_save_type save_type, void *other_d);
+cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , void *other_d);
 
 /*!
 * \brief This function loads data stored using \c cl_save_mem_area() function. 
@@ -50,7 +50,7 @@ cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area ,
 * It does so by searching source area and loading
 * data from blocks with ID matching destination area
 */
-cl_int_t cl_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *other_d);
+cl_int_t cl_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, void *other_d);
 
 /*!
 * \brief This function reads data stored using \c cl_save_mem_area() function.
@@ -59,7 +59,7 @@ cl_int_t cl_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, 
 * them is that after loading, block in source area is marked as empty and can therefore be filled with new data while reading
 * simply reads data into destination area without modifying source.
 */
-cl_int_t cl_read_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *other_d);
+cl_int_t cl_read_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, void *other_d);
 /*! @}*/
 
 /*!
@@ -70,8 +70,8 @@ cl_int_t cl_read_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, 
 * \note Even peripheral functions use memory areas as a destinations
 * \todo functions should use \c memory_area as destination. Change that
 */
-cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area, Cl_memory_area_t dst_area, enum Bare_save_type save_type,void *other_d);
-cl_int_t cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *other_d);
-cl_int_t cl_read_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *other_d);
+cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area, Cl_memory_area_t dst_area,void *other_d);
+cl_int_t cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *other_d);
+cl_int_t cl_read_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *other_d);
 /*! @}*/
 #endif

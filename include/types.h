@@ -68,6 +68,17 @@ typedef uint64_t cl_int_t;
 */
 
 /*!
+* \brief Low-level way of storing/loading bytes  
+*
+* Chooses which low-level function will be used for data storage or loading.
+* In its base form contains two options: CPU which means that data are written
+* in standard-C way by the CPU and DEVICE which means any other form of data storage.
+* \todo Port creator or user should probably have option to expand this enum.
+* \todo This could probably be moved into \c context_lib_port.h
+*/
+enum Bare_save_type{ CL_CPU,CL_DEVICE };
+
+/*!
  * \struct Cl_memory_area_t
  * \brief Part of memory space with distinct role or technicalities.
  *
@@ -99,6 +110,7 @@ typedef struct {
     cl_int_t id;          //! Area unique identifier used as a metadata when storing area
     cl_addr_t start_addr; //! First address of memory area
     cl_addr_t end_addr;   //! Last address of memory area
+    enum Bare_save_type save_type;
 } Cl_memory_area_t;
 
 
@@ -120,6 +132,7 @@ typedef struct {
 typedef struct {
     cl_int_t id;
     cl_int_t addr_num;
+    enum Bare_save_type save_type;
     cl_addr_t addresses[];
 } Cl_peripheral_area_t;
 
@@ -148,16 +161,6 @@ typedef cl_int_t (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_
 typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
 
 
-/*!
-* \brief Low-level way of storing/loading bytes  
-*
-* Chooses which low-level function will be used for data storage or loading
-* \todo This should be refactored: SEND and CUSTOM_SEND merged and name should be
-* changed as this is used for both save and load
-* \todo Port creator or user should probably have option to expand this enum.
-* \todo This could probably be moved into \c context_lib_port.h
-*/
-enum Bare_save_type{ RAM_WRITE, SEND};
 
 
 

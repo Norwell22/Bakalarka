@@ -124,9 +124,9 @@ base example of data storage and load
 */
 void use_case1()
 {
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma11,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma11,NULL);
+    cl_clear_mem_area(ma1,NULL);
     cl_protect_memory(11);
     cl_protect_memory(255);
     cl_protect_memory(100);
@@ -157,8 +157,8 @@ void use_case1()
     print_rf();
     lram_clear();
     hram_clear();
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
-    cl_clear_mem_area(ma11,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma10,NULL);
+    cl_clear_mem_area(ma11,NULL);
     cl_change_mode(VLLS,STOP,NULL);
     cl_change_mode(STOP,RUN,NULL);
     use_case1_print();
