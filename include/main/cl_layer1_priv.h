@@ -1,8 +1,8 @@
-#ifndef CL_INCLUDE_LAYER_1
-#define CL_INCLUDE_LAYER_1
+#ifndef CL_INCLUDE_LAYER_1_PRIV
+#define CL_INCLUDE_LAYER_1_PRIV
 
 /*! 
- * \file      l1.h
+ * \file      cl_l1_priv.h
  * \brief     Low-level functions for storing and loading data elements
  * \details   
  * On its lowest level, this library simply moves bytes of data from one place to another.
@@ -68,18 +68,6 @@ cl_int_t cl_raw_custom_send_dw(uint64_t dw, uint64_t *addr, void *custom_other_d
 /*! @}*/
 
 /*!
-* \name Saving abstract layer
-* @{
-* \brief Wrapper over saving functions that simply calls one of them based on bus size.
-* \todo This would work better as a macro
-*/
-cl_int_t cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_custom_send_e(cl_int_t e, cl_addr_t addr, void *custom_other_data);
-/*! @}*/
-
-
-/*!
 * \name Loading functions
 * @{
 * \brief Functions for loading data.
@@ -104,27 +92,5 @@ cl_int_t cl_raw_rcv_dw(uint64_t *w, uint64_t *addr, void *not_used);
 cl_int_t cl_raw_custom_rcv_dw(uint64_t *w, uint64_t *addr, void *custom_other_data);
 /*! @}*/
 
-/*!
-* \name Loading abstract layer
-* @{
-* \brief Wrapper over loading functions that simply calls one of them based on bus size.
-* \todo This would work better as a macro
-*/
-cl_int_t cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-cl_int_t cl_raw_custom_rcv_e(cl_addr_t e, cl_addr_t addr, void *custom_other_data);
-/*! @} */
-
-/*
-TODO: either delete or use this somehow
-cl_int_t cl_bare_save(cl_addr_t data, cl_addr_t addr, cl_int_t byte_size, enum Bare_save_type save_type, void *custom_other_data);
-cl_int_t cl_bare_load(cl_addr_t buffer, cl_addr_t addr, cl_int_t byte_size, enum Bare_save_type load_type, void *custom_other_data); 
-uint32_t cl_raw_save_arr_B(uint8_t *data, uint8_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-uint32_t cl_raw_save_arr_hw(uint16_t *data, uint16_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-uint32_t cl_raw_save_arr_w(uint32_t *data, uint32_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-uint32_t cl_raw_load_arr_B(uint8_t *buffer, uint8_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-uint32_t cl_raw_load_arr_hw(uint16_t *buffer, uint16_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-uint32_t cl_raw_load_arr_w(uint32_t *buffer, uint32_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
-*/
 
 #endif

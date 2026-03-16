@@ -242,3 +242,15 @@ const struct peripheral_backup peripheral_backup_table[] = {
     {&ma200,&ma10},{&ma201,&ma10},{&ma202,&ma10},{&ma203,&ma11},
     {&ma204,&ma11}
 };
+
+/*
+TODO: either delete or use this somehow
+cl_int_t cl_bare_save(cl_addr_t data, cl_addr_t addr, cl_int_t byte_size, enum Bare_save_type save_type, void *custom_other_data);
+cl_int_t cl_bare_load(cl_addr_t buffer, cl_addr_t addr, cl_int_t byte_size, enum Bare_save_type load_type, void *custom_other_data); 
+uint32_t cl_raw_save_arr_B(uint8_t *data, uint8_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+uint32_t cl_raw_save_arr_hw(uint16_t *data, uint16_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+uint32_t cl_raw_save_arr_w(uint32_t *data, uint32_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+uint32_t cl_raw_load_arr_B(uint8_t *buffer, uint8_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+uint32_t cl_raw_load_arr_hw(uint16_t *buffer, uint16_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+uint32_t cl_raw_load_arr_w(uint32_t *buffer, uint32_t *addr, uint32_t arr_size, enum Bare_save_type save_type, void *custom_other_data);
+*/

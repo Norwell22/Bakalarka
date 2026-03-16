@@ -12,7 +12,7 @@
  * \todo Implement \a peripheral functions
  */
 #include "../../include/main/l2.h"
-#include "../../include/main/l1.h"
+#include "../../include/main/cl_layer1.h"
 
 cl_int_t cl_clear_mem_area(Cl_memory_area_t area, enum Bare_save_type clear_type, void *custom_d)
 {

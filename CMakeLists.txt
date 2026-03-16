@@ -3,8 +3,7 @@ project(MyLib C)
 
 add_library(context_lib
     src/main/context_manager.c
-    src/main/l1_private.c
-    src/main/l1_public.c
+    src/main/cl_layer1.c
     src/main/l2_private.c
     src/main/l2_public.c
     src/main/l3.c

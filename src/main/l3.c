@@ -12,7 +12,7 @@
  * \todo Implement \a peripheral functions
  */
 #include "../../include/main/l2.h"
-#include "../../include/main/l1.h"
+#include "../../include/main/cl_layer1.h"
 #include "../../include/main/l3.h"
 
 bool is_protected(cl_int_t id)

@@ -126,28 +126,28 @@ Turn on off L2 and L3
 Default protect
 
 ## TODOs
+ - remove those stupid `main` and `common` folders **NOW**
+ - write conf file **NOW**
+ - fix ugly local includes **NOW**
+ - check Endianess, probably deal with it in config **NOW**
+ - make public/private division **NOW**
+ - raw functions don't need to be part of API **NOW**
  - deal with floating point data somehow, probably add functions like for B,HW,W,DW
- - write conf file
  - write proper testbench
  - make proper voluntary logging
  - last address of context should not be part of it
  - write example code to showcase to Strnadel
- - fix ugly local includes
- - check Endianess, probably deal with it in config
  - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
  - it would probably be better if areas itself also contained ways to write into them (load/send/custom_send)
  - metadata should also contain current_mode as this simplifies user interface 
- - there should be an option to save one area into multiple backup places if one won't be enough
  - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
  - L3 meta-meta data: **current mode**, **number of areas**
  - change it so that end address is actually end address
- - with all that recursive crap deal in form of table: [area-mode-target area]
  - load function should merge consecutive blocks with id=0
  - TODO: if save function runs into its own ID, it should probably break or overwrite it
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
  - share library with Strnadel
  - add tests for different types of context
- - make public/private division
  - for some change mode, maybe clear_mem_area should be called
  - deal with load/store between different area types
  - deal with function return types
@@ -160,14 +160,10 @@ Default protect
  - break large functions into smaller ones
  - rewrite testing files into some structured way
  - move doxygen doc into docs
- - remove those stupid `main` and `common` folders
- - raw functions don't need to be part of API
  - merge areas and peripherals everywhere where you can (use union)
  - merge read and load functions
  - get consistent comments for memory area + peripheral area = context area
- - area_on/off is the only way to deal with peripherals I decided
  - refactor with current_mode variable
- - refactor L3 completely
  - write init (cl_protect_all, clear_mem_area,
  - when saving and stumbling upon same ID, rewrite it
 
