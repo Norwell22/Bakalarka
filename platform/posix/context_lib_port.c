@@ -125,6 +125,7 @@ const Cl_peripheral_area_t ma204 = {204,16,
     }
 };
 
+
 /*
 * Layer 3 metadata
 */
@@ -138,89 +139,30 @@ const Cl_peripheral_area_t ma204 = {204,16,
  */
 
 
-const cl_int_t memory_areas_table_size = 12;
-const Cl_memory_area_t *memory_areas[] = {&ma255,&ma1,&ma2,&ma10,&ma11,&ma12,&ma100,&ma101,&ma102,&ma103,
-        &ma104,&ma105};
+const cl_int_t area_backup_table_size = 19;
+struct area_backup area_backup_table[] = {
 
-const cl_int_t peripheral_areas_table_size = 5;
-const Cl_peripheral_area_t *peripheral_areas[] = {&ma200,&ma201,&ma202,&ma203,&ma204};
+    {&ma100, &ma10, STOP,false},{&ma101, &ma10, STOP,false},{&ma102, &ma10, STOP,false},
+    {&ma103, &ma10, STOP,false},{&ma104, &ma10, STOP,false},{&ma105, &ma10,  STOP,false},
 
-const cl_int_t area_mode_table_size = 8;
-const struct area_in_mode area_mode_table[] = {
-    {LRAM, LRAM + 1023, RUN, ON},
-    {LRAM, LRAM + 1023, SLEEP, ON},
-    {LRAM, LRAM + 1023, STOP, ON},
-    {LRAM, LRAM + 1023, VLLS, OFF},
-    {LRAM, LRAM + 1023, VLLS0, OFF},
+    {&ma100, &ma1, VLLS,false},{&ma101, &ma1, VLLS,false},{&ma102, &ma1, VLLS,false},
+    {&ma103, &ma1, VLLS,false},{&ma104, &ma1, VLLS,false},{&ma105, &ma1, VLLS,false},
 
-    {HRAM, HRAM + 1023, RUN, ON},
-    {HRAM, HRAM + 1023, SLEEP, ON},
-    {HRAM, HRAM + 1023, STOP, OFF},
-    {HRAM, HRAM + 1023, VLLS, OFF},
-    {HRAM, HRAM + 1023, VLLS0, OFF},
+    {&ma10, &ma1, VLLS,false},{&ma11, &ma1, VLLS,false},{&ma12, &ma1, VLLS,false},
 
-    {REGISTER_FILE, REGISTER_FILE + 127,RUN,ON},
-    {REGISTER_FILE, REGISTER_FILE + 127,SLEEP,ON},
-    {REGISTER_FILE, REGISTER_FILE + 127,STOP,ON},
-    {REGISTER_FILE, REGISTER_FILE + 127,VLLS,ON},
-    {REGISTER_FILE, REGISTER_FILE + 127,VLLS0,OFF},
+    {&ma10, &ma2, VLLS0,false},{&ma11, &ma2, VLLS0,false},{&ma12, &ma2, VLLS0,false},
 
-    {REGISTER_FILE2, REGISTER_FILE2 + 255,RUN,ON},
-    {REGISTER_FILE2, REGISTER_FILE2 + 255,SLEEP,ON},
-    {REGISTER_FILE2, REGISTER_FILE2 + 255,STOP,ON},
-    {REGISTER_FILE2, REGISTER_FILE2 + 255,VLLS,ON},
-    {REGISTER_FILE2, REGISTER_FILE2 + 255,VLLS0,ON},
-
-    {OUTSIDE1,OUTSIDE1 + 255, RUN, BOTH_VALID},
-    {OUTSIDE1,OUTSIDE1 + 255, SLEEP, BOTH_VALID},
-    {OUTSIDE1,OUTSIDE1 + 255, STOP, BOTH_VALID},
-    {OUTSIDE1,OUTSIDE1 + 255, VLLS, BOTH_VALID},
-
-    {OUTSIDE2,OUTSIDE2 + 255, RUN, BOTH_VALID},
-    {OUTSIDE2,OUTSIDE2 + 255, SLEEP, BOTH_VALID},
-    {OUTSIDE2,OUTSIDE2 + 255, STOP, BOTH_VALID},
-    {OUTSIDE2,OUTSIDE2 + 255, VLLS, BOTH_VALID},
-
-    {UART0_REGS, UART0_REGS + 7, RUN, BOTH_VALID},
-    {UART0_REGS, UART0_REGS + 7, SLEEP, BOTH_VALID},
-    {UART0_REGS, UART0_REGS + 7, STOP, OFF},
-    {UART0_REGS, UART0_REGS + 7, VLLS, OFF},
-
-    {SPI0_REGS, SPI0_REGS + 5, RUN, BOTH_VALID},
-    {SPI0_REGS, SPI0_REGS + 5, SLEEP, BOTH_VALID},
-    {SPI0_REGS, SPI0_REGS + 5, STOP, OFF},
-    {SPI0_REGS, SPI0_REGS + 5, VLLS, OFF},
-
-    {I2C0_REGS, I2C0_REGS + 5, RUN, BOTH_VALID},
-    {I2C0_REGS, I2C0_REGS + 5, SLEEP, BOTH_VALID},
-    {I2C0_REGS, I2C0_REGS + 5, STOP, OFF},
-    {I2C0_REGS, I2C0_REGS + 5, VLLS, OFF},
-
-    {TIMER0_REGS, TIMER0_REGS + 9, RUN, BOTH_VALID},
-    {TIMER0_REGS, TIMER0_REGS + 9, SLEEP, BOTH_VALID},
-    {TIMER0_REGS, TIMER0_REGS + 9, STOP, OFF},
-    {TIMER0_REGS, TIMER0_REGS + 9, VLLS, OFF},
-
-    {GPIO_REGS, GPIO_REGS + 15, RUN, BOTH_VALID},
-    {GPIO_REGS, GPIO_REGS + 15, SLEEP, BOTH_VALID},
-    {GPIO_REGS, GPIO_REGS + 15, STOP, OFF},
-    {GPIO_REGS, GPIO_REGS + 15, VLLS, OFF}
+    {&ma1, &ma2, VLLS0,false}
 };
 
-
-const cl_int_t area_backup_table_size = 10;
-const struct area_backup area_backup_table[] = {
-    {&ma255,&ma1},{&ma10,&ma1},{&ma11,&ma1},
-    {&ma100,&ma10},{&ma101,&ma10},{&ma102,&ma10},
-    {&ma103,&ma10},{&ma104,&ma10},{&ma105,&ma10},
-    {&ma1,&ma2}
-};
-
-const cl_int_t peripheral_backup_table_size = 5;
+const cl_int_t peripheral_backup_table_size = 15;
 const struct peripheral_backup peripheral_backup_table[] = {
-    {&ma200,&ma10},{&ma201,&ma10},{&ma202,&ma10},{&ma203,&ma11},
-    {&ma204,&ma11}
+    {&ma200, &ma10, RUN,true},{&ma201, &ma10, RUN,true},{&ma202, &ma10, RUN,true},
+    {&ma203, &ma10, RUN,true},{&ma204, &ma10, RUN,true},
+
+    {&ma200, &ma10, STOP,true},{&ma201, &ma10, STOP,true},{&ma202, &ma10, STOP,true},
+    {&ma203, &ma10, STOP,true},{&ma204, &ma10, STOP,true},
+
+    {&ma200, &ma1, VLLS,false},{&ma201, &ma1, VLLS,false},{&ma202, &ma1, VLLS,false},
+    {&ma203, &ma1, VLLS,false},{&ma204, &ma1, VLLS,false}
 };
-
-
-

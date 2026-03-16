@@ -1,11 +1,120 @@
 # Context library
 **Author:** Michal Zidzik
-**Date:** end of 2025, start of 2026
+**Date:** 2025 - 2026
 
-# Library documentation
+Purpose of this library is to provide abstract layer over context management functions 
+for **embedded systems**. It provides functions for protecting, storing and loading 
+memory areas filled with sensitive data with expected usage being the situation when
+embedded device is put in some power saving mode (SLEEP, STOP and many others). 
 
-This file serves as a basic first version of documentation for my library
-Its main point is for me stoopid person to not forget what I came up with
+Target audience is embedded developers who need to include some basic memory protection 
+in their software and are willing to sacrifice bit of time learning (*and probably porting*)
+new library. I also hope that it can provide a bit of insight and serve as a tool for learning
+memory management on embedded systems. Library is open source and you are welcome to change whathever
+you want about it.
+
+Library was written in C(TODO standard) and uses CMake(TODO standard) as building tool. Apart from this file,
+doxygen documentation for it has been created. Library is also described to the great detail in my bachelors thesis,
+but that is written in Slovak language.
+
+*This library was written as part of my bachelors thesis for Faculty of information technology on*
+*Brno University of technology in academic year 2025/26* 
+
+
+# Where to start
+
+- Read previous section to get on the same page with me
+- Check **[Devices](#devices)** section to learn whether library has been ported to your device
+- If no, proceed with **[How to port](#how-to-port)** section, then return here
+- Proceed with **[How to include](#how-to-include)** section
+- You will probably want to look into **[API](#api)** and **[Basic functionality](#basic-functionality)** sections of this document
+
+
+# Library structure
+
+ - `./` folder contains basic documentation, versioning and licensing info.
+ - `./docs`: Doxygen generated documentation
+ - `./examples`: well-commented use cases and testbench for different
+ embedded devices that this library supports
+ - `./include`: header files of this library
+ - `./platform`: ports of this library to different microcontroller devices
+ - `./src`: library source files (.c)
+
+
+# API
+
+Data types that user interacts with:
+- `Cl_memory_area_t`: area of memory that represents range of addresses with same logical meaning
+- `Cl_peripheral_area_t`: area of memory that represents set of individual non-connected addresses
+
+User-defined metadata:
+- `memory_areas`: table of all memory areas
+- `peripheral_areas`: table of all peripheral areas
+- `area_backup_table`: table mapping memory area to its backup memory area
+- `peripheral_backup_table`: table mapping peripheral area to its backup memory area
+
+Functions for direct context storage:
+- `cl_clear_mem_area`: this must be called for destination areas
+- `cl_save_mem_area`: save contents of one memory area into another one
+- `cl_load_mem_area`: retrieve saved contents
+- `cl_read_mem_area`: retrieve saved contents, don't mark it as obsolete
+- `cl_save_peripheral`: save contents of peripheral area into memory area
+- `cl_load_peripheral`: retrieve saved contents
+- `cl_read_peripheral`: retrieve saved contents, don't mark it as obsolete
+
+Functions for automatic context storage:
+- `cl_area_on`: inform library that context area has been turned on *(trigger load)*
+- `cl_area_off`: inform library that context area has been turned off *(trigger save)*
+- `cl_protect_memory`: mark context area as protected
+- `cl_unprotect_memory`: mark context area as unprotected
+- `cl_change_mode`: inform library that power mode of MCU has been changed
+
+
+# Basic functionality
+
+This library is expected to be used in following way:
+1. Port with metadata about MCU is created
+2. User defines context areas that he wants to protect alongside 
+areas where he wants to protect them (registers into RAM array, 
+RAM array into non-volatile memory...)
+3. User declares these areas as protected
+4. Every time power mode changes, user informs library about this change
+
+*For better explanation, please visit `\examples` folder*
+
+
+# Used terms
+
+- *library* refers to this library
+- *port* is implementation of `/platform` files in such a way that library can 
+work on new device
+- *user* is embedded developer using this library
+- *memory area* is sequence of addresses with one logical or physical meaning
+- *peripheral area* is set of addresses with one logical or physical meaning
+(expected usage is registers of peripheral device or some MCU module)
+- *context* refers to any data important to user, that might be lost in power
+saving modes (memory area + peripheral area)
+- *MCU*,*microcontroller*,*embedded device*,*device* are used interchangeably
+- *source area* is area with some important data that user wants to save
+- *destination area* is area used **only** as data backup
+
+
+# How to port
+
+TODO
+
+
+# How to include
+
+TODO
+
+
+
+
+# Notes
+- Currently it seems that 
+- `git tag v<num.num.num>`
+- `git push origin v<num.num.num>`
 
 ## Configuration file
 
@@ -14,29 +123,7 @@ Don't forget to allow/block raw functions
 Turn logging on-off
 Probably some lightweight version
 Turn on off L2 and L3
-
-## Layer 1
-Layer 1 refers to most low-level library layer. Its goal is basically to move data from one place to another
-It's most important and problematic role is to provide means for different ways in which we can move data from one place to another
-It contains basic moving in memory from one place to another, should also contain send/receive mechanism and custom sending mechanism with 
-option to pass down some bonus data.
-MCU-specific functions aren't currently on one place because I haven't figured out yet what is the best approach about them
-MCU-specific functions for storing data: `store_byte`, `send_byte`, `custom_send_byte`
-MCU-specific functions for receiving data: `load_byte`, `rcv_byte`, `custom_rcv_byte`
-
-Generic functions build on those functions and provide means for storing data in every technical way. Data can be stored/loaded:
- - by bytes
- - by half words
- - by words
- - (by double words)
- Those functions are currently stored in l1_public.c
- 
- There are some TODOs accross different files, mainly stuff that I need to figure out what best approach about them might be
-
-In one sentence: now I can write and load data across different memory areas without worying about technical details of it. 
-
-## Layer 2
-
+Default protect
 
 ## TODOs
  - deal with floating point data somehow, probably add functions like for B,HW,W,DW
@@ -46,7 +133,6 @@ In one sentence: now I can write and load data across different memory areas wit
  - last address of context should not be part of it
  - write example code to showcase to Strnadel
  - fix ugly local includes
- - remove unnecessary includes
  - check Endianess, probably deal with it in config
  - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
  - it would probably be better if areas itself also contained ways to write into them (load/send/custom_send)
@@ -72,6 +158,18 @@ In one sentence: now I can write and load data across different memory areas wit
  - can address go from high to low??
  - rething protect/unprotect memory functions
  - break large functions into smaller ones
+ - rewrite testing files into some structured way
+ - move doxygen doc into docs
+ - remove those stupid `main` and `common` folders
+ - raw functions don't need to be part of API
+ - merge areas and peripherals everywhere where you can (use union)
+ - merge read and load functions
+ - get consistent comments for memory area + peripheral area = context area
+ - area_on/off is the only way to deal with peripherals I decided
+ - refactor with current_mode variable
+ - refactor L3 completely
+ - write init (cl_protect_all, clear_mem_area,
+ - when saving and stumbling upon same ID, rewrite it
 
 ## Requirements
  - deal with CMake version
@@ -79,6 +177,7 @@ In one sentence: now I can write and load data across different memory areas wit
  - (?? 1B == 8b ??)
  - (?? every byte is addressable ??)
  - every address space used as destination should not be used in any other way
+ - `const` ends in FLASH
 
 ## Possible issues
  - fragmentation of addres space : dynamically merge empty spaces with load function
@@ -87,6 +186,8 @@ In one sentence: now I can write and load data across different memory areas wit
         loading, its a problem
  - similarily, problem with A->B->C loading in case A and B are turned off: for every saved/loading area, there needs to be proper algorithm for choosing destination. That should not be super hard and should fix the problem quite well.
  - it will probably pose a big issue to reinitialize destination areas after they are deleted: in turn_on, this should probably happen
+ - loading using change_mode now does more loading than it should because of duplicates in backup_area table. Logic behind this
+ table needs  to be reworked properly with this and also recursive saving in mind
  ## Versioning
  MAJOR:MINOR:PATCH
  MAJOR: if you change API in significant way, for non finished project use 0

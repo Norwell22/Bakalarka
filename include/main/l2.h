@@ -70,9 +70,9 @@ cl_int_t cl_read_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, 
 * \note Even peripheral functions use memory areas as a destinations
 * \todo functions should use \c memory_area as destination. Change that
 */
-cl_int_t cl_save_peripheral(Cl_peripheral_area_t src_area, Cl_peripheral_area_t dst_area, enum Bare_save_type save_type,void *custom_other_data);
-cl_int_t cl_load_peripheral(Cl_peripheral_area_t dst_area, Cl_peripheral_area_t src_area, enum Bare_save_type save_type, void *custom_other_data);
-cl_int_t cl_read_peripheral(Cl_peripheral_area_t dst_area, Cl_peripheral_area_t src_area, enum Bare_save_type save_type, void *custom_other_data);
+cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area, Cl_memory_area_t dst_area, enum Bare_save_type save_type,void *custom_other_data);
+cl_int_t cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *custom_other_data);
+cl_int_t cl_read_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type, void *custom_other_data);
 /*! @}*/
 
 
@@ -124,5 +124,6 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
 */
 cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type,void *custom_d,uint8_t erase);
 
+cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, enum Bare_save_type save_type,void *custom_d, uint8_t erase);
 
 #endif

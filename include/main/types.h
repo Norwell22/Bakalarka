@@ -195,19 +195,21 @@ enum Cl_power_mode_t{RUN, SLEEP, STOP, VLLS, VLLS0};
 * Area is either turned on, off or it can be turned on/off independendly
 * of this particular power mode( \c BOTH_VALID option)
 */
-enum Cl_memory_state{ON,OFF,BOTH_VALID};
+// enum Cl_memory_state{ON,OFF,BOTH_VALID};
 
 /*!
 * \brief For individual power modes determines which parts of address space are turned
 * off. 
 * \note One table of this type should be implemented by the port creator ( \c area_mode_table )
 */
-struct area_in_mode {
+/*
+struct area_in_mode_old {
     cl_addr_t start_address;
     cl_addr_t end_address;
     enum Cl_power_mode_t mode;
     enum Cl_memory_state state;
 };
+*/
 
 /*!
 * \brief Area to be protected mapped to area where it should be saved
@@ -219,9 +221,15 @@ struct area_in_mode {
 * \note Saving areas is recursive: if A is mapped onto B and B is mapped onto C,
 * context from A will be saved into C if A and B is turned off at once.
 */
+struct area_backup_old {
+    const Cl_memory_area_t *area;
+    const Cl_memory_area_t *backup_area;
+};
 struct area_backup {
     const Cl_memory_area_t *area;
     const Cl_memory_area_t *backup_area;
+    enum Cl_power_mode_t mode;
+    bool default_on;
 };
 
 /*!
@@ -234,9 +242,15 @@ struct area_backup {
 * \note Saving areas is recursive: if A is mapped onto B and B is mapped onto C,
 * context from A will be saved into C if A and B is turned off at once.
 */
+struct peripheral_backup_old {
+    const Cl_peripheral_area_t *area;
+    const Cl_memory_area_t *backup_area;
+};
 struct peripheral_backup {
     const Cl_peripheral_area_t *area;
     const Cl_memory_area_t *backup_area;
+    enum Cl_power_mode_t mode;
+    bool default_on;
 };
 
 /*!
@@ -250,7 +264,7 @@ extern const cl_int_t memory_areas_table_size;
 * file.
 * \todo Consider removing this
 */
-extern const Cl_memory_area_t *memory_areas[];
+extern const Cl_memory_area_t *memory_areas_old[];
 
 /*!
 * \brief Size of \c peripheral_areas table
@@ -263,7 +277,7 @@ extern const cl_int_t peripheral_areas_table_size;
 * file.
 * \todo Consider removing this
 */
-extern const Cl_peripheral_area_t *peripheral_areas[];
+extern const Cl_peripheral_area_t *peripheral_areas_old[];
 
 /*!
 * \brief Size of \c area_mode table
@@ -279,7 +293,7 @@ extern const cl_int_t  area_mode_table_size;
 * \note This table can only contain RUN and modes that actually turn some part of memory off. Low-power run 
 * for example is absolutely unnecessary here.
 */
-extern const struct area_in_mode area_mode_table[];
+// extern const struct area_in_mode area_mode_table_old[];
 
 /*!
 * \brief Size of \c area_backup_table
@@ -294,7 +308,7 @@ extern const cl_int_t area_backup_table_size;
 * \note See examples in \c context_lib_port.c files
 * \todo Implement recursive data protection
 */
-extern const struct area_backup area_backup_table[];
+extern struct area_backup area_backup_table[];
 
 /*!
 * \brief Size of \c peripheral_backup_table

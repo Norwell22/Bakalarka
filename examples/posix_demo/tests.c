@@ -37,6 +37,8 @@
     2.4 load part of data: SUCCESS
     2.5 load two parts of data: SUCCESS
     2.6 load three parts of data: SUCCESS
+3. cl_save/load_peripheral
+    3.1 save and then load peripheral area
 4. mem_area functions combined
     4.1 save-read-load: SUCCESS
     4.2 read: SUCCESS
@@ -510,6 +512,23 @@ void l2_test2()
 
 }
 
+void l2_test3()
+{
+    spi0_fill();
+    print_spi0_regs();
+    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    printf("MA201:%p\n",&ma201);
+    cl_save_peripheral(&ma201,ma10,RAM_WRITE,NULL);
+    printf("3.1 EXPECTED: [201,<A>,2010,2011,2012,2013,...]\n");
+    print_lram(0,20);
+
+    spi0_clear();
+    cl_load_peripheral(&ma201,ma10,RAM_WRITE,NULL);
+    printf("3.1 EXPECTED: [2010,2011,2012,2013...]\n");
+    print_spi0_regs();
+
+}
+
 void l2_test4()
 {
     hram_fill1();
@@ -610,8 +629,9 @@ void l3_t11()
     cl_clear_mem_area(ma10,RAM_WRITE,NULL);
     hram_fill1();
     cl_protect_memory(100);
-    cl_area_off(100,NULL);
-    cl_area_on(100,NULL);
+    cl_area_off(100,STOP,NULL);
+    hram_clear();
+    cl_area_on(100,STOP,NULL);
     print_lram(0,10);
     print_hram(0,5);
 }
@@ -622,15 +642,17 @@ void l3_t12()
     cl_clear_mem_area(ma10,RAM_WRITE,NULL);
     uart0_fill();
     cl_protect_memory(200);
-    cl_area_off(200,NULL);
-    cl_area_on(200,NULL);
-    print_lram(0,10);
+    cl_area_off(200,RUN,NULL);
+    cl_area_on(200,RUN,NULL);
+    printf("1.2 EXPECTED: [0,<A>,2000,2001,...] [2000,2001,2002,2003,2004]\n");
+    print_lram(0,20);
     print_uart0_regs();
-    cl_area_off(200,NULL);
-    cl_area_on(200,NULL);
-    cl_area_off(200,NULL);
-    cl_area_on(200,NULL);
-    print_lram(0,10);
+    cl_area_off(200,RUN,NULL);
+    cl_area_on(200,RUN,NULL);
+    cl_area_off(200,RUN,NULL);
+    cl_area_on(200,RUN,NULL);
+    printf("1.2 EXPECTED: [0,<A>,2000,2001,...] [2000,2001,2002,2003,2004]\n");
+    print_lram(0,30);
     print_uart0_regs();
 }
 
@@ -639,39 +661,48 @@ void l3_t13()
     // 1.3 Protect multiple ma's, then load and save them repeatedly using area_off/area_on
     cl_clear_mem_area(ma10,RAM_WRITE,NULL);
     hram_fill1();
+    registers_fill();
+    registers_print();
     cl_protect_memory(200);
     cl_protect_memory(201);
     cl_protect_memory(204);
     cl_protect_memory(203);
-    cl_area_off(200,NULL);
-    cl_area_off(201,NULL);
-    registers_clear();
-    cl_area_on(200,NULL);
-    cl_area_off(204,NULL);
-    cl_area_off(203,NULL);
-    printf("1.3 EXPECTED: [0,<A>,2000,2001,...,201,<A>,2010,2011,...,204,<A>,2040,2041,...,203,<A>,2030,2031,...,0,<A>\n");
-    print_lram(0,30);
+    cl_area_off(200,RUN,NULL);
+    uart0_clear();
+    cl_area_off(201,RUN,NULL);
+    spi0_clear();
+    cl_area_on(200,RUN,NULL);
+    cl_area_off(204,RUN,NULL);
+    gpio_clear();
+    cl_area_off(203,RUN,NULL);
+    timer0_clear();
+    printf("1.3 EXPECTED: [204,<A>,2040,2041...,201,<A>,2010,...,204,<A>,204x,...,203,<A>,2030,...,0,<A>,..]\n");
+    print_lram(0,40);
 }
 
 void l3_t14()
 {
     // 1.4 Protect multiple ma's, then load and save them repeatedly using area_off_area on
+    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
     registers_fill();
     cl_protect_memory(201);
     cl_protect_memory(202);
     cl_protect_memory(203);
-    cl_area_off(203,NULL);
+    cl_area_off(203,RUN,NULL);
     timer0_clear();
-    cl_area_on(203,NULL);
+    cl_area_on(203,RUN,NULL);
     print_timer0_regs();
-    cl_area_off(202,NULL);
+    cl_area_off(202,RUN,NULL);
     i2c0_clear();
-    cl_area_off(201,NULL);
+    cl_area_off(201,RUN,NULL);
     spi0_clear();
-    cl_area_off(204,NULL);
+    cl_area_off(204,RUN,NULL);
     gpio_clear();
-    cl_area_on(202,NULL);
+    cl_area_on(202,RUN,NULL);
+    printf("1.4 EXPECTED: UART,I2C and TIMER have contents saved\n");
     registers_print();
+    printf("1.4 EXPECTED: [0,<A>,2020,...,201,<A>,2010,...]\n");
+    print_lram(0,40);
 }
 
 void l3_t15()
@@ -696,16 +727,17 @@ void l3_t15()
 void l3_t16()
 {
     // 1.6 Protect peripheral, then save and load it repeatedly using change_mode
-    cl_clear_mem_area(ma10,RAM_WRITE,NULL);
+    cl_clear_mem_area(ma1,RAM_WRITE,NULL);
     registers_fill();
     cl_protect_memory(204);
-    cl_change_mode(RUN,STOP,NULL);
+    cl_change_mode(RUN,VLLS,NULL);
     registers_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(VLLS,RUN,NULL);
     print_gpio_regs();
-    cl_change_mode(RUN,STOP,NULL);
+    cl_change_mode(RUN,VLLS,NULL);
     registers_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(VLLS,RUN,NULL);
+    printf("1.6 EXPECTED: [2040,2041,...]\n");
     print_gpio_regs();
 }
 
@@ -736,6 +768,7 @@ void l3_t17()
     print_hram(30,36);
     print_hram(40,47);
     print_hram(50,54);
+    print_lram(0,40);
 }
 
 void l3_t21()
@@ -849,7 +882,7 @@ void l3_t27() {
 
 void l3_t28() {
     // 2.8 With A->B->C, first turn on B, then turn on A
-    // need to run 2.7 first
+    // need to run 2.7 or 2.1 first
     // SUCCESS
     cl_change_mode(VLLS,STOP,NULL);  // restore B from C
     cl_change_mode(STOP,RUN,NULL);   // restore A from B
@@ -861,25 +894,38 @@ void l3_t28() {
 
 void l3_test2()
 {
+    //1: FAILURE: I have not seen situation like this in any real-life scenario, it would be good if it worked but not necessary
+    // l3_t27();
+    // l3_t28();
+    //2:
+    // l3_t27();
+    // l3_t22();
+    //3:
+    // l3_t21();
+    // l3_t28();
+    //4:
+    // l3_t21();
+    // l3_t22();
+
     // l3_t21();
     // l3_t22();
     // l3_t23();
     // l3_t24();
     // l3_t25();
     // l3_t26();
-    l3_t27();
-    l3_t28();
+    // l3_t27();
+    // l3_t28();
 }
 
 void l3_test1()
 {
-    // l3_t11();
-    // l3_t12();
-    // l3_t13();
-    // l3_t14();
-    // l3_t15();
-    // l3_t16();
-    // l3_t17();
+    // l3_t11(); v0.5.0 : success
+    // l3_t12(); v0.5.0 : success
+    // l3_t13(); v0.5.0 : success
+    // l3_t14(); v0.5.0 : success
+    // l3_t15(); v0.5.0 : success
+    // l3_t16(); v0.5.0 : success
+    // l3_t17(); v0.5.0 : success
 }
 
 /* === Testbench for L3
@@ -904,7 +950,8 @@ cl_int_t main()
 {
     // l2_test1();
     // l2_test2();
+    // l2_test3();
     // l2_test4();
-    //  l3_test1();
+    // l3_test1();
     l3_test2();
 }
