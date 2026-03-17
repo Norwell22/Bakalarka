@@ -123,10 +123,8 @@ TODO
  - test saving of different data types **USE CASE WORK**
  - write proper testbench **TESTS WORK**
  - write example code to showcase to Strnadel **USE CASE WORK**
- - metadata should also contain current_mode as this simplifies user interface **CURRENT MODE IN METADATA**
  - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **MACRO FOR MEMORY AREA**
- - L3 meta-meta data: **current mode**, **number of areas** **CURRENT MODE IN METADATA**
- - TODO: if save function runs into its own ID, it should probably break or overwrite it
+ - if save function runs into its own ID, it should probably break or overwrite it
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
  - share library with Strnadel
  - add tests for different types of context

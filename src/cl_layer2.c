@@ -377,6 +377,7 @@ cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
 
 void cl_init()
 {
+    cl_write_mode(CL_DEFAULT_MODE);
     ULOG_INIT();
     ULOG_SUBSCRIBE(console_log,ULOG_TRACE_LEVEL);
 }

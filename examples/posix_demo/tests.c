@@ -629,9 +629,10 @@ void l3_t11()
     cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     cl_protect_memory(100);
-    cl_area_off(100,STOP,NULL);
+    cl_write_mode(STOP);
+    cl_area_off(100,NULL);
     hram_clear();
-    cl_area_on(100,STOP,NULL);
+    cl_area_on(100,NULL);
     print_lram(0,10);
     print_hram(0,5);
 }
@@ -642,15 +643,16 @@ void l3_t12()
     cl_clear_mem_area(ma10,NULL);
     uart0_fill();
     cl_protect_memory(200);
-    cl_area_off(200,RUN,NULL);
-    cl_area_on(200,RUN,NULL);
+    cl_write_mode(RUN);
+    cl_area_off(200,NULL);
+    cl_area_on(200,NULL);
     printf("1.2 EXPECTED: [0,<A>,2000,2001,...] [2000,2001,2002,2003,2004]\n");
     print_lram(0,20);
     print_uart0_regs();
-    cl_area_off(200,RUN,NULL);
-    cl_area_on(200,RUN,NULL);
-    cl_area_off(200,RUN,NULL);
-    cl_area_on(200,RUN,NULL);
+    cl_area_off(200,NULL);
+    cl_area_on(200,NULL);
+    cl_area_off(200,NULL);
+    cl_area_on(200,NULL);
     printf("1.2 EXPECTED: [0,<A>,2000,2001,...] [2000,2001,2002,2003,2004]\n");
     print_lram(0,30);
     print_uart0_regs();
@@ -667,14 +669,15 @@ void l3_t13()
     cl_protect_memory(201);
     cl_protect_memory(204);
     cl_protect_memory(203);
-    cl_area_off(200,RUN,NULL);
+    cl_write_mode(RUN);
+    cl_area_off(200,NULL);
     uart0_clear();
-    cl_area_off(201,RUN,NULL);
+    cl_area_off(201,NULL);
     spi0_clear();
-    cl_area_on(200,RUN,NULL);
-    cl_area_off(204,RUN,NULL);
+    cl_area_on(200,NULL);
+    cl_area_off(204,NULL);
     gpio_clear();
-    cl_area_off(203,RUN,NULL);
+    cl_area_off(203,NULL);
     timer0_clear();
     printf("1.3 EXPECTED: [204,<A>,2040,2041...,201,<A>,2010,...,204,<A>,204x,...,203,<A>,2030,...,0,<A>,..]\n");
     print_lram(0,40);
@@ -688,17 +691,18 @@ void l3_t14()
     cl_protect_memory(201);
     cl_protect_memory(202);
     cl_protect_memory(203);
-    cl_area_off(203,RUN,NULL);
+    cl_write_mode(RUN);
+    cl_area_off(203,NULL);
     timer0_clear();
-    cl_area_on(203,RUN,NULL);
+    cl_area_on(203,NULL);
     print_timer0_regs();
-    cl_area_off(202,RUN,NULL);
+    cl_area_off(202,NULL);
     i2c0_clear();
-    cl_area_off(201,RUN,NULL);
+    cl_area_off(201,NULL);
     spi0_clear();
-    cl_area_off(204,RUN,NULL);
+    cl_area_off(204,NULL);
     gpio_clear();
-    cl_area_on(202,RUN,NULL);
+    cl_area_on(202,NULL);
     printf("1.4 EXPECTED: UART,I2C and TIMER have contents saved\n");
     registers_print();
     printf("1.4 EXPECTED: [0,<A>,2020,...,201,<A>,2010,...]\n");
@@ -711,14 +715,15 @@ void l3_t15()
     cl_clear_mem_area(ma10,NULL);
     hram_fill1();
     cl_protect_memory(100);
-    cl_change_mode(RUN,STOP,NULL);
+    cl_write_mode(RUN);
+    cl_change_mode(STOP,NULL);
     hram_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("1.5 EXPECTED: [0,1,2,3,4]\n");
     print_hram(0,5);
-    cl_change_mode(RUN,STOP,NULL);
+    cl_change_mode(STOP,NULL);
     hram_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("1.5 EXPECTED: [0,1,2,3,4]\n");
     print_hram(0,5);
     print_lram(0,10);
@@ -730,13 +735,14 @@ void l3_t16()
     cl_clear_mem_area(ma1,NULL);
     registers_fill();
     cl_protect_memory(204);
-    cl_change_mode(RUN,VLLS,NULL);
+    cl_write_mode(RUN);
+    cl_change_mode(VLLS,NULL);
     registers_clear();
-    cl_change_mode(VLLS,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     print_gpio_regs();
-    cl_change_mode(RUN,VLLS,NULL);
+    cl_change_mode(VLLS,NULL);
     registers_clear();
-    cl_change_mode(VLLS,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("1.6 EXPECTED: [2040,2041,...]\n");
     print_gpio_regs();
 }
@@ -749,9 +755,10 @@ void l3_t17()
     cl_protect_memory(102);
     cl_protect_memory(103);
     cl_protect_memory(104);
-    cl_change_mode(RUN,STOP,NULL);
+    cl_write_mode(RUN);
+    cl_change_mode(STOP,NULL);
     hram_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("1.7 EXPECTED: [10,11,12,13,14] [15,16,17,18,19,20] [20,21,22,23,24,25,26]\n");
     print_hram(20,25);
     print_hram(30,36);
@@ -760,9 +767,9 @@ void l3_t17()
     cl_unprotect_memory(103);
     cl_unprotect_memory(102);
     hram_fill1();
-    cl_change_mode(RUN,STOP,NULL);
+    cl_change_mode(STOP,NULL);
     hram_clear();
-    cl_change_mode(STOP,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("1.7 EXPECTED: [0,0,0,0,0] [0,0,0,0,0,0] [20,21,22,23,24,25,26] [25,26,27,28]\n");
     print_hram(20,25);
     print_hram(30,36);
@@ -775,6 +782,7 @@ void l3_t21()
 {
     // 2.1 With A->B->C, change into mode that turns off A and B
     // FAILED
+    cl_write_mode(RUN);
     cl_clear_mem_area(ma10,NULL);
     cl_clear_mem_area(ma1,NULL);
 
@@ -783,7 +791,7 @@ void l3_t21()
     cl_protect_memory(100); // A
     cl_protect_memory(10);  // B
 
-    cl_change_mode(RUN,VLLS,NULL);
+    cl_change_mode(VLLS,NULL);
     hram_clear();
     lram_clear();
     printf("2.1 EXPECTED: [10,<A>,100,<A>,0,1,2,3,4,0,<A>\n");
@@ -795,7 +803,7 @@ void l3_t22()
     // 2.2 With A->B->C, change into mode that turns on A and B
     // this test needs to be run after 2.1 
     // FAILED
-    cl_change_mode(VLLS,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("2.2 EXPECTED: [0,<A>,0,1,2,3,4,0,<A>] [0,1,2,3,4]\n");
     print_lram(0,10);
     print_hram(0,5);
@@ -814,10 +822,12 @@ void l3_t23()
     cl_protect_memory(10);  // B
     cl_protect_memory(1);   // C
 
-    cl_change_mode(RUN,VLLS,NULL);
+    cl_write_mode(RUN);
+
+    cl_change_mode(VLLS,NULL);
     hram_clear();
     lram_clear();
-    cl_change_mode(VLLS,VLLS0,NULL);
+    cl_change_mode(VLLS0,NULL);
     rf_clear();
     printf("2.3 EXPECTED: [1,<A>,10,<A>,100,<A>,0,1,2,3,4,0,<A>\n");
     print_rf2(0,20);
@@ -835,7 +845,9 @@ void l3_t24()
     cl_protect_memory(100); // A
     cl_protect_memory(10);  // B
     cl_protect_memory(1);   // C
-    cl_change_mode(RUN,VLLS0,NULL);
+
+    cl_write_mode(RUN);
+    cl_change_mode(VLLS0,NULL);
     hram_clear();
     lram_clear();
     rf_clear();
@@ -847,7 +859,7 @@ void l3_t25() {
     // 2.5 With A->B->C->D, change into mode that turns on C and D
     // currently won't work
     // run after 2.3
-    cl_change_mode(VLLS0,STOP,NULL);
+    cl_change_mode(STOP,NULL);
     printf("2.5 EXPECTED: (no clue honestly)\n");
     print_rf(0,15);
     print_lram(0,10);
@@ -857,7 +869,7 @@ void l3_t25() {
 void l3_t26() {
     // 2.6 With A->B->C->D, change into mode that turns on A and B and C
     // run after 2.4
-    cl_change_mode(VLLS0,RUN,NULL);
+    cl_change_mode(RUN,NULL);
     printf("2.6 EXPECTED: no clue honestly\n");
     print_rf(0,10);
     print_lram(0,10);
@@ -872,9 +884,10 @@ void l3_t27() {
     hram_fill1();
     cl_protect_memory(100);
     cl_protect_memory(10);
-    cl_change_mode(RUN,STOP,NULL);   // vypne A (A->B)
+    cl_write_mode(RUN);
+    cl_change_mode(STOP,NULL);   // vypne A (A->B)
     hram_clear();
-    cl_change_mode(STOP,VLLS,NULL);  // vypne B (B->C)
+    cl_change_mode(VLLS,NULL);  // vypne B (B->C)
     lram_clear();
     printf("2.7 EXPECTED: [10,<A>,100,<A>,0,1,2,3,4,0,<A>\n");
     print_rf(0,12);
@@ -884,8 +897,8 @@ void l3_t28() {
     // 2.8 With A->B->C, first turn on B, then turn on A
     // need to run 2.7 or 2.1 first
     // SUCCESS
-    cl_change_mode(VLLS,STOP,NULL);  // restore B from C
-    cl_change_mode(STOP,RUN,NULL);   // restore A from B
+    cl_change_mode(STOP,NULL);  // restore B from C
+    cl_change_mode(RUN,NULL);   // restore A from B
 
     printf("2.8 EXPECTED: [0,<A>,0,1,2,3,4,0,<A>] [0,1,2,3,4]\n");
     print_lram(0,10);

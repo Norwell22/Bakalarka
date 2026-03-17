@@ -181,6 +181,7 @@ typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom
 * enum Cl_power_mode_t{RUN,SLEEP,STOP,LLS,VLLS0,VLLS1,VLLS2,VLLS3};
 */
 enum Cl_power_mode_t{RUN, SLEEP, STOP, VLLS, VLLS0};
+#define CL_DEFAULT_MODE RUN
 
 
 /*!

@@ -29,7 +29,7 @@ bool is_protected(cl_int_t id)
 
 // cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
 // cl_load_f_t load_f = sel_load_f(src_area.save_type); // choose low-level technique for loading data
-enum Cl_power_mode_t get_mode()
+enum Cl_power_mode_t cl_get_mode()
 {
     cl_int_t mode;
     cl_load_f_t load_f = sel_load_f(ma255.save_type);
@@ -37,7 +37,7 @@ enum Cl_power_mode_t get_mode()
     return (enum Cl_power_mode_t)mode;
 }
 
-void write_mode(enum Cl_power_mode_t new_mode)
+void cl_write_mode(enum Cl_power_mode_t new_mode)
 {
     cl_save_f_t save_f = sel_save_f(ma255.save_type);
     save_f((cl_int_t)new_mode,ma255.end_addr,NULL);
@@ -46,8 +46,9 @@ void write_mode(enum Cl_power_mode_t new_mode)
     
     
 
-cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
+cl_int_t cl_area_on( cl_int_t id, void *custom_d)
 {
+    enum Cl_power_mode_t mode = cl_get_mode();
     cl_int_t i;
     if (!is_protected(id))
     {
@@ -72,8 +73,9 @@ cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
     }
 }
 
-cl_int_t cl_area_off( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
+cl_int_t cl_area_off( cl_int_t id, void *custom_d)
 {
+    enum Cl_power_mode_t current_mode = cl_get_mode();
     cl_int_t i;
     /*
     TODO: you should check if its possible to turn it off once you implement current mode variable 
@@ -172,8 +174,9 @@ bool find_match(cl_addr_t start_a1, cl_addr_t end_a1, cl_addr_t start_a2,
 }
 
 
-cl_int_t cl_change_mode(enum Cl_power_mode_t from_mode, enum Cl_power_mode_t to_mode,void *custom_d)
+cl_int_t cl_change_mode(enum Cl_power_mode_t to_mode,void *custom_d)
 {
+    enum Cl_power_mode_t from_mode = cl_get_mode();
     cl_int_t i;
     for (i = 0; i < area_backup_table_size; i++){
         if (area_backup_table[i].mode == to_mode &&
@@ -199,4 +202,5 @@ cl_int_t cl_change_mode(enum Cl_power_mode_t from_mode, enum Cl_power_mode_t to_
             cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         }
     }
+    cl_write_mode(to_mode);
 }
