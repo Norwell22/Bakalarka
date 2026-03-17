@@ -948,6 +948,7 @@ void l3_test1()
 
 cl_int_t main()
 {
+    cl_init();
     // l2_test1();
     // l2_test2();
     // l2_test3();

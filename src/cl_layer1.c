@@ -11,6 +11,7 @@
  * \date      02.03.2026
  */
 #include "cl_layer1.h"
+#include "ulog.h"
 //#include "../../include/main/cl_layer1_priv.h"
 
 static cl_int_t save_byte(uint8_t b, uint8_t *addr)

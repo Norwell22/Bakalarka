@@ -118,17 +118,14 @@ TODO
 
 
 ## TODOs
- - write conf file
- - deal with floating point data somehow, probably add functions like for B,HW,W,DW
- - test saving of different data types
- - write proper testbench
- - make proper voluntary logging
- - write example code to showcase to Strnadel
- - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
- - metadata should also contain current_mode as this simplifies user interface 
- - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
- - L3 meta-meta data: **current mode**, **number of areas**
- - load function should merge consecutive blocks with id=0 **THIS**
+ - write conf file **FINAL WORK**
+ - deal with floating point data somehow, probably add functions like for B,HW,W,DW **USE CASE WORK**
+ - test saving of different data types **USE CASE WORK**
+ - write proper testbench **TESTS WORK**
+ - write example code to showcase to Strnadel **USE CASE WORK**
+ - metadata should also contain current_mode as this simplifies user interface **CURRENT MODE IN METADATA**
+ - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **MACRO FOR MEMORY AREA**
+ - L3 meta-meta data: **current mode**, **number of areas** **CURRENT MODE IN METADATA**
  - TODO: if save function runs into its own ID, it should probably break or overwrite it
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
  - share library with Strnadel
@@ -136,6 +133,9 @@ TODO
  - for some change mode, maybe clear_mem_area should be called
  - deal with load/store between different area types
  - deal with function return types
+ - remove magic constants
+ - give CL_prefix to public types
+ - rewrite is protected as it's utterly wrong
  - deal with error handling
  - add proper logging
  - for some functions check if size of area is at least 2
@@ -145,15 +145,17 @@ TODO
  - break large functions into smaller ones
  - rewrite testing files into some structured way
  - move doxygen doc into docs
- - merge areas and peripherals everywhere where you can (use union)
- - merge read and load functions
  - get consistent comments for memory area + peripheral area = context area
  - refactor with current_mode variable
  - write init (cl_protect_all, clear_mem_area,
  - when saving and stumbling upon same ID, rewrite it
  - it would be cool if CL in public things could be generalized
- - add `#ifndef` clause to l3.h
+ - deal with todos in every file
+ - generate config automatically
  - after everything, go through comments once more
+
+## TODOs to study
+ - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
 
 ## Requirements and technical notes
  - Library works with data stored in Little endian format.

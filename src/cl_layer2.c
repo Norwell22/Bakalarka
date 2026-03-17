@@ -10,13 +10,15 @@
 #include "cl_layer2.h"
 #include "cl_layer2_priv.h"
 #include "cl_layer1.h"
+#include "ulog.h"
 
 cl_int_t cl_clear_mem_area(Cl_memory_area_t area, void *custom_d)
 {
+    ULOG_INFO("cl_clear_mem_area:\tclear_mem_area started");
     cl_save_f_t save_f = sel_save_f(area.save_type);
     if (area.end_addr < area.start_addr){
-        printf("ERROR:clear_mem_area: ending address is smaller than start "
-                "address. Fix area definition ");
+        ULOG_ERROR("cl_clear_mem_area\tending address is smaller than start address."
+             " Fix area definition");
         return 1;
     }
     cl_addr_t current_addr = area.start_addr;
@@ -27,12 +29,12 @@ cl_int_t cl_clear_mem_area(Cl_memory_area_t area, void *custom_d)
     }
     // second element should be end address
     save_f((cl_int_t)area.end_addr, area.start_addr + 1,custom_d);
-    printf("INFO\tclear_mem_area\tArea %ld set to [0,<end_addr>,0,0...]\n\n\n",area.id);
+    ULOG_INFO("cl_clear_mem_area:\tArea cleared");
 }
 
 cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , void *custom_d)
 {
-    printf("INFO\tsave_mem_area\tContext saving from area %ld to %ld started\n",src_area.id,dst_area.id);
+    ULOG_INFO("cl_save_mem_area:\tContext saving started");
     cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
     cl_load_f_t load_f = sel_load_f(src_area.save_type); // choose low-level technique for loading data
 
@@ -51,29 +53,30 @@ cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area ,
         load_f(&cur_id, target_addr,custom_d);
         load_f(&p_next_block_start,target_addr + 1, custom_d);
         next_block_start = (cl_addr_t)p_next_block_start;
-        printf("DEBUG\tsave_mem_area\tCurrent block: ID-%ld NEXT BLOCK-%ld\n",cur_id, (cl_int_t)next_block_start);
+        ULOG_DEBUG("cl_save_mem_area:\tCurrent block: ID-%ld NEXT BLOCK-%ld",cur_id, (cl_int_t)next_block_start);
+        
         // after that, either load data into block or skip block
         if (cur_id){ // this marks valid data block
             target_addr = next_block_start;
         }
         else{ // non-valid block reached: can be filled untill cur_block_end
             free_space = next_block_start - target_addr - 2;
-            printf("DEBUG\tcl_save_mem\tfree space:%ld\n",free_space);
+            ULOG_DEBUG("cl_save_mem_area:\tfree space:%ld",free_space);
 
             //here, actual saving of data happens. number of saved elements are returned
             // based on saved_elements, program can determine if all data were written and where next block can begin
             saved_elements = fill_block(save_f, source_addr, src_area.end_addr, target_addr + 2, next_block_start,custom_d);
-            printf("DEBUG\tcl_save_mem\tsaved elements:%ld\n",saved_elements);
+            ULOG_DEBUG("cl_save_mem_area:\tsaved elements:%ld",saved_elements);
             source_addr += saved_elements; // marks how many elements from source address were written
             switch(free_space - saved_elements){ // at the end of current block, new empty block can emerge
                 case 0: // no new empty block
                     break;
                 case 1: // one empty space: merged to current block
-                    printf("INFO\tcl_save_mem\tOne empty element added to end of existing block\n");
+                    ULOG_INFO("cl_save_mem_area:\tOne empty element added to end of existing block");
                     saved_elements++;
                     break;
                 default: // new empty block: gets filled with [0,<original_next_block_addr>]
-                    printf("DEBUG\tcl_save_mem\tNew empty block created after the one currently created\n");
+                    ULOG_DEBUG("cl_save_mem_area:\tjNew empty block created after the one currently created");
 
                     save_f(0x0,target_addr + 2 + saved_elements, custom_d);
                     save_f((cl_int_t)next_block_start, target_addr + 2 + saved_elements + 1,custom_d);
@@ -82,14 +85,13 @@ cl_int_t cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area ,
             save_f(src_area.id, target_addr,custom_d);
             save_f( (cl_int_t)(target_addr + 2 + saved_elements), target_addr + 1, custom_d);
             if (source_addr == src_area.end_addr){
-                printf("INFO\tcl_save_mem\tArea writing successfull\n\n\n");
+                ULOG_INFO("cl_save_mem_area:\tArea writing successful");
                 return 0;
             }
             target_addr += 2 + saved_elements;
         }  
     }
-    printf("ERROR\tsave_mem_area\tFrom area %ld, %ld elements was not saved "
-            "into %ld\n\n\n",src_area.id,src_area.end_addr - source_addr,dst_area.id);
+    ULOG_ERROR("cl_save_mem_area:\tFailed to save all elements");
     return 1;
 }
 
@@ -108,8 +110,7 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                                  Cl_memory_area_t dst_area,
                                  void *custom_d)
 {
-    printf("INFO\tsave_peripheral_area\tContext saving from peripheral area %ld to %ld started\n",
-           src_area->id, dst_area.id);
+    ULOG_INFO("cl_save_peripheral_area:\tContext saving from peripheral area %ld to %ld started",src_area->id, dst_area.id);
 
     cl_save_f_t save_f = sel_save_f(dst_area.save_type);
     cl_load_f_t load_f = sel_load_f(src_area->save_type);
@@ -123,31 +124,22 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area,
 
     cl_int_t free_space;
     cl_int_t saved_elements = 0;
-    printf("MA201:%p, SOURCE AREA: %p\n",&ma201,src_area);
-    printf("ID: %ld\n",src_area->id);
 
     cl_int_t i;
-    puts("SPI:");
-    for (i = 0; i < 6; i++){
-        printf("%ld, ",*src_area->addresses[i]);
-    }
-    puts("");
-
     while (target_addr <= dst_area.end_addr) {
 
         load_f(&cur_id, target_addr, custom_d);
         load_f(&p_next_block_start, target_addr + 1, custom_d);
         next_block_start = (cl_addr_t)p_next_block_start;
 
-        printf("DEBUG\tsave_peripheral_area\tCurrent block: ID-%ld NEXT BLOCK-%ld\n",
-               cur_id, (cl_int_t)next_block_start);
+        ULOG_DEBUG("cl_save_peripheral_area:\tCurrent block: ID-%ld NEXT BLOCK-%ld", cur_id, (cl_int_t)next_block_start);
 
         if (cur_id) {               // valid block → skip
             target_addr = next_block_start;
         }
         else {                      // empty block → fill
             free_space = next_block_start - target_addr - 2;
-            printf("DEBUG\tcl_save_peripheral\tfree space:%ld\n", free_space);
+            ULOG_DEBUG("cl_save_peripheral_area:\tfree space:%ld",free_space);
 
             saved_elements = 0;
 
@@ -165,19 +157,19 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                 source_index++;
             }
 
-            printf("DEBUG\tcl_save_peripheral\tsaved elements:%ld\n", saved_elements);
+            ULOG_DEBUG("cl_save_peripheral_area:\tsaved elements:%ld", saved_elements);
 
             switch (free_space - saved_elements) {
                 case 0:
                     break;
 
                 case 1:
-                    printf("INFO\tcl_save_peripheral\tOne empty element added to end of existing block\n");
+                    ULOG_INFO("cl_save_peripheral_area:\tOne empty element added to end of existing block");
                     saved_elements++;
                     break;
 
                 default:
-                    printf("DEBUG\tcl_save_peripheral\tNew empty block created after the one currently created\n");
+                    ULOG_DEBUG("cl_save_peripheral_area:\tNew empty block created after the one currently created");
 
                     save_f(0x0, target_addr + 2 + saved_elements, custom_d);
                     save_f((cl_int_t)next_block_start,
@@ -191,7 +183,7 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                    custom_d);
 
             if (source_index == src_area->addr_num) {
-                printf("INFO\tcl_save_peripheral\tArea writing successful\n\n\n");
+                ULOG_INFO("cl_save_peripheral_area:\tArea writing successful");
                 return 0;
             }
 
@@ -199,13 +191,11 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area,
         }
     }
 
-    printf("ERROR\tsave_peripheral_area\tFrom area %ld, %ld elements were not saved into %ld\n\n\n",
-           src_area->id,
-           src_area->addr_num - source_index,
-           dst_area.id);
+    ULOG_ERROR("cl_save_peripheral_area:\tFrom area %ld, %ld elements were not saved into %ld", src_area->id, src_area->addr_num - source_index, dst_area.id);
 
     return 1;
 }
+
 
 cl_int_t cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *custom_d)
 {
@@ -243,11 +233,11 @@ cl_int_t fill_block(cl_save_f_t save_f,cl_addr_t start_src_a, cl_addr_t end_src_
     cl_int_t loaded_blocks = 0;
     while(1){
         if (start_src_a >= end_src_a){ // loading ended successfully
-            puts("DEBUG\tfill_block\tAll elements were saved\n");
+            ULOG_DEBUG("cl_fill_block:\tAll elements were saved");
             return loaded_blocks;
         }
         if (start_dst_a >= end_dst_a){ // some data were left not loaded
-            puts("DEBUG\tfill block\tSome elements were NOT saved\n");
+            ULOG_DEBUG("cl_fill_block:\tSome elements were NOT saved");
             return loaded_blocks;
         }
         save_f(*start_src_a,start_dst_a,custom_d);
@@ -262,11 +252,11 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
     cl_int_t loaded_blocks = 0;
     while(1){
         if (start_src_a >= end_src_a){ // loading ended successfully
-            printf("DEBUG\tload_block\tAll elements were loaded successfully\n");
+            ULOG_DEBUG("cl_load_block:\tAll elements were loaded successfully");
             return loaded_blocks;
         }
         if (start_dst_a >= end_dst_a){ // some data were left not loaded
-            printf("DEBUG\tload_block\tSome elements were NOT loaded\n");
+            ULOG_DEBUG("cl_load_block:\tSome elements were NOT loaded");
             return loaded_blocks;
         }
         load_f(start_src_a,start_dst_a,custom_d);
@@ -278,7 +268,7 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
 
 cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,void *custom_d,uint8_t erase)
 {
-    printf("INFO\tload_mem_area\tContext loading from area %ld to %ld started\n",src_area.id,dst_area.id);
+    ULOG_INFO("cl_load_mem_area:\tContext loading from area %ld to %ld started", src_area.id, dst_area.id);
     cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
     cl_load_f_t load_f = sel_load_f(src_area.save_type); // choose low-level technique for loading data
 
@@ -294,13 +284,12 @@ cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area
         load_f(&i_next_block_addr, block_addr + 1,custom_d); //! load end of the block address 
         next_block_addr = (cl_addr_t)i_next_block_addr;
         load_f(&next_block_id,next_block_addr,custom_d);
-        printf("DEBUG\tload_mem_area\tCurrent block: ID-%ld Next block address-%ld\n",block_id,(cl_int_t)next_block_addr);
+        ULOG_DEBUG("cl_load_mem_area:\tCurrent block: ID-%ld Next block address-%ld",block_id,(cl_int_t)next_block_addr);
         // added after v0.5.0
         if (next_block_id == 0 && (block_id == 0 || (block_id == id) && erase)){ // merge two empty blocks
             load_f(&i_next_next_block_addr, next_block_addr + 1,custom_d); //! load end of the block address 
             next_next_block_addr = (cl_addr_t)i_next_next_block_addr;
-            printf("DEBUG\tload_mem_area\tMerging two empty blocks\n");
-            printf("DEBUG\tload_mem_area\tSaving %ld where %ld was before\n",next_next_block_addr,block_addr);
+            ULOG_DEBUG("cl_load_mem_area:\tMerging two empty blocks");
             save_f((cl_int_t)next_next_block_addr,block_addr + 1,custom_d); // added after v0.5.0
         }
         if(block_id == id){ // matching id, read data in this block
@@ -310,7 +299,7 @@ cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area
                 save_f(0x0,block_addr,custom_d);
             }
             if (dst_addr == dst_area.end_addr){ // all elements were loaded
-                puts("INFO\tload_mem_area\tSuccessfully loaded all elements\n\n\n");
+                ULOG_INFO("cl_load_mem_area:\tSuccessfully loaded all elements");
                 return 0;
             }
         }
@@ -318,8 +307,7 @@ cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area
             block_addr = next_block_addr;
         }
     }
-    printf("ERROR\tcl_load_mem_area\t%ld elements from area %ld to %ld were not loaded\n\n\n",
-            dst_area.end_addr - dst_addr,src_area.id,dst_area.id);
+    ULOG_ERROR("cl_load_mem_area:\t%ld elements from area %ld to %ld were not loaded", dst_area.end_addr - dst_addr, src_area.id, dst_area.id);
 }
 
 // generated by chat gpt
@@ -328,8 +316,7 @@ cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
                                    void *custom_d,
                                    uint8_t erase)
 {
-    printf("INFO\tload_mem_area\tContext loading from area %ld to peripheral area %ld started\n",
-           src_area.id, dst_area->id);
+    ULOG_INFO("cl_load_peripheral_area:\tContext loading from area %ld to peripheral area %ld started", src_area.id, dst_area->id);
 
     cl_save_f_t save_f = sel_save_f(dst_area->save_type);
     cl_load_f_t load_f = sel_load_f(src_area.save_type);
@@ -350,8 +337,7 @@ cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
 
         next_block_addr = (cl_addr_t)i_next_block_addr;
 
-        printf("DEBUG\tload_mem_area\tCurrent block: ID-%ld Next block address-%ld\n",
-               block_id, (cl_int_t)next_block_addr);
+        ULOG_DEBUG("cl_load_peripheral_area:\tCurrent block: ID-%ld Next block address-%ld", block_id, (cl_int_t)next_block_addr);
 
         if (block_id == id) {
 
@@ -373,7 +359,7 @@ cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
             }
 
             if (loaded == dst_area->addr_num) {
-                puts("INFO\tload_mem_area\tSuccessfully loaded all elements\n\n\n");
+                ULOG_INFO("cl_load_peripheral_area:\tSuccessfully loaded all elements");
                 return 0;
             }
 
@@ -384,8 +370,13 @@ cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
         }
     }
 
-    printf("ERROR\tcl_load_mem_area\t%ld peripheral elements from area %ld were not loaded\n\n\n",
-           dst_area->addr_num - loaded, src_area.id);
+    ULOG_ERROR("cl_load_peripheral_area:\t%ld peripheral elements from area %ld were not loaded", dst_area->addr_num - loaded, src_area.id);
 
     return 1;
+}
+
+void cl_init()
+{
+    ULOG_INIT();
+    ULOG_SUBSCRIBE(console_log,ULOG_TRACE_LEVEL);
 }

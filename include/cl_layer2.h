@@ -74,4 +74,26 @@ cl_int_t cl_save_peripheral(const Cl_peripheral_area_t *src_area, Cl_memory_area
 cl_int_t cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *other_d);
 cl_int_t cl_read_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *other_d);
 /*! @}*/
+
+void cl_init();
+
+
+/*!
+* \brief Helper function that chooses between save/send/custom function for storing data.
+*
+* Simple function that returns save/send/custom_e function. Used to make L2 functions bit easier
+* to understand
+* \return One of \c cl_save_e , \c cl_send_e , \c cl_custom_send_e functions
+*/
+cl_save_f_t sel_save_f(enum Bare_save_type save_type);
+
+/*!
+* \brief Helper function that chooses between load/rcv/custom function for loading data.
+*
+* Simple function that returns load/rcv/custom_e function. Used to make L2 functions bit easier
+* to understand
+* \return One of \c cl_load_e , \c cl_rcv_e , \c cl_custom_rcv_e functions
+*/
+cl_load_f_t sel_load_f(enum Bare_save_type save_type);
+
 #endif

@@ -16,7 +16,7 @@
 
 
 int main() {
-    use_case1();
-    
+    cl_init();
+    cl_clear_mem_area(ma10,NULL); 
     return 0;
 }

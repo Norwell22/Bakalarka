@@ -1,3 +1,5 @@
+#ifndef CL_INCLUDE_LAYER_3
+#define CL_INCLUDE_LAYER_3
 /*! 
  * \file      l3.h
  * \brief     Automatic context management
@@ -58,3 +60,5 @@ cl_int_t cl_change_mode(enum Cl_power_mode_t from_mode, enum Cl_power_mode_t to_
 
 cl_int_t cl_unprotect_all();
 cl_int_t cl_protect_all();
+
+#endif

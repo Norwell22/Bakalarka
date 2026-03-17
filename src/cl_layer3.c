@@ -14,32 +14,51 @@
 #include "cl_layer1.h"
 #include "cl_layer2.h"
 #include "cl_layer3.h"
+#include "ulog.h"
 
 // TODO: write comments for this function
 bool is_protected(cl_int_t id)
 {
     cl_int_t mask = (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE);
     if (mask & CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE]){
-        printf("DEBUG is_protected : area %lu is protected\n",id);
+        ULOG_DEBUG("is_protected:\tarea %lu is protected",id);
         return 1;
     }
-    // printf("DEBUG is_protected : area %lu is not protected\n",id);
     return 0;
 }
+
+// cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
+// cl_load_f_t load_f = sel_load_f(src_area.save_type); // choose low-level technique for loading data
+enum Cl_power_mode_t get_mode()
+{
+    cl_int_t mode;
+    cl_load_f_t load_f = sel_load_f(ma255.save_type);
+    load_f(&mode,ma255.end_addr, NULL);
+    return (enum Cl_power_mode_t)mode;
+}
+
+void write_mode(enum Cl_power_mode_t new_mode)
+{
+    cl_save_f_t save_f = sel_save_f(ma255.save_type);
+    save_f((cl_int_t)new_mode,ma255.end_addr,NULL);
+}
+
+    
+    
 
 cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
 {
     cl_int_t i;
     if (!is_protected(id))
     {
-        printf("INFO cl_area_on: Area %lu is not protected and therefore won't be loaded\n",id);
+        ULOG_INFO("cl_area_on:\tArea %lu is not protected and therefore won't be loaded",id);
         return 0;
     }
     for (i = 0; i < area_backup_table_size; i++){
         if (area_backup_table[i].area->id != id || area_backup_table[i].mode != mode){
             continue;
         }
-        printf("DEBUG cl_area_on: Found area with id %lu\n",id);
+        ULOG_DEBUG("cl_area_on:\tFound area with id %lu",id);
         cl_load_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         break;
     }
@@ -47,7 +66,7 @@ cl_int_t cl_area_on( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
         if (peripheral_backup_table[i].area->id != id || peripheral_backup_table[i].mode != mode){
             continue;
         }
-        printf("DEBUG cl_area_on: Found peripheral with id %lu\n",id);
+        ULOG_DEBUG("cl_area_on:\tFound peripheral with id %lu",id);
         cl_load_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         break;
     }
@@ -61,14 +80,14 @@ cl_int_t cl_area_off( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
     */
     if (!is_protected(id))
     {
-        printf("INFO cl_area_off: Area %lu is not protected and therefore won't be saved\n",id);
+        ULOG_INFO("cl_area_off:\tArea %lu is not protected and therefore won't be saved",id);
         return 0;
     }
     for (i = 0; i < area_backup_table_size; i++){
         if (area_backup_table[i].area->id != id){
             continue;
         }
-        printf("DEBUG cl_area_off: Found area with id %lu\n",id);
+        ULOG_DEBUG("cl_area_off:\tFound area with id %lu",id);
         cl_save_mem_area(*(area_backup_table[i].area), *(area_backup_table[i].backup_area),NULL);
         break;
     }
@@ -76,7 +95,7 @@ cl_int_t cl_area_off( cl_int_t id,enum Cl_power_mode_t mode, void *custom_d)
         if (peripheral_backup_table[i].area->id != id){
             continue;
         }
-        printf("DEBUG cl_area_off: Found peripheral with id %lu\n",id);
+        ULOG_DEBUG("cl_area_off:\tFound peripheral with id %lu",id);
         cl_save_peripheral(peripheral_backup_table[i].area, *(peripheral_backup_table[i].backup_area),NULL);
         break;
     }
@@ -101,13 +120,12 @@ cl_int_t cl_unprotect_all()
 cl_int_t cl_protect_memory(cl_int_t id)
 {
     if (id >= 256){
-        printf("WARNING cl_protect_memory: ID should be in range 0 - 255,"
-            " please, adjust memory area accordingly\n");
+        ULOG_WARNING("cl_protect_memory:\tID should be in range 0 - 255, please adjust memory area accordingly");
         return 1;
     }
     cl_int_t mask = (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE);
-    printf("DEBUG cl_protect_memory: id mod ABS is %lu\n",id % ARCHITECTURE_BUS_SIZE);
-    printf("DEBUG cl_protect_memory: mask is %lu\n",mask);
+    ULOG_DEBUG("cl_protect_memory:\tid mod ABS is %lu",id % ARCHITECTURE_BUS_SIZE);
+    ULOG_DEBUG("cl_protect_memory:\tmask is %lu",mask);
     CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] |= mask;
     return 0;
 }
@@ -115,13 +133,12 @@ cl_int_t cl_protect_memory(cl_int_t id)
 cl_int_t cl_unprotect_memory(cl_int_t id)
 {
     if (id >= 256){
-        printf("WARNING cl_unprotect_memory: ID should be in range 0 - 255,"
-            " please, adjust memory area accordingly\n");
+        ULOG_WARNING("cl_unprotect_memory:\tID should be in range 0 - 255, please adjust memory area accordingly");
         return 1;
     }
     cl_int_t mask = ~( (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE));
-    printf("DEBUG cl_protect_memory: id mod ABS is %lu\n",id % ARCHITECTURE_BUS_SIZE);
-    printf("DEBUG cl_protect_memory: mask is %lu\n",mask);
+    ULOG_DEBUG("cl_unprotect_memory:\tid mod ABS is %lu",id % ARCHITECTURE_BUS_SIZE);
+    ULOG_DEBUG("cl_unprotect_memory:\tmask is %lu",mask);
     CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] &= mask;
     return 0;
 }
@@ -146,7 +163,7 @@ bool find_match(cl_addr_t start_a1, cl_addr_t end_a1, cl_addr_t start_a2,
     if (s >= e) {
         return false;
     }
-    printf("DEBUG find_match: size of match is %lu\n",e - s);
+    ULOG_DEBUG("find_match:\tsize of match is %lu",e - s);
 
     if (start) *start = s;
     if (end)   *end   = e;

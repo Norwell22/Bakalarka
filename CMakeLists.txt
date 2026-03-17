@@ -12,5 +12,7 @@ target_include_directories(context_lib
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+add_subdirectory(ulog)
+target_link_libraries(context_lib PRIVATE ulog)
 target_include_directories(context_lib PUBLIC include platform/posix)
 add_subdirectory(examples/posix_demo)
