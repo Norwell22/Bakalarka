@@ -153,7 +153,7 @@ static ulog_level_t ulog_lowest_log_level(){
 }
 
 
-void console_log(ulog_level_t level, const char *msg) {
+void console_log(ulog_level_t level,char *msg) {
   printf("[%s]\t%s\n",
   ulog_level_name(level),
   msg);

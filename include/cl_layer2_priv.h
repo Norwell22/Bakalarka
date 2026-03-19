@@ -50,8 +50,10 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
 * \param erase Chooses between \a read and \a load functionality
 * \todo Param should be of type \c bool 
 */
-cl_int_t read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,void *custom_d,uint8_t erase);
+bool read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,void *custom_d,uint8_t erase);
 
-cl_int_t read_load_peripheral_area(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *custom_d, uint8_t erase);
+bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *custom_d, uint8_t erase);
+
+bool l3_init();
 
 #endif

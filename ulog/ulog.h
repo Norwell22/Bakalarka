@@ -148,6 +148,6 @@ void ulog_message(ulog_level_t severity, const char *fmt, ...);
 #endif
 
 
-void console_log(ulog_level_t level,const char *msg);
+void console_log(ulog_level_t level,char *msg);
 
 #endif /* ULOG_H_ */

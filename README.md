@@ -124,27 +124,19 @@ TODO
  - write proper testbench **TESTS WORK**
  - write example code to showcase to Strnadel **USE CASE WORK**
  - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **MACRO FOR MEMORY AREA**
- - if save function runs into its own ID, it should probably break or overwrite it
  - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
  - share library with Strnadel
- - add tests for different types of context
+ - add tests for different types of context **TEST WORK**
  - for some change mode, maybe clear_mem_area should be called
  - deal with load/store between different area types
- - deal with function return types
  - remove magic constants
- - give CL_prefix to public types
- - rewrite is protected as it's utterly wrong
- - deal with error handling
- - add proper logging
- - for some functions check if size of area is at least 2
- - add dynamic block merging to load-block
- - can address go from high to low??
+ - deal with error handling **THIS**
+ - for some functions check if size of area is at least 2 **THIS**
  - rething protect/unprotect memory functions
  - break large functions into smaller ones
  - rewrite testing files into some structured way
  - move doxygen doc into docs
  - get consistent comments for memory area + peripheral area = context area
- - refactor with current_mode variable
  - write init (cl_protect_all, clear_mem_area,
  - when saving and stumbling upon same ID, rewrite it
  - it would be cool if CL in public things could be generalized

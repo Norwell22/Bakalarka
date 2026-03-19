@@ -122,6 +122,7 @@ base example of data storage and load
 //TODO: it should also contain RUN-VLLS transition
 // as well as realistic dealing with areas reinitialization
 */
+/*
 void use_case1()
 {
     cl_clear_mem_area(ma10,NULL);
@@ -165,6 +166,7 @@ void use_case1()
     use_case1_print();
     print_lram2();
 }
+    */
 
 /* ===== Use case  2
 

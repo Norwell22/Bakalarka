@@ -35,8 +35,8 @@
 * with data. They simply copy given byte to given address. 
 * \note They may be reimplemented although it is not advised 
 */
-static cl_int_t save_byte(uint8_t b, uint8_t *addr);
-cl_int_t load_byte(uint8_t *b, uint8_t *addr);
+static void save_byte(uint8_t b, uint8_t *addr);
+static void load_byte(uint8_t *b, uint8_t *addr);
 /*! @}*/
 
 /*!
@@ -53,14 +53,14 @@ cl_int_t load_byte(uint8_t *b, uint8_t *addr);
 * possible data management techniques. If one wishes to store data into new device, it's
 * necesssary to provide implementation of function for sending bytes
 */
-cl_int_t raw_save_B(uint8_t B, uint8_t *addr, void *not_used);
-cl_int_t raw_send_B(uint8_t B, uint8_t *addr, void *other_d);
-cl_int_t raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used);
-cl_int_t raw_send_hw(uint16_t hw, uint16_t *addr, void *other_d);
-cl_int_t raw_save_w(uint32_t w, uint32_t *addr, void *not_used);
-cl_int_t raw_send_w(uint32_t w, uint32_t *addr, void *other_d);
-cl_int_t raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used);
-cl_int_t raw_send_dw(uint64_t dw, uint64_t *addr, void *other_d);
+void raw_save_B(uint8_t B, uint8_t *addr, void *not_used);
+void raw_send_B(uint8_t B, uint8_t *addr, void *other_d);
+void raw_save_hw(uint16_t hw, uint16_t *addr, void *not_used);
+void raw_send_hw(uint16_t hw, uint16_t *addr, void *other_d);
+void raw_save_w(uint32_t w, uint32_t *addr, void *not_used);
+void raw_send_w(uint32_t w, uint32_t *addr, void *other_d);
+void raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used);
+void raw_send_dw(uint64_t dw, uint64_t *addr, void *other_d);
 /*! @}*/
 
 /*!
@@ -74,14 +74,14 @@ cl_int_t raw_send_dw(uint64_t dw, uint64_t *addr, void *other_d);
 * possible data management techniques. If one wishes to load data from new device, it's
 * necesssary to provide implementation of function for sending bytes
 */
-cl_int_t raw_load_B(uint8_t *B, uint8_t *addr, void *not_used);
-cl_int_t raw_rcv_B(uint8_t *B, uint8_t *addr, void *other_d);
-cl_int_t raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used);
-cl_int_t raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *other_d);
-cl_int_t raw_load_w(uint32_t *w, uint32_t *addr, void *not_used);
-cl_int_t raw_rcv_w(uint32_t *w, uint32_t *addr, void *other_d);
-cl_int_t raw_load_dw(uint64_t *w, uint64_t *addr, void *not_used);
-cl_int_t raw_rcv_dw(uint64_t *w, uint64_t *addr, void *other_d);
+void raw_load_B(uint8_t *B, uint8_t *addr, void *not_used);
+void raw_rcv_B(uint8_t *B, uint8_t *addr, void *other_d);
+void raw_load_hw(uint16_t *hw, uint16_t *addr, void *not_used);
+void raw_rcv_hw(uint16_t *hw, uint16_t *addr, void *other_d);
+void raw_load_w(uint32_t *w, uint32_t *addr, void *not_used);
+void raw_rcv_w(uint32_t *w, uint32_t *addr, void *other_d);
+void raw_load_dw(uint64_t *w, uint64_t *addr, void *not_used);
+void raw_rcv_dw(uint64_t *w, uint64_t *addr, void *other_d);
 /*! @}*/
 
 

@@ -127,30 +127,30 @@ const Cl_peripheral_area_t ma204 = {204,16,CL_CPU,
  */
 
 
-const cl_int_t area_backup_table_size = 19;
-struct area_backup area_backup_table[] = {
+const cl_int_t cl_area_backup_table_size = 19;
+struct cl_area_backup cl_area_backup_table[] = {
 
-    {&ma100, &ma10, STOP,false},{&ma101, &ma10, STOP,false},{&ma102, &ma10, STOP,false},
-    {&ma103, &ma10, STOP,false},{&ma104, &ma10, STOP,false},{&ma105, &ma10,  STOP,false},
+    {&ma100, &ma10, CL_STOP,false},{&ma101, &ma10, CL_STOP,false},{&ma102, &ma10, CL_STOP,false},
+    {&ma103, &ma10, CL_STOP,false},{&ma104, &ma10, CL_STOP,false},{&ma105, &ma10,  CL_STOP,false},
 
-    {&ma100, &ma1, VLLS,false},{&ma101, &ma1, VLLS,false},{&ma102, &ma1, VLLS,false},
-    {&ma103, &ma1, VLLS,false},{&ma104, &ma1, VLLS,false},{&ma105, &ma1, VLLS,false},
+    {&ma100, &ma1, CL_VLLS,false},{&ma101, &ma1, CL_VLLS,false},{&ma102, &ma1, CL_VLLS,false},
+    {&ma103, &ma1, CL_VLLS,false},{&ma104, &ma1, CL_VLLS,false},{&ma105, &ma1, CL_VLLS,false},
 
-    {&ma10, &ma1, VLLS,false},{&ma11, &ma1, VLLS,false},{&ma12, &ma1, VLLS,false},
+    {&ma10, &ma1, CL_VLLS,false},{&ma11, &ma1, CL_VLLS,false},{&ma12, &ma1, CL_VLLS,false},
 
-    {&ma10, &ma2, VLLS0,false},{&ma11, &ma2, VLLS0,false},{&ma12, &ma2, VLLS0,false},
+    {&ma10, &ma2, CL_VLLS0,false},{&ma11, &ma2, CL_VLLS0,false},{&ma12, &ma2, CL_VLLS0,false},
 
-    {&ma1, &ma2, VLLS0,false}
+    {&ma1, &ma2, CL_VLLS0,false}
 };
 
-const cl_int_t peripheral_backup_table_size = 15;
-const struct peripheral_backup peripheral_backup_table[] = {
-    {&ma200, &ma10, RUN,true},{&ma201, &ma10, RUN,true},{&ma202, &ma10, RUN,true},
-    {&ma203, &ma10, RUN,true},{&ma204, &ma10, RUN,true},
+const cl_int_t cl_peripheral_backup_table_size = 15;
+const struct cl_peripheral_backup cl_peripheral_backup_table[] = {
+    {&ma200, &ma10, CL_RUN,true},{&ma201, &ma10, CL_RUN,true},{&ma202, &ma10, CL_RUN,true},
+    {&ma203, &ma10, CL_RUN,true},{&ma204, &ma10, CL_RUN,true},
 
-    {&ma200, &ma10, STOP,true},{&ma201, &ma10, STOP,true},{&ma202, &ma10, STOP,true},
-    {&ma203, &ma10, STOP,true},{&ma204, &ma10, STOP,true},
+    {&ma200, &ma10, CL_STOP,true},{&ma201, &ma10, CL_STOP,true},{&ma202, &ma10, CL_STOP,true},
+    {&ma203, &ma10, CL_STOP,true},{&ma204, &ma10, CL_STOP,true},
 
-    {&ma200, &ma1, VLLS,false},{&ma201, &ma1, VLLS,false},{&ma202, &ma1, VLLS,false},
-    {&ma203, &ma1, VLLS,false},{&ma204, &ma1, VLLS,false}
+    {&ma200, &ma1, CL_VLLS,false},{&ma201, &ma1, CL_VLLS,false},{&ma202, &ma1, CL_VLLS,false},
+    {&ma203, &ma1, CL_VLLS,false},{&ma204, &ma1, CL_VLLS,false}
 };

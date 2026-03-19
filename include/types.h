@@ -146,7 +146,7 @@ typedef struct {
 * \param custom_d pointer to (presumably) structure that contains any metadata needed for correct 
 *  data transfer using special function
 */
-typedef cl_int_t (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_d);
+typedef void (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_d);
 
 /*!
 * \brief Type of the function used for loading one data element. 
@@ -158,7 +158,7 @@ typedef cl_int_t (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_
 * \param custom_d pointer to (presumably) structure that contains any metadata needed for correct 
 *  data transfer using special function
 */
-typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
+typedef void (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
 
 
 
@@ -178,10 +178,10 @@ typedef cl_int_t (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom
 * \warning This is the only line of code outside \a context_lib_port.c
 * that needs to be implemented by port creator.
 * \note Example(default option):
-* enum Cl_power_mode_t{RUN,SLEEP,STOP,LLS,VLLS0,VLLS1,VLLS2,VLLS3};
+* enum Cl_power_mode_t{CL_RUN,CL_SLEEP,CL_STOP,CL_LLS,CL_VLLS0,CL_VLLS1,CL_VLLS2,CL_VLLS3};
 */
-enum Cl_power_mode_t{RUN, SLEEP, STOP, VLLS, VLLS0};
-#define CL_DEFAULT_MODE RUN
+enum Cl_power_mode_t{CL_RUN, CL_SLEEP, CL_STOP, CL_VLLS, CL_VLLS0};
+#define CL_DEFAULT_MODE CL_RUN
 
 
 /*!
@@ -221,7 +221,7 @@ struct area_backup_old {
     const Cl_memory_area_t *area;
     const Cl_memory_area_t *backup_area;
 };
-struct area_backup {
+struct cl_area_backup {
     const Cl_memory_area_t *area;
     const Cl_memory_area_t *backup_area;
     enum Cl_power_mode_t mode;
@@ -242,7 +242,7 @@ struct peripheral_backup_old {
     const Cl_peripheral_area_t *area;
     const Cl_memory_area_t *backup_area;
 };
-struct peripheral_backup {
+struct cl_peripheral_backup {
     const Cl_peripheral_area_t *area;
     const Cl_memory_area_t *backup_area;
     enum Cl_power_mode_t mode;
@@ -278,7 +278,7 @@ extern const Cl_peripheral_area_t *peripheral_areas_old[];
 /*!
 * \brief Size of \c area_mode table
 */
-extern const cl_int_t  area_mode_table_size;
+extern const cl_int_t  cl_area_mode_table_size;
 /*!
 * \brief Table that informs library about what memory areas run in certain modes.
 * 
@@ -294,7 +294,7 @@ extern const cl_int_t  area_mode_table_size;
 /*!
 * \brief Size of \c area_backup_table
 */
-extern const cl_int_t area_backup_table_size;
+extern const cl_int_t cl_area_backup_table_size;
 /*!
 * \brief Table that maps protected memory to place where it should
 * be protected
@@ -304,16 +304,16 @@ extern const cl_int_t area_backup_table_size;
 * \note See examples in \c context_lib_port.c files
 * \todo Implement recursive data protection
 */
-extern struct area_backup area_backup_table[];
+extern struct cl_area_backup cl_area_backup_table[];
 
 /*!
 * \brief Size of \c peripheral_backup_table
 */
-extern const cl_int_t peripheral_backup_table_size;
+extern const cl_int_t cl_peripheral_backup_table_size;
 /*!
 * \note Same thing as \c area_backup, just for peripherals
 */
-extern const struct peripheral_backup peripheral_backup_table[];
+extern const struct cl_peripheral_backup cl_peripheral_backup_table[];
 
 
 #endif
