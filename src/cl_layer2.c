@@ -12,15 +12,11 @@
 #include "cl_layer1.h"
 #include "ulog.h"
 
+   
 bool cl_clear_mem_area(Cl_memory_area_t area, void *custom_d)
 {
     ULOG_INFO("cl_clear_mem_area:\tclear_mem_area started");
     cl_save_f_t save_f = sel_save_f(area.save_type);
-    if (area.end_addr < area.start_addr){
-        ULOG_ERROR("cl_clear_mem_area\tending address is smaller than start address."
-             " Fix area definition");
-        return false;
-    }
     cl_addr_t current_addr = area.start_addr;
     while( current_addr <= area.end_addr){
         // fill whole area with zeroes
@@ -61,12 +57,12 @@ bool cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , voi
             target_addr = next_block_start;
         }
         else{ // non-valid block reached: can be filled untill cur_block_end
-            free_space = next_block_start - target_addr - 2;
+            free_space = next_block_start - target_addr - HEAD_LENGTH;
             ULOG_DEBUG("cl_save_mem_area:\tfree space:%ld",free_space);
 
             //here, actual saving of data happens. number of saved elements are returned
             // based on saved_elements, program can determine if all data were written and where next block can begin
-            saved_elements = fill_block(save_f, source_addr, src_area.end_addr, target_addr + 2, next_block_start,custom_d);
+            saved_elements = fill_block(save_f, source_addr, src_area.end_addr, target_addr + HEAD_LENGTH, next_block_start,custom_d);
             ULOG_DEBUG("cl_save_mem_area:\tsaved elements:%ld",saved_elements);
             source_addr += saved_elements; // marks how many elements from source address were written
             switch(free_space - saved_elements){ // at the end of current block, new empty block can emerge
@@ -79,17 +75,17 @@ bool cl_save_mem_area(Cl_memory_area_t src_area, Cl_memory_area_t dst_area , voi
                 default: // new empty block: gets filled with [0,<original_next_block_addr>]
                     ULOG_DEBUG("cl_save_mem_area:\tjNew empty block created after the one currently created");
 
-                    save_f(0x0,target_addr + 2 + saved_elements, custom_d);
-                    save_f((cl_int_t)next_block_start, target_addr + 2 + saved_elements + 1,custom_d);
+                    save_f(0x0,target_addr + HEAD_LENGTH + saved_elements, custom_d);
+                    save_f((cl_int_t)next_block_start, target_addr + HEAD_LENGTH + saved_elements + 1,custom_d);
             }
 
             save_f(src_area.id, target_addr,custom_d);
-            save_f( (cl_int_t)(target_addr + 2 + saved_elements), target_addr + 1, custom_d);
+            save_f( (cl_int_t)(target_addr + HEAD_LENGTH + saved_elements), target_addr + 1, custom_d);
             if (source_addr == src_area.end_addr){
                 ULOG_INFO("cl_save_mem_area:\tArea writing successful");
                 return true;
             }
-            target_addr += 2 + saved_elements;
+            target_addr += HEAD_LENGTH + saved_elements;
         }  
     }
     ULOG_ERROR("cl_save_mem_area:\tFailed to save all elements");
@@ -139,7 +135,7 @@ bool cl_save_peripheral(const Cl_peripheral_area_t *src_area,
             target_addr = next_block_start;
         }
         else {                      // empty block → fill
-            free_space = next_block_start - target_addr - 2;
+            free_space = next_block_start - target_addr - HEAD_LENGTH;
             ULOG_DEBUG("cl_save_peripheral_area:\tfree space:%ld",free_space);
 
             saved_elements = 0;
@@ -151,7 +147,7 @@ bool cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                 load_f(&val, src_area->addresses[source_index], custom_d);
 
                 save_f(val,
-                       target_addr + 2 + saved_elements,
+                       target_addr + HEAD_LENGTH + saved_elements,
                        custom_d);
 
                 saved_elements++;
@@ -172,14 +168,14 @@ bool cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                 default:
                     ULOG_DEBUG("cl_save_peripheral_area:\tNew empty block created after the one currently created");
 
-                    save_f(0x0, target_addr + 2 + saved_elements, custom_d);
+                    save_f(0x0, target_addr + HEAD_LENGTH + saved_elements, custom_d);
                     save_f((cl_int_t)next_block_start,
-                           target_addr + 2 + saved_elements + 1,
+                           target_addr + HEAD_LENGTH + saved_elements + 1,
                            custom_d);
             }
 
             save_f(src_area->id, target_addr, custom_d);
-            save_f((cl_int_t)(target_addr + 2 + saved_elements),
+            save_f((cl_int_t)(target_addr + HEAD_LENGTH + saved_elements),
                    target_addr + 1,
                    custom_d);
 
@@ -188,7 +184,7 @@ bool cl_save_peripheral(const Cl_peripheral_area_t *src_area,
                 return true;
             }
 
-            target_addr += 2 + saved_elements;
+            target_addr += HEAD_LENGTH + saved_elements;
         }
     }
 
@@ -298,7 +294,7 @@ bool read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,voi
             save_f((cl_int_t)next_next_block_addr,block_addr + 1,custom_d); // added after v0.5.0
         }
         if(block_id == id){ // matching id, read data in this block
-            dst_addr += load_block(load_f, dst_addr,dst_area.end_addr,block_addr + 2,next_block_addr,custom_d);
+            dst_addr += load_block(load_f, dst_addr,dst_area.end_addr,block_addr + HEAD_LENGTH,next_block_addr,custom_d);
             // mark block as invalid (for load, not for read functions)
             if (erase){
                 save_f(0x0,block_addr,custom_d);
@@ -347,7 +343,7 @@ bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
 
         if (block_id == id) {
 
-            cl_addr_t data_addr = block_addr + 2;
+            cl_addr_t data_addr = block_addr + HEAD_LENGTH;
 
             while (data_addr < next_block_addr && loaded < dst_area->addr_num) {
 
@@ -383,8 +379,6 @@ bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
 bool cl_init()
 {
     l3_init();
-    // cl_write_mode(CL_DEFAULT_MODE);
-    // cl_protect_all();
     ULOG_INIT();
     ULOG_SUBSCRIBE(console_log,ULOG_TRACE_LEVEL);
     return true;

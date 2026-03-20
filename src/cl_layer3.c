@@ -126,7 +126,7 @@ bool cl_unprotect_all()
 
 bool cl_protect_memory(cl_int_t id)
 {
-    if (id >= 256){
+    if (id >= 256){ // max allowed id
         ULOG_WARNING("cl_protect_memory:\tID should be in range 0 - 255, please adjust memory area accordingly");
         return false;
     }
@@ -139,7 +139,7 @@ bool cl_protect_memory(cl_int_t id)
 
 bool cl_unprotect_memory(cl_int_t id)
 {
-    if (id >= 256){
+    if (id >= 256){ // max allowed id
         ULOG_WARNING("cl_unprotect_memory:\tID should be in range 0 - 255, please adjust memory area accordingly");
         return false;
     }
@@ -216,6 +216,13 @@ bool cl_change_mode(enum Cl_power_mode_t to_mode,void *custom_d)
 bool l3_init()
 {
     cl_write_mode(CL_DEFAULT_MODE);
+    cl_int_t i;
+    for (i = 0; i < cl_area_backup_table_size; i++){
+        cl_clear_mem_area(*(cl_area_backup_table[i].backup_area),NULL);
+    }
+    for (i = 0; i < cl_peripheral_backup_table_size; i++){
+        cl_clear_mem_area(*(cl_peripheral_backup_table[i].backup_area),NULL);
+    }
     cl_protect_all();
     return true;
 }

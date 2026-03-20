@@ -121,27 +121,20 @@ TODO
  - write conf file **FINAL WORK**
  - deal with floating point data somehow, probably add functions like for B,HW,W,DW **USE CASE WORK**
  - test saving of different data types **USE CASE WORK**
- - write proper testbench **TESTS WORK**
+ - write proper testbench **LATER**
  - write example code to showcase to Strnadel **USE CASE WORK**
- - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **MACRO FOR MEMORY AREA**
- - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
+ - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **LATER**
+ - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them **LATER**
  - share library with Strnadel
  - add tests for different types of context **TEST WORK**
- - for some change mode, maybe clear_mem_area should be called
- - deal with load/store between different area types
- - remove magic constants
- - deal with error handling **THIS**
- - for some functions check if size of area is at least 2 **THIS**
- - rething protect/unprotect memory functions
- - break large functions into smaller ones
- - rewrite testing files into some structured way
- - move doxygen doc into docs
- - get consistent comments for memory area + peripheral area = context area
- - write init (cl_protect_all, clear_mem_area,
- - when saving and stumbling upon same ID, rewrite it
- - it would be cool if CL in public things could be generalized
- - deal with todos in every file
- - generate config automatically
+ - deal with load/store between different area types **USE CASE WORK**
+ - deal with error handling **LATER**
+ - for some functions check if size of area is at least 2 **LATER**
+ - rewrite testing files into some structured way **TEST WORK**
+ - get consistent comments for memory area + peripheral area = context area **FINAL WORK**
+ - deal with todos in every file **FINAL WORK**
+ - generate config automatically **FINAL WORK**
+ - test and rework saving data using special function **LATER**
  - after everything, go through comments once more
 
 ## TODOs to study

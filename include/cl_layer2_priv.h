@@ -21,6 +21,8 @@
  */
 #include "../../platform/posix/context_lib_port.h"
 
+#define HEAD_LENGTH 2
+
 
 /*!
 * \brief Function that moves data from one memory block to another

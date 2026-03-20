@@ -21,6 +21,7 @@
  */
 #include "../../platform/posix/context_lib_port.h"
 
+
 /*!
 * \brief Function that prepares memory area for context saving
 *
