@@ -74,7 +74,6 @@ typedef uint64_t cl_int_t;
 * In its base form contains two options: CPU which means that data are written
 * in standard-C way by the CPU and DEVICE which means any other form of data storage.
 * \todo Port creator or user should probably have option to expand this enum.
-* \todo This could probably be moved into \c context_lib_port.h
 */
 enum Bare_save_type{ CL_CPU,CL_DEVICE };
 
@@ -100,10 +99,7 @@ enum Bare_save_type{ CL_CPU,CL_DEVICE };
  * one should allocate space statically with array definition and create this variable using newly defined 
  * array.
  *
- * 
  * \note It's recommended to check \a platform\ or  \a examples\ folder for usage of this structure.
- * 
- * \todo add READ_WRITE_TYPE that is currently a parameter of L2 functions
  *
  */
 typedef struct {
@@ -123,10 +119,7 @@ typedef struct {
  * description of CPU or peripheral registers. This area cannot be used as a destination of storage 
  * process.
  *
- * 
  * \note Check \c Cl_memory_area_t documentation for more info. Check examples in \a platform\ and \a examples\ folders
- * 
- * \todo add READ_WRITE_TYPE that is currently a parameter of L2 and L3 functions
  *
  */
 typedef struct {
@@ -160,10 +153,6 @@ typedef void (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_d);
 */
 typedef void (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
 
-
-
-
-
 /* =========== L3 
 * TODO: only when L3 is turned on
 */
@@ -178,34 +167,10 @@ typedef void (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
 * \warning This is the only line of code outside \a context_lib_port.c
 * that needs to be implemented by port creator.
 * \note Example(default option):
-* enum Cl_power_mode_t{CL_RUN,CL_SLEEP,CL_STOP,CL_LLS,CL_VLLS0,CL_VLLS1,CL_VLLS2,CL_VLLS3};
 */
-enum Cl_power_mode_t{CL_RUN, CL_SLEEP, CL_STOP, CL_VLLS, CL_VLLS0};
+enum Cl_power_mode_t{CL_RUN,CL_SLEEP,CL_STOP,CL_LLS,CL_VLLS,CL_VLLS0,CL_VLLS1,CL_VLLS2,CL_VLLS3};
+// enum Cl_power_mode_t{CL_RUN, CL_SLEEP, CL_STOP, CL_VLLS, CL_VLLS0};
 #define CL_DEFAULT_MODE CL_RUN
-
-
-/*!
-* \brief State of memory area in power mode
-*
-* Simple enumeration used in table mapping memory areas to power modes.
-* Area is either turned on, off or it can be turned on/off independendly
-* of this particular power mode( \c BOTH_VALID option)
-*/
-// enum Cl_memory_state{ON,OFF,BOTH_VALID};
-
-/*!
-* \brief For individual power modes determines which parts of address space are turned
-* off. 
-* \note One table of this type should be implemented by the port creator ( \c area_mode_table )
-*/
-/*
-struct area_in_mode_old {
-    cl_addr_t start_address;
-    cl_addr_t end_address;
-    enum Cl_power_mode_t mode;
-    enum Cl_memory_state state;
-};
-*/
 
 /*!
 * \brief Area to be protected mapped to area where it should be saved
@@ -217,10 +182,6 @@ struct area_in_mode_old {
 * \note Saving areas is recursive: if A is mapped onto B and B is mapped onto C,
 * context from A will be saved into C if A and B is turned off at once.
 */
-struct area_backup_old {
-    const Cl_memory_area_t *area;
-    const Cl_memory_area_t *backup_area;
-};
 struct cl_area_backup {
     const Cl_memory_area_t *area;
     const Cl_memory_area_t *backup_area;
@@ -238,58 +199,12 @@ struct cl_area_backup {
 * \note Saving areas is recursive: if A is mapped onto B and B is mapped onto C,
 * context from A will be saved into C if A and B is turned off at once.
 */
-struct peripheral_backup_old {
-    const Cl_peripheral_area_t *area;
-    const Cl_memory_area_t *backup_area;
-};
 struct cl_peripheral_backup {
     const Cl_peripheral_area_t *area;
     const Cl_memory_area_t *backup_area;
     enum Cl_power_mode_t mode;
     bool default_on;
 };
-
-/*!
-* \brief Size of \c memory_areas table
-*/
-extern const cl_int_t memory_areas_table_size;  
-/*!
-* \brief Array containing every memory area defined by user
-* 
-* This array needs to be implemented by the user inside \c context_lib_port.c
-* file.
-* \todo Consider removing this
-*/
-extern const Cl_memory_area_t *memory_areas_old[];
-
-/*!
-* \brief Size of \c peripheral_areas table
-*/
-extern const cl_int_t peripheral_areas_table_size;
-/*!
-* \brief Array containing every peripheral area defined by user
-* 
-* This array needs to be implemented by the user inside \c context_lib_port.c
-* file.
-* \todo Consider removing this
-*/
-extern const Cl_peripheral_area_t *peripheral_areas_old[];
-
-/*!
-* \brief Size of \c area_mode table
-*/
-extern const cl_int_t  cl_area_mode_table_size;
-/*!
-* \brief Table that informs library about what memory areas run in certain modes.
-* 
-* In most frugal power modes, some parts of microcontroller memory are turned off. Into this
-* table, \b port \b creator should put ranges of memory map and information whether they are powered
-* in certain power mode or not. Based on those ranges, \c cl_change_mode function determines what 
-* memory/peripheral areas should be protected. 
-* \note This table can only contain RUN and modes that actually turn some part of memory off. Low-power run 
-* for example is absolutely unnecessary here.
-*/
-// extern const struct area_in_mode area_mode_table_old[];
 
 /*!
 * \brief Size of \c area_backup_table
@@ -314,6 +229,5 @@ extern const cl_int_t cl_peripheral_backup_table_size;
 * \note Same thing as \c area_backup, just for peripherals
 */
 extern const struct cl_peripheral_backup cl_peripheral_backup_table[];
-
 
 #endif

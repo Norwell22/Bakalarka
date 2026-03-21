@@ -4,17 +4,15 @@
 
 /*! 
  * \file      context_lib_port.h
- * \brief     Example of port for simulated microcontroler.
+ * \brief     Empty port example. Serves as template for new port
  * \details   
- * Dependencies:
- * - "../../include/main/types.h"
- * Before using this library on new microcontroller, port like this needs
- * to be created for that particular MCU. This means defining some functions
- * and variables with MCU-specific values, which in vast majority happens in 
- * this file and also in \c context_lib_port.h file. This file contains function and
- * variable declarations and descriptions needed for port implementation.
+ * Before using this library on new microcontroller, new port needs
+ * to be implemented. Vast majority of this implementation happens inside
+ * this file and inside \c context_lib_port.c with every exception being
+ * clearly marked inside this file. When creating port, please go through
+ * functions in this file one by one. 
  * \author    Michal Zidzik
- * \date      02.03.2026
+ * \date      21.03.2026
  * \note Port creation is highly guided process. Follow comments in this file or instructions in
  * TODO and you should avoid most problems.
  * \note Port creation requires knowledge of power modes, memory map and memory retention for your 
@@ -39,8 +37,13 @@
 * \b to \b address or in (possibly more) custom device-specific ways.  
 * This function gives user a way to specify function for sending data in specific way.
 * Most prominent use case for this is expected to be sending data to external storage (E.g. SD card)
+* 
+* 
 * \todo Library should also allow for adding similar functions
+* \todo After reworking L1, add instructions for creating more functions.
 * \note Port creator or user can implement this function to execute byte saving in any needed way
+* \note Port creator or user can add more functions with same type here provided that he follows
+* instructions in this comment.(TBD)
 */
 uint32_t send_byte(uint8_t b, uint8_t *addr,void *other_d); 
 
@@ -55,10 +58,11 @@ uint32_t send_byte(uint8_t b, uint8_t *addr,void *other_d);
 * \b from \b one \b address \b to \b another or in (possibly more) custom device-specific ways.  
 * \todo Library should also allow for adding similar functions
 * \note Port creator or user can implement this function to execute byte saving in any needed way
+* \note Port creator or user can add more functions with same type here provided that he follows
+* instructions in this comment.(TBD)
 */
 uint32_t rcv_byte(uint8_t *b, uint8_t *addr,void *other_d);
 /*! @}*/
-
 
 
 
@@ -66,40 +70,42 @@ uint32_t rcv_byte(uint8_t *b, uint8_t *addr,void *other_d);
 * \name Simulated memory arrays
 * \brief Example of memory protection for memory area.
 *
-* These arrays simulate parts of microcontroller memory map that can be found within a common device. 
-* They serve as an example for anyone working with this library and are also used in its testbench.
-*
 * Library itself has no way to protect memory from being erased. This is due to fact that dynamic
 * allocation is generally not supported on embedded systems and any static allocation that would happen
 * inside dedicated function would obviously lose effect after return from the function. Library user must 
 * therefore make sure that parts of the memory used by the library will be left untouched by other parts of
 * the program and will stay 'allocated' for the entirety of its runtime. Expected way to do it is by declaring
-* array globally and define memory areas using those addresses.
+* arrays globally and define memory areas using those addresses.
+* 
+* Here you can add global declarations of every array that you will use. Don't forget to also define it in 
+* \c .c equivalent of this file. 
+*
 * \note All of these areas should be declared here and defined in \c context_lib_port.c file
 * \note Saving data into LRAM or HRAM should be possible using __attribute__
 * @{
 */
-extern cl_int_t FLASH[1024];
-extern cl_int_t CL_PROTECTED_MEM[10];
-extern cl_int_t LRAM[1024];
-extern cl_int_t HRAM[1024];
-extern cl_int_t REGISTER_FILE[128];
-extern cl_int_t REGISTER_FILE2[256];
-extern cl_int_t OUTSIDE1[256];
-extern cl_int_t OUTSIDE2[256];
-extern cl_int_t I2C1_REG0;
-extern cl_int_t I2C1_REG1;
-extern cl_int_t I2C1_REG2;
-extern cl_int_t I2C1_REG3;
-extern cl_int_t I2C1_REG4;
-extern cl_int_t I2C1_REG5;
-extern cl_int_t GPIO_REGS[16];
-extern cl_int_t UART0_REGS[8];
-extern cl_int_t SPI0_REGS[6];
-extern cl_int_t I2C0_REGS[6];
-extern cl_int_t TIMER0_REGS[10];
+extern cl_int_t MEMORY_ARR1[100];
+extern cl_int_t MEMORY_ARR2[100];
 /** @} */
 
+/*!
+* \name Simulated registers addresses
+* \brief Example of address definition for peripheral areas.
+*
+* Principle here is the same as for memory areas but instead of arrays, you define specific addresses. Expected
+* usage is that one address will represent register of a device.
+* 
+* Here you can add global declarations of every array that you will use. Don't forget to also define it in 
+* \c .c equivalent of this file. 
+*
+* \note All of these areas should be declared here and defined in \c context_lib_port.c file
+* \note Saving data into LRAM or HRAM should be possible using __attribute__
+* @{
+*/
+extern cl_addr_t reg_addr1;
+extern cl_addr_t reg_addr2;
+extern cl_addr_t reg_addr3;
+/** @} */
 
 /*!
 * \brief Library metadata which should allways be protected
@@ -110,75 +116,37 @@ extern cl_int_t TIMER0_REGS[10];
 * contains 32-byte, allways on memory area called Register file, user may define areas for this file this way:
 * - \code const Cl_memory_area_t ma255 = {255,REGISTER_FILE_START_ADDR, REGISTER_FILE_START_ADDR + N}; \endcode
 * - \code const Cl_memory_area_t rf = {1,REGISTER_FILE_START_ADDR + N + 1,REGISTER_FILE_START_ADDR + 32}; \endcode
-* rf can be used for protection of most important data while ma255 should be left untouched
-* \note Its size should be at least ( 256 / ARCHITECTURE_BUS_SIZE ) + 1
-* \todo Specify its size
+* rf can be used for protection of most important data while metadata will be left untouched
+* 
+* This area therefore needs to be defined in \c .c equivalent of this file
+* 
+* \note Its size should be ( 256 / ARCHITECTURE_BUS_SIZE ) + 1
 */
 extern const Cl_memory_area_t cl_metadata_ma;
 
 /*!
-* \brief RegF2: Best-protected memory area. Serves as an example
-*
-* After defining arrays used for memory storage, library user must define memory areas
-* using these arrays. Examples of this can be seen in any \c context_lib_port.c file
-*
-* This area simulates Register file 2: Memory area that is protected in every
-* power mode that this MCU provides. It is used mainly for testing.
-*
-* \note Every memory area needs to be declared like this in this file. 
-*/
-extern const Cl_memory_area_t ma2;
-
-/*!
-* \brief RegF: Very well protected memory area. Serves as an example
+* \name Memory areas
+* @{
+* \brief Examples of memory areas
 * 
-* This area simulates Register file. Small memory area that is protected in almost
-* every power mode. It is used mainly for testing. 
+* In similar manner to metadata memory area, you can define as many areas as you want. These areas are backbone of
+* this library, so pay good attention to them when creating it. Also don't forget to actually define them in \c .c
+* equivalent of this file.
 */
-extern const Cl_memory_area_t ma1;
+extern const Cl_memory_area_t memory_area_example1;
+extern const Cl_memory_area_t memory_area_example2;
+/*! @}*/
 
 /*!
-* \name LRAM Memory areas
+* \name Peripheral areas
 * @{
-* \brief Reasonably well protected memory areas.
-*
-* These areas simulate part of RAM memory. Big memory area, protected in all modes
-* except Very low leakage stop modes.
+* \brief Examples of peripheral areas
+* 
+* In similar manner to metadata memory area, you can define as many areas as you want. These areas are backbone of
+* this library, so pay good attention to them when creating it. Also don't forget to actually define them in \c .c
+* equivalent of this file.
 */
-extern const Cl_memory_area_t ma10;
-extern const Cl_memory_area_t ma11;
-extern const Cl_memory_area_t ma12;
-extern const Cl_memory_area_t ma13;
-/*! @} */
-
-
-/*!
-* \name HRAM Memory areas
-* @{
-* \brief Moderately protected memory area.
-*
-* This area simulates part of RAM memory. Big memory area, not protected in Low leakage
-* stop modes.
-*/
-extern const Cl_memory_area_t ma100;
-extern const Cl_memory_area_t ma101;
-extern const Cl_memory_area_t ma102;
-extern const Cl_memory_area_t ma103;
-extern const Cl_memory_area_t ma104;
-extern const Cl_memory_area_t ma105;
-/*! @} */
-
-/*!
-* \name Peripheral Memory areas
-* @{
-* \brief Peripherals: Can be turned on or off independently of power mode 
-* \note Definitions of these areas were generated by ChatGPT
-*/
-extern const Cl_peripheral_area_t ma200;
-extern const Cl_peripheral_area_t ma201;
-extern const Cl_peripheral_area_t ma202;
-extern const Cl_peripheral_area_t ma203;
-extern const Cl_peripheral_area_t ma204;
+extern const Cl_peripheral_area_t peripheral_area_example1;
 /*! @} */
 
 #endif

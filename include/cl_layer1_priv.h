@@ -11,11 +11,8 @@
  * is to provide ways for implementing those, possibly very variable functions and create some simple abstract
  * layer over them. 
  * Dependencies:
- * - "../../platform/posix/context_lib_port.h"
+ * - "context_lib_port.h"
  * 
- * \todo Do second include in some better way
- * \todo Some of these would probably work much more efficient as macros
- * \todo Most of these functions should be probably refactored to private ones
  * \todo Instructions should contain description for creating custom L1 function
  * \note \c save and \c load functions are already implemented and they work with 
  * addresses in standard C way
@@ -23,7 +20,7 @@
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "../../platform/posix/context_lib_port.h"
+#include "context_lib_port.h"
 
 
 /*!

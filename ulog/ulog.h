@@ -87,7 +87,8 @@ typedef enum {
 // There are two ways to enable uLog: you can uncomment the following
 // line, or -- if it is commented out -- you can add -DULOG_ENABLED to
 // your compiler switches.
-#define ULOG_ENABLED
+#include "../include/config.h" // added by Michal Zidzik for context library
+// #define ULOG_ENABLED
 
 #ifdef ULOG_ENABLED
   #define ULOG_INIT() ulog_init()

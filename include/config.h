@@ -32,11 +32,14 @@
 /*!
 * \brief Allow logging
 *
-* 
+* Logging in this library is implemented via third party ulog library 
+* \a (see \c \ulog \a subfolder). If this macro is defined, logging library translates
+* and logging output is created.
 *
-* \todo Add once logging is implemented
+* \note Disable logging by commenting this line out
+* \todo Try to do this in some better way, now ulog has to include this file
 */
-#define CL_LOGGING 1
+#define ULOG_ENABLED
 
 /*!
 * \brief Allow layer 3 of the library (automatic context management)
@@ -47,5 +50,16 @@
 * library size and complexity, usefulness of this version of library is questionable
 */
 #define CL_ALLOW_L3
+
+/*!
+* \brief Determine, whether areas should be protected by default
+*
+* If this macro is defined, every context area starts in protected mode 
+* and is saved in case it is going to be erased. If it's not defined, 
+* every context area starts in unprotected mode. This default behaviour
+* can be overwritten using \c cl_protect_memory and \c cl_unprotect_memory
+* functions
+*/
+//#define CL_DEFAULT_PROTECT
 
 #endif

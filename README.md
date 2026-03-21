@@ -1,3 +1,20 @@
+# Info pre vedúceho
+Dobrý deň. 
+
+Tento repozitár obsahuje momentálnu verziu mojej BP pre Vašu kontrolu. Na nasledujúcich miestach nájdete
+všetko dôležité:
+- okomentované šablóny základných prípadov použitia sú v súbore `\examples\posix_demo\use_cases.c`. Poprosil by
+som Vás, aby ste prípadnú kontrolu začali tam: ak som niečomu dôležitému nepochopil alebo mi niečo podstatné uniklo,
+z toho súboru to hneď odhalíte
+- dokumentácia (v angličtine) sa nachádza buď v tomto súbore alebo v adresári `docs` *(je potrebné ju vygenerovať)*
+- zdrojové súbory sa nachádzajú v adresári `\src`
+- prípady použitia a testy som robil na simulovanom  MCU, ktorého pseudo port nájdete v adresári `\platform\posix\`
+Ak pri kontrole narazíte na nejaký vážny nedostatok, budem vďačný, ak mi dáte vedieť. Inak môžeme všetko prediskutovať
+na ďalšom stretnutí.
+
+Michal Židzik
+
+
 # Context library
 **Author:** Michal Zidzik
 **Date:** 2025 - 2026
@@ -115,30 +132,22 @@ TODO
 - Currently it seems that 
 - `git tag v<num.num.num>`
 - `git push origin v<num.num.num>`
+- `cmake -DTARGET_PLATFORM=posix --build build`
 
 
 ## TODOs
- - write conf file **FINAL WORK**
- - deal with floating point data somehow, probably add functions like for B,HW,W,DW **USE CASE WORK**
- - test saving of different data types **USE CASE WORK**
- - write proper testbench **LATER**
- - write example code to showcase to Strnadel **USE CASE WORK**
- - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases **LATER**
- - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them **LATER**
- - share library with Strnadel
- - add tests for different types of context **TEST WORK**
- - deal with load/store between different area types **USE CASE WORK**
- - deal with error handling **LATER**
- - for some functions check if size of area is at least 2 **LATER**
- - rewrite testing files into some structured way **TEST WORK**
- - get consistent comments for memory area + peripheral area = context area **FINAL WORK**
- - deal with todos in every file **FINAL WORK**
- - generate config automatically **FINAL WORK**
- - test and rework saving data using special function **LATER**
+ - write proper testbench 
+ - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
+ - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
+ - deal with load/store between different area types
+ - deal with error handling
+ - for some functions check if size of area is at least 2
+ - get consistent comments for memory area + peripheral area = context area
+ - generate config automatically?
  - after everything, go through comments once more
-
-## TODOs to study
  - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
+ - 256 ids should be configurable macro 
+ - rework layer 1 so that new functions for sending data can be added in some simpler way
 
 ## Requirements and technical notes
  - Library works with data stored in Little endian format.
@@ -170,3 +179,4 @@ TODO
 - Used as information source: less-known C constructs, best practice for Doxygen
 - Used for writing part of test cases
 - Copilot used when writing tests
+- Used when writing CMake

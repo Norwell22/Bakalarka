@@ -5,7 +5,6 @@
  * Main functions for saving and loading memory areas.
  * \author    Michal Zidzik
  * \date      02.03.2026
- * \todo Merge with \c l2_private.c
  */
 #include "cl_layer2.h"
 #include "cl_layer2_priv.h"
@@ -196,13 +195,13 @@ bool cl_save_peripheral(const Cl_peripheral_area_t *src_area,
 
  bool cl_load_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *custom_d)
 {
-    return read_load_peripheral_area(dst_area, src_area, custom_d,1);
+    return read_load_peripheral_area(dst_area, src_area, custom_d,true);
 }
 
 bool cl_read_peripheral(const Cl_peripheral_area_t *dst_area, Cl_memory_area_t src_area, void *custom_d)
 {
 
-    return read_load_peripheral_area(dst_area, src_area, custom_d,0);
+    return read_load_peripheral_area(dst_area, src_area, custom_d,false);
 }
 
 cl_save_f_t sel_save_f(enum Bare_save_type save_type)
@@ -212,6 +211,7 @@ cl_save_f_t sel_save_f(enum Bare_save_type save_type)
             return cl_raw_save_e;
         case CL_DEVICE:
             return cl_raw_send_e;
+        //add more cases here
         default:
             return NULL;
     }
@@ -224,6 +224,7 @@ cl_load_f_t sel_load_f(enum Bare_save_type save_type)
             return cl_raw_load_e;
         case CL_DEVICE:
             return cl_raw_rcv_e;
+        //add more cases here
         default:
             return NULL;
     }
@@ -267,7 +268,7 @@ cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_
     }
 }
 
-bool read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,void *custom_d,uint8_t erase)
+bool read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,void *custom_d,bool erase)
 {
     ULOG_INFO("cl_load_mem_area:\tContext loading from area %ld to %ld started", src_area.id, dst_area.id);
     cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
@@ -316,7 +317,7 @@ bool read_load_mem_area(Cl_memory_area_t dst_area, Cl_memory_area_t src_area,voi
 bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
                                    Cl_memory_area_t src_area,
                                    void *custom_d,
-                                   uint8_t erase)
+                                   bool erase)
 {
     ULOG_INFO("cl_load_peripheral_area:\tContext loading from area %ld to peripheral area %ld started", src_area.id, dst_area->id);
 
@@ -376,6 +377,7 @@ bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area,
     return false;
 }
 
+
 bool cl_init()
 {
     l3_init();
@@ -383,10 +385,3 @@ bool cl_init()
     ULOG_SUBSCRIBE(console_log,ULOG_TRACE_LEVEL);
     return true;
 }
-
-/*
-bool l3_init()
-{
-    return true;
-}
-    */

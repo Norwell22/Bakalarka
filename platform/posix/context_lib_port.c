@@ -50,7 +50,7 @@ cl_int_t GPIO_REGS[16];
 /*
 * Layer 2 memory areas
 */
-const Cl_memory_area_t ma255 = {255,CL_PROTECTED_MEM,CL_PROTECTED_MEM + 9,CL_CPU};
+const Cl_memory_area_t cl_metadata_ma = {255,CL_PROTECTED_MEM,CL_PROTECTED_MEM + 9,CL_CPU};
 const Cl_memory_area_t ma1 = {1,REGISTER_FILE,REGISTER_FILE + 127,CL_CPU};
 const Cl_memory_area_t ma2 = {2,REGISTER_FILE2,REGISTER_FILE2 + 255,CL_CPU};
 const Cl_memory_area_t ma10 = {10,LRAM, LRAM + 99,CL_CPU};
@@ -62,7 +62,7 @@ const Cl_memory_area_t ma101 = {101, HRAM + 10, HRAM + 15,CL_CPU};
 const Cl_memory_area_t ma102 = {102, HRAM + 20, HRAM + 25,CL_CPU};
 const Cl_memory_area_t ma103 = {103, HRAM + 30, HRAM + 36,CL_CPU};
 const Cl_memory_area_t ma104 = {104, HRAM + 40, HRAM + 47,CL_CPU};
-const Cl_memory_area_t ma105 = {105, HRAM + 50, HRAM + 54,CL_CPU};
+const Cl_memory_area_t ma105 = {105, HRAM + 50, HRAM + 70,CL_CPU};
 
 const Cl_peripheral_area_t ma200 = {200, 8,CL_CPU,
     {
@@ -118,6 +118,8 @@ const Cl_peripheral_area_t ma204 = {204,16,CL_CPU,
 * Layer 3 metadata
 */
 
+#ifdef CL_ALLOW_L3
+
 /*!
  * \brief Implement this enumeration in \c types.h
  *
@@ -154,3 +156,4 @@ const struct cl_peripheral_backup cl_peripheral_backup_table[] = {
     {&ma200, &ma1, CL_VLLS,false},{&ma201, &ma1, CL_VLLS,false},{&ma202, &ma1, CL_VLLS,false},
     {&ma203, &ma1, CL_VLLS,false},{&ma204, &ma1, CL_VLLS,false}
 };
+#endif

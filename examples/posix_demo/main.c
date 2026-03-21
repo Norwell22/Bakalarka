@@ -12,11 +12,12 @@
  * \note __attribute__((section(".hram_section"))) uint8_t buffer[1024]
  */
 #include "context_manager.h"
-#include "use_cases.h"
+#include "tests_helper.h"
 
 
 int main() {
     cl_init();
+    lram_clear();
     cl_clear_mem_area(ma10,NULL); 
     return 0;
 }

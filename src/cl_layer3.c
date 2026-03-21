@@ -8,21 +8,29 @@
  * - "../../include/main/l2.h"
  * \author    Michal Zidzik
  * \date      02.03.2026
- * \todo Merge with \c l2_private.c
- * \todo Implement \a peripheral functions
  */
 #include "cl_layer1.h"
 #include "cl_layer2.h"
 #include "cl_layer3.h"
 #include "ulog.h"
 
-// TODO: write comments for this function
+#ifdef CL_ALLOW_L3
+
+/*!
+* \brief Simple function determining whether area is protected
+*
+* When context area is protected, it returns true, otherwise false.
+* To save some space, area protection metadata is implemented over
+* an 256-elements long bit array
+*/
 bool is_protected(cl_int_t id)
 {
     cl_int_t protected;
+    // mask bit that belongs to given id
     cl_int_t mask = (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE);
-    cl_load_f_t load_f = sel_load_f(ma255.save_type);
-    load_f(&protected,ma255.start_addr + id / ARCHITECTURE_BUS_SIZE, NULL);
+    // load data element on right position
+    cl_load_f_t load_f = sel_load_f(cl_metadata_ma.save_type);
+    load_f(&protected,cl_metadata_ma.start_addr + id / ARCHITECTURE_BUS_SIZE, NULL);
     if (mask & protected){
         ULOG_DEBUG("is_protected:\tarea %lu is protected",id);
         return true;
@@ -30,30 +38,26 @@ bool is_protected(cl_int_t id)
     return false;
 }
 
-// cl_save_f_t save_f = sel_save_f(dst_area.save_type); // choose low-level technique for storing data
-// cl_load_f_t load_f = sel_load_f(src_area.save_type); // choose low-level technique for loading data
 enum Cl_power_mode_t cl_get_mode()
 {
     cl_int_t mode;
-    cl_load_f_t load_f = sel_load_f(ma255.save_type);
-    load_f(&mode,ma255.end_addr, NULL);
+    cl_load_f_t load_f = sel_load_f(cl_metadata_ma.save_type);
+    load_f(&mode,cl_metadata_ma.end_addr, NULL);
     return (enum Cl_power_mode_t)mode;
 }
 
 void cl_write_mode(enum Cl_power_mode_t new_mode)
 {
-    cl_save_f_t save_f = sel_save_f(ma255.save_type);
-    save_f((cl_int_t)new_mode,ma255.end_addr,NULL);
+    cl_save_f_t save_f = sel_save_f(cl_metadata_ma.save_type);
+    save_f((cl_int_t)new_mode,cl_metadata_ma.end_addr,NULL);
 }
 
-    
-    
-
+// turn on context area
 bool cl_area_on( cl_int_t id, void *custom_d)
 {
     enum Cl_power_mode_t mode = cl_get_mode();
     cl_int_t i;
-    if (!is_protected(id))
+    if (!is_protected(id)) // if not protected, nothing has to be done
     {
         ULOG_INFO("cl_area_on:\tArea %lu is not protected and therefore won't be loaded",id);
         return false;
@@ -79,9 +83,6 @@ bool cl_area_off( cl_int_t id, void *custom_d)
 {
     enum Cl_power_mode_t current_mode = cl_get_mode();
     cl_int_t i;
-    /*
-    TODO: you should check if its possible to turn it off once you implement current mode variable 
-    */
     if (!is_protected(id))
     {
         ULOG_INFO("cl_area_off:\tArea %lu is not protected and therefore won't be saved",id);
@@ -104,7 +105,10 @@ bool cl_area_off( cl_int_t id, void *custom_d)
     return false;
 }
 
-bool cl_protect_all()
+/*!
+* \brief Set every context area as protected
+*/
+static bool protect_all()
 {
     cl_int_t i;
     bool success = true;
@@ -114,7 +118,10 @@ bool cl_protect_all()
     return success;
 }
 
-bool cl_unprotect_all()
+/*!
+* \brief Set every context area as unprotected
+*/
+static bool unprotect_all()
 {
     cl_int_t i;
     bool success = true;
@@ -212,7 +219,6 @@ bool cl_change_mode(enum Cl_power_mode_t to_mode,void *custom_d)
     return success;
 }
 
-
 bool l3_init()
 {
     cl_write_mode(CL_DEFAULT_MODE);
@@ -223,6 +229,18 @@ bool l3_init()
     for (i = 0; i < cl_peripheral_backup_table_size; i++){
         cl_clear_mem_area(*(cl_peripheral_backup_table[i].backup_area),NULL);
     }
-    cl_protect_all();
+    #ifdef CL_DEFAULT_PROTECT
+    protect_all();
+    #else
+    unprotect_all();
+    cl_protect_memory(255);
+    #endif
+    // for unprotect all, protect at least 255
     return true;
 }
+#else
+bool l3_init()
+{
+    return true;
+}
+#endif

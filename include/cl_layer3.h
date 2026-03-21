@@ -11,14 +11,13 @@
  * should happen automatically.
  * 
  * Dependencies:
- * - "../../platform/posix/context_lib_port.h"
+ * - "context_lib_port.h"
  * \note In order to make third layer work, quite large set of metadata needs to
  * be declared in \c context_lib_port.h/c 
- * \todo Do second include in some better way
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "../../platform/posix/context_lib_port.h"
+#include "context_lib_port.h"
 
 /*!
 * \brief Inform the library, that the memory area has been turned on
@@ -58,10 +57,16 @@ bool cl_unprotect_memory(cl_int_t id);
 */
 bool cl_change_mode(enum Cl_power_mode_t to_mode,void *other_d);
 
-bool cl_unprotect_all();
-bool cl_protect_all();
-
+/*!
+* \brief Only changes current mode in metadata without any memory protection
+*
+* \note Is automatically called within \c cl_change_mode
+*/
 void cl_write_mode(enum Cl_power_mode_t mode);
+
+/*!
+* \brief Get value of current mode from metadata
+*/
 enum Cl_power_mode_t cl_get_mode();
 
 #endif
