@@ -39,7 +39,26 @@
 * \note Disable logging by commenting this line out
 * \todo Try to do this in some better way, now ulog has to include this file
 */
+
+/*
+typedef enum {
+  ULOG_TRACE_LEVEL=100,
+  ULOG_DEBUG_LEVEL,
+  ULOG_INFO_LEVEL,
+  ULOG_WARNING_LEVEL,
+  ULOG_ERROR_LEVEL,
+  ULOG_CRITICAL_LEVEL,
+  ULOG_ALWAYS_LEVEL
+} ulog_level_t;
+*/
+
 #define ULOG_ENABLED
+#define ULOG_CONSOLE_ENABLE
+#define ULOG_CONSOLE_LEVEL ULOG_INFO_LEVEL
+//#define ULOG_FILE_ENABLE 
+#define ULOG_FILE_LEVEL ULOG_DEBUG_LEVEL
+#define ULOG_FILE_NAME "cl_logging.txt"
+#define ULOG_CUSTOM_ENABLE
 
 /*!
 * \brief Allow layer 3 of the library (automatic context management)
@@ -49,6 +68,7 @@
 * additional functions, there is an option to turn it off. While this reduces
 * library size and complexity, usefulness of this version of library is questionable
 */
+
 #define CL_ALLOW_L3
 
 /*!

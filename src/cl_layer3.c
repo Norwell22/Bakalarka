@@ -140,7 +140,8 @@ bool cl_protect_memory(cl_int_t id)
     cl_int_t mask = (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE);
     ULOG_DEBUG("cl_protect_memory:\tid mod ABS is %lu",id % ARCHITECTURE_BUS_SIZE);
     ULOG_DEBUG("cl_protect_memory:\tmask is %lu",mask);
-    CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] |= mask;
+    //CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] |= mask;
+    *(cl_metadata_ma.start_addr + id / ARCHITECTURE_BUS_SIZE) |= mask;
     return true;
 }
 
@@ -153,7 +154,8 @@ bool cl_unprotect_memory(cl_int_t id)
     cl_int_t mask = ~( (cl_int_t)1 << (id % ARCHITECTURE_BUS_SIZE));
     ULOG_DEBUG("cl_unprotect_memory:\tid mod ABS is %lu",id % ARCHITECTURE_BUS_SIZE);
     ULOG_DEBUG("cl_unprotect_memory:\tmask is %lu",mask);
-    CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] &= mask;
+    // CL_PROTECTED_MEM[id / ARCHITECTURE_BUS_SIZE] &= mask;
+    *(cl_metadata_ma.start_addr + id / ARCHITECTURE_BUS_SIZE) &= mask;
     return true;
 }
 
@@ -221,6 +223,7 @@ bool cl_change_mode(enum Cl_power_mode_t to_mode,void *custom_d)
 
 bool l3_init()
 {
+    puts("L3 INIT GOT CALLED AS EXPECTED");
     cl_write_mode(CL_DEFAULT_MODE);
     cl_int_t i;
     for (i = 0; i < cl_area_backup_table_size; i++){
@@ -232,6 +235,7 @@ bool l3_init()
     #ifdef CL_DEFAULT_PROTECT
     protect_all();
     #else
+    puts("UNPROTECT ALL GOT CALLED");
     unprotect_all();
     cl_protect_memory(255);
     #endif

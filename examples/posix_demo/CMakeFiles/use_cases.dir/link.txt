@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/use_cases.dir/use_cases.c.o CMakeFiles/use_cases.dir/tests_helper.c.o -o use_cases  ../../libcontext_lib.a ../../ulog/libulog.a

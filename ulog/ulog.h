@@ -148,7 +148,10 @@ void ulog_message(ulog_level_t severity, const char *fmt, ...);
 }
 #endif
 
-
+#include <stdio.h>
 void console_log(ulog_level_t level,char *msg);
+
+void file_log(ulog_level_t level,char *msg);
+void mcuxpresso_log(ulog_level_t level,char *msg);
 
 #endif /* ULOG_H_ */

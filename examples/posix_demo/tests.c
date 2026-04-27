@@ -16,12 +16,13 @@
  * \note While I designed tests in this file, many of them were written using GPT or Copilot
  * \note Tests are commented out as it's really hard to check them all at once in their current state
  */
+#include <stdio.h>
+#include "context_manager.h"
+#ifdef CL_ALLOW_L3
+
 #include "tests_helper.h"
 #include "l2_tests.h"
 #include "l3_tests.h"
-#include "context_manager.h"
-
-#ifdef CL_ALLOW_L3
 
 /*!
 * \brief Layer 2 tests
@@ -29,65 +30,66 @@
 * \details 
 * 1. cl_save_mem_area
 *    1.1 save data into empty array: SUCCESS
-*    1.2 save part of data into small empty array: +1 bug where end address is not actually end address, but one behind
-*    1.3 save part of data into array occupied at the start: see 1.2
-*    1.4 save part of data into array occupied at the end: see 1.2
-*    1.5 save part of data into array occupied in the middle: see 1.2
+*    1.2 save part of data into small empty array: SUCCESS
+*    1.3 save part of data into array occupied at the start: SUCCESS
+*    1.4 save part of data into array occupied at the end: SUCCESS
+*    1.5 save part of data into array occupied in the middle: SUCCESS
 *    1.6 save data into complicated array 1: SUCCESS
 *    1.7 save data into complicated array 2: SUCCESS
 *    1.8 save data into complicated array 3: SUCCESS
 *    1.10 refuse to save data into full array: SUCCESS
-* 2. cl_load_mem_area
+*
+* 2. cl_load_mem_area: SUCCESS
 *    2.1 load whole dataset: SUCCESS
 *    2.2 load data from begining: SUCCESS
 *    2.3 load data from end: SUCCESS
 *    2.4 load part of data: SUCCESS
 *    2.5 load two parts of data: SUCCESS
 *    2.6 load three parts of data: SUCCESS
+*
 * 3. cl_save/load_peripheral
-*    3.1 save and then load peripheral area
+*    3.1 save and then load peripheral area: SUCCESS
+*
 * 4. mem_area functions combined
-*    4.1 save-read-load: SUCCESS
-*    4.2 read: SUCCESS
-*    4.3 read-load: SUCCESS
-*    4.4 save-save-read-load: SUCCESS
-*    4.5 save-save-load-read: SUCCESS
-*    4.6 load-save-save-load-save-load: SUCCESS
-*    4.7 save-save-save-save-load-load-read-load-save-load-save-save-save-load: SUCCESS
-* 5. tests with special functions
-*    5.1 run 1.5 using special function
-*    5.2 run 1.7 using special function
-*    5.3 run 1.11 using special function
-*    5.4 run 2.5 using special function
-*    5.5 run 2.6 using special function
-*    5.6 run 4.4 using special function
-*    5.7 run 4.6 using special function
-*    5.8 run 4.7 using special function
-* 6. Edge cases
-*     6.1 Save area with one free space
+*    4.1 save-read-load:
+*    4.2 read:
+*    4.3 read-load:
+*    4.4 save-save-read-load:
+*    4.5 save-save-load-read: 
+*    4.6 load-save-save-load-save-load: 
+*    4.7 save-save-save-save-load-load-read-load-save-load-save-save-save-load: 
+*
+*  5. save into areas that use special functions
+*   5.1 save data into area that uses special function: SUCCESS
+*   5.2 save and load data from area that uses special function: SUCCESS
+*   5.3 save part of data into area that uses special function: SUCCESS
+*   5.4 save and load part of data from area that uses special function: SUCCESS
+*
 *
 * \note Not all tests have been yet implemented
 * \todo Implement rest of tests
 */
 void l2_tests()
 {
-    //1.1 - 1.10
     l2_test1();
-
-    //2.1 - 2.6
     l2_test2();
-
-    //3.1
     l2_test3();
-
-    // 4.1 - 4.7
     l2_test4();
+    l2_test5();
 }
 
 /*!
 * \brief Layer 3 tests
 * 
 * \details
+*   1.1 Protect memory, then save and load it repeatedly using area_off/area_on
+*   1.2 Protect peripheral, then save and load it repeatedly using area_off/area_on
+*   1.3 Protect multiple ma's, then load and save them repeatedly using area_off/area_on
+*   1.4 Protect multiple ma's, then load and save them repeatedly using area_off_area on
+*   1.5 Protect memory, then save and load it repeatedly using change_mode
+*   1.6 Protect peripheral, then save and load it repeatedly using change_mode
+*   1.7 Protect multiple ma's, then load and save them repeatedly using change_mode
+*
 * 2. Recursive load-save
 *     2.1 With A->B->C, change into mode that turns off A and B
 *     2.2 With A->B->C, change into mode that turns on A and B
@@ -120,11 +122,11 @@ void l3_tests()
 cl_int_t main()
 {
     cl_init();
-    //l2_tests();
-    l3_tests();
+    l2_tests();
+    //l3_tests();
 }
 #else
-cl_int_t main()
+int main()
 {
     puts("tests\tLayer 3 not allowed, tests cannot be executed");
 }

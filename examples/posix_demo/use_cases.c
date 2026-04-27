@@ -1,4 +1,5 @@
-#ifndef CL_ALLOW_L3
+#include <stdio.h>
+#ifdef CL_ALLOW_L3
 /*! 
  * \file      use_cases.c
  * \brief     Sablony zakladnych pripadov uzitia pre moju kniznicu
@@ -10,7 +11,6 @@
  * \date      21.03.2026
  * \note Aplikacie vyuzivaju pseudo port z adresara \c platform/posix
  */
-#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
@@ -163,6 +163,14 @@ void use_case3()
 * az na realnom MCU ked budem mat k dispozicii externu pamat
 */
 void use_case4()
+{
+}
+
+/*!
+* \brief Ulozenie kontextu procesora potrebneho pre obnovenie vypoctu bez resetu
+*
+*/
+void use_case5()
 {
 }
 

@@ -31,14 +31,17 @@
 * \param save_f Function used for saving individual elements
 * \return Number of saved elements
 */
-cl_int_t fill_block(cl_save_f_t save_f,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d);
+cl_int_t fill_block(cl_load_f_t s_load_f, cl_save_f_t d_save_f ,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d);
 
-
+cl_int_t save_block_peripheral(Cl_peripheral_area_t *src_a, cl_load_f_t s_load_f,cl_save_f_t d_save_f, cl_int_t src_i, cl_int_t max_i, 
+    cl_addr_t start_dst_a, cl_addr_t end_dst_a, void *custom_d);
+cl_int_t load_block_peripheral(Cl_peripheral_area_t *dst_a, cl_load_f_t s_load_f,cl_save_f_t d_save_f, cl_int_t dst_i, cl_int_t max_i, 
+    cl_addr_t start_src_a, cl_addr_t end_src_a, void *custom_d);
 /*!
 * \brief Load version of \c fill_block
 * \return Number of loaded elements
 */
-cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d);
+//cl_int_t load_block(cl_load_f_t load_f,cl_addr_t start_src_a, cl_addr_t end_src_a, cl_addr_t start_dst_a, cl_addr_t end_dst_a,void *custom_d);
 
 /*!
 * \name Read/Load functions

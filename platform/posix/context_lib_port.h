@@ -98,6 +98,9 @@ extern cl_int_t UART0_REGS[8];
 extern cl_int_t SPI0_REGS[6];
 extern cl_int_t I2C0_REGS[6];
 extern cl_int_t TIMER0_REGS[10];
+
+extern cl_int_t A_MEM[40];
+extern cl_int_t B_MEM[40];
 /** @} */
 
 
@@ -180,5 +183,10 @@ extern const Cl_peripheral_area_t ma202;
 extern const Cl_peripheral_area_t ma203;
 extern const Cl_peripheral_area_t ma204;
 /*! @} */
+
+
+extern const Cl_memory_area_t ma150;
+extern const Cl_memory_area_t ma151;
+
 
 #endif

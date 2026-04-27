@@ -46,7 +46,6 @@ cl_int_t SPI0_REGS[6];
 cl_int_t I2C0_REGS[6];
 cl_int_t TIMER0_REGS[10];
 cl_int_t GPIO_REGS[16];
-
 /*
 * Layer 2 memory areas
 */
@@ -54,15 +53,20 @@ const Cl_memory_area_t cl_metadata_ma = {255,CL_PROTECTED_MEM,CL_PROTECTED_MEM +
 const Cl_memory_area_t ma1 = {1,REGISTER_FILE,REGISTER_FILE + 127,CL_CPU};
 const Cl_memory_area_t ma2 = {2,REGISTER_FILE2,REGISTER_FILE2 + 255,CL_CPU};
 const Cl_memory_area_t ma10 = {10,LRAM, LRAM + 99,CL_CPU};
-const Cl_memory_area_t ma11 = {11,LRAM + 100, LRAM + 109,CL_CPU};
-const Cl_memory_area_t ma12 = {12,LRAM + 120, LRAM + 124,CL_CPU};
-const Cl_memory_area_t ma13 = {13,LRAM, LRAM + 10,CL_CPU};
+const Cl_memory_area_t ma11 = {11,LRAM + 100, LRAM + 108,CL_CPU};
+const Cl_memory_area_t ma12 = {12,LRAM + 120, LRAM + 123,CL_CPU};
+const Cl_memory_area_t ma13 = {13,LRAM, LRAM + 9,CL_CPU};
 const Cl_memory_area_t ma100 = {100, HRAM     , HRAM + 5,CL_CPU};
 const Cl_memory_area_t ma101 = {101, HRAM + 10, HRAM + 15,CL_CPU};
 const Cl_memory_area_t ma102 = {102, HRAM + 20, HRAM + 25,CL_CPU};
 const Cl_memory_area_t ma103 = {103, HRAM + 30, HRAM + 36,CL_CPU};
 const Cl_memory_area_t ma104 = {104, HRAM + 40, HRAM + 47,CL_CPU};
 const Cl_memory_area_t ma105 = {105, HRAM + 50, HRAM + 70,CL_CPU};
+
+cl_int_t A_MEM[40];
+cl_int_t B_MEM[40];
+const Cl_memory_area_t ma150 = {150, 0, 6*sizeof(uint64_t),CL_A};
+const Cl_memory_area_t ma151 = {151, 0, 4*sizeof(uint64_t),CL_B};
 
 const Cl_peripheral_area_t ma200 = {200, 8,CL_CPU,
     {
@@ -156,4 +160,8 @@ const struct cl_peripheral_backup cl_peripheral_backup_table[] = {
     {&ma200, &ma1, CL_VLLS,false},{&ma201, &ma1, CL_VLLS,false},{&ma202, &ma1, CL_VLLS,false},
     {&ma203, &ma1, CL_VLLS,false},{&ma204, &ma1, CL_VLLS,false}
 };
+
+
+
+
 #endif

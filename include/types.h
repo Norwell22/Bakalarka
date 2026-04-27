@@ -75,7 +75,7 @@ typedef uint64_t cl_int_t;
 * in standard-C way by the CPU and DEVICE which means any other form of data storage.
 * \todo Port creator or user should probably have option to expand this enum.
 */
-enum Bare_save_type{ CL_CPU,CL_DEVICE };
+enum Bare_save_type{ CL_CPU,CL_DEVICE, CL_A, CL_B, CL_MCUXPRESSO_GPIO, CL_EEPROM };
 
 /*!
  * \struct Cl_memory_area_t
@@ -153,7 +153,7 @@ typedef void (*cl_save_f_t)(cl_int_t source, cl_addr_t target, void *custom_d);
 */
 typedef void (*cl_load_f_t)(cl_addr_t target, cl_addr_t source, void *custom_d);
 
-/* =========== L3 
+/* =========== L3 =================== 
 * TODO: only when L3 is turned on
 */
 
@@ -229,5 +229,8 @@ extern const cl_int_t cl_peripheral_backup_table_size;
 * \note Same thing as \c area_backup, just for peripherals
 */
 extern const struct cl_peripheral_backup cl_peripheral_backup_table[];
+
+
+
 
 #endif

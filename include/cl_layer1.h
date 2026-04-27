@@ -32,6 +32,12 @@
 */
 void cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
 void cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *other_d);
+void a_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+void b_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+void cl_eeprom_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+void cl_sdk_save_gpio_e(cl_int_t pin, cl_addr_t addr,void *port_char);
+
+
 /*! @}*/
 
 
@@ -43,6 +49,12 @@ void cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *other_d);
 */
 void cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 void cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *other_d);
+void a_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
+void b_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
+void cl_eeprom_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
+void cl_sdk_load_gpio_e(cl_addr_t pin, cl_addr_t backup_addr, void *port_char);
+
+
 /*! @} */
 
 #endif

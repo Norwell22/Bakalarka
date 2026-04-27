@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/tests.dir/tests.c.o CMakeFiles/tests.dir/tests_helper.c.o CMakeFiles/tests.dir/l2_tests.c.o CMakeFiles/tests.dir/l3_tests.c.o -o tests  ../../libcontext_lib.a ../../ulog/libulog.a

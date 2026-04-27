@@ -5,7 +5,7 @@
 @brief: initial file for testing and running library
 */
 #include "context_manager.h"
-#include "../../platform/posix/context_lib_port.h"
+#include "context_lib_port.h"
 #include <stdio.h> //this would be better if wasn't here
 #include <stdbool.h> //this would be better if it wasn't here
 

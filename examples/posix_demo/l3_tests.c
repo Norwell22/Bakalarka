@@ -11,6 +11,7 @@
  * \note Tests are commented out as it's really hard to check them all at once in their current state
  */
 #include "context_manager.h"
+#ifdef CL_ALLOW_L3
 #include "l3_tests.h"
 #include "tests_helper.h"
 
@@ -304,7 +305,7 @@ void l3_test1()
     // l3_t14(); //v0.5.0 : success
     // l3_t15(); //v0.5.0 : success
     // l3_t16(); //v0.5.0 : success
-    l3_t17(); //v0.5.0 : success
+    // l3_t17(); //v0.5.0 : success
 }
 void l3_test2()
 {
@@ -330,3 +331,4 @@ void l3_test2()
     // l3_t27();
     // l3_t28();
 }
+#endif

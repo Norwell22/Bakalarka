@@ -16,8 +16,7 @@
 
 
 int main() {
-    cl_init();
-    lram_clear();
-    cl_clear_mem_area(ma10,NULL); 
+
+
     return 0;
 }

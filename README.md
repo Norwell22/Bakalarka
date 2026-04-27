@@ -9,8 +9,10 @@ z toho súboru to hneď odhalíte
 - dokumentácia (v angličtine) sa nachádza buď v tomto súbore alebo v adresári `docs` *(je potrebné ju vygenerovať)*
 - zdrojové súbory sa nachádzajú v adresári `\src`
 - prípady použitia a testy som robil na simulovanom  MCU, ktorého pseudo port nájdete v adresári `\platform\posix\`
+- Opísaná aplikácia, ktorá bola testovaná na doske FRDM-KL27z sa nachádza v adresári `\examples\frdm_kl27z_demo`
 Ak pri kontrole narazíte na nejaký vážny nedostatok, budem vďačný, ak mi dáte vedieť. Inak môžeme všetko prediskutovať
 na ďalšom stretnutí.
+
 
 Michal Židzik
 
@@ -129,25 +131,34 @@ TODO
 
 
 # Notes
-- Currently it seems that 
 - `git tag v<num.num.num>`
 - `git push origin v<num.num.num>`
-- `cmake -DTARGET_PLATFORM=posix --build build`
+- `cmake -S . -B build -DTARGET_PLATFORM=frdm_kl27z`
+- `cmake --build build`
 
-
-## TODOs
- - write proper testbench 
- - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
- - users should definitely use Cl_memory_area_t pointers before id's as this unnecessarily complicates things for them
- - deal with load/store between different area types
+## TO not DOs
  - deal with error handling
  - for some functions check if size of area is at least 2
  - get consistent comments for memory area + peripheral area = context area
- - generate config automatically?
- - after everything, go through comments once more
- - after series of events int x[10]; <VLLS1>;<wakeup>; is space for x  still 'allocated' ?
  - 256 ids should be configurable macro 
+- rewrite CMake files, everything is in one and its horrible
+
+## TODOs
+ - write proper testbench 
+ - fix load/store design error
+ - ideally go through comments
+- logging is allways level TRACE and more importantly allways goes to console. fix it
+- add logging macros as described in bachelors thesis
+- add application for MCU1
+- add application for MCU2
+
+
+## Mention in improvements
+ - maybe replace hard-coded structure creation with some macro: that could absolutely work in some cases
  - rework layer 1 so that new functions for sending data can be added in some simpler way
+ - maye add function checking reset type? but this may be problematic as that is really dependent upon MCU specific stuff
+ - more robust version of this library
+- simplify L1: there is no need for separate cl_save_e and cl_save_b/hw/w/dw functions: cl_save_b/hw/w/dw should be renamed to cl_save_e and be directly included in macro 
 
 ## Requirements and technical notes
  - Library works with data stored in Little endian format.

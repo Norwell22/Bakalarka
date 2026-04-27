@@ -152,9 +152,30 @@ static ulog_level_t ulog_lowest_log_level(){
   return lowest_log_level;
 }
 
-
+/*
 void console_log(ulog_level_t level,char *msg) {
   printf("[%s]\t%s\n",
+  ulog_level_name(level),
+  msg);
+}
+*/
+__attribute__((weak)) void console_log(ulog_level_t level,char *msg) {
+  printf("[%s]\t%s\n",
+  ulog_level_name(level),
+  msg);
+}
+
+__attribute__((weak)) void file_log(ulog_level_t level,char *msg) {
+  FILE *fptr;
+  fptr = fopen(ULOG_FILE_NAME,"a");
+  fprintf(fptr,"[%s]\t%s\n",
+  ulog_level_name(level),
+  msg);
+  fclose(fptr);
+}
+
+void mcuxpresso_log(ulog_level_t level,char *msg) {
+  PRINTF("\r[%s]\t%s\n",
   ulog_level_name(level),
   msg);
 }

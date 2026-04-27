@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/posix_demo.dir/main.c.o CMakeFiles/posix_demo.dir/tests_helper.c.o -o posix_demo  ../../libcontext_lib.a ../../ulog/libulog.a

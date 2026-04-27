@@ -44,4 +44,6 @@ void l2_test3();
 * ranging to simple to more complex. 
 */
 void l2_test4();
+
+void l2_test5();
 #endif
