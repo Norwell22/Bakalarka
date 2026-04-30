@@ -162,6 +162,62 @@ const struct cl_peripheral_backup cl_peripheral_backup_table[] = {
 };
 
 
+void a_save_e(cl_int_t e, cl_int_t *addr,void *not_used)
+{
+    cl_int_t local_addr = (cl_int_t)addr * 2 / 8;
+    //printf("A: LOCAL ADDRESS: %ld\n",local_addr);
+    if (local_addr > 32)
+    {
+        printf("a_save_e error: wrong address: %ld\n",local_addr);
+        return;
+    }
+    //A_MEM[local_addr + 10] = 0xaa;
+    //A_MEM[local_addr + 11] = e;
+    return;
+}
+    
+void a_load_e(cl_int_t *e, cl_int_t *addr, void *not_used)
+{
+    cl_int_t local_addr = (cl_int_t)addr * 2 / 8;
+    printf("A: LOCAL ADDRESS: %ld\n",local_addr);
+    if (local_addr > 32)
+    {
+        printf("a_load_e error: wrong address: %ld\n",local_addr);
+        return;
+    }
+    A_MEM[local_addr + 10] = 0x00;
+    *e = A_MEM[local_addr + 11];
+    return;
+}
+
+
+void b_save_e(cl_int_t e, cl_int_t *addr, void *not_used)
+{
+    cl_int_t local_addr = (cl_int_t)addr / 8 + 11;
+    printf("B: LOCAL ADDRESS: %ld\n",local_addr);
+    if (local_addr < 11 || local_addr > 15)
+    {
+        printf("b_save_e error: wrong address: %ld\n",local_addr);
+        return;
+    }
+    B_MEM[local_addr + 5] = 0xbb;
+    B_MEM[local_addr - 5] = 0xbb;
+    B_MEM[local_addr] = e;
+    return;
+}
+    
+void b_load_e(cl_int_t *e, cl_int_t *addr, void *not_used)
+{
+    cl_int_t local_addr = (cl_int_t)addr / 8 + 11;
+    printf("B: LOCAL ADDRESS: %ld\n",local_addr);
+    if (local_addr < 11 || local_addr > 15)
+    {
+        printf("b_load_e error: wrong address: %ld\n",local_addr);
+        return;
+    }
+    *e = B_MEM[local_addr];
+    return;
+}
 
 
 #endif

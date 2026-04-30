@@ -175,9 +175,9 @@ __attribute__((weak)) void file_log(ulog_level_t level,char *msg) {
 }
 
 void mcuxpresso_log(ulog_level_t level,char *msg) {
-  PRINTF("\r[%s]\t%s\n",
-  ulog_level_name(level),
-  msg);
+  //PRINTF("\r[%s]\t%s\n",
+  //ulog_level_name(level),
+  //msg);
 }
 
 #endif  // #ifdef ULOG_ENABLED

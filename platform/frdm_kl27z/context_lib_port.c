@@ -74,4 +74,126 @@ const cl_int_t cl_peripheral_backup_table_size = 1;
 const struct cl_peripheral_backup cl_peripheral_backup_table[] = {
     {&peripheral_area_example1,&memory_area_example2,CL_RUN,true}
 };
+
+/*
+won't work because of missing MCUXpresso enviroment
+#include "cl_layer1.h"
+#include "ulog.h"
+#include "fsl_i2c.h"
+#include "fsl_common.h"
+#include "fsl_gpio.h"
+*/
+
+void eeprom_write_b(uint8_t byte, uint8_t *addr) {
+/*
+    i2c_master_transfer_t masterXfer = {0};
+
+    masterXfer.slaveAddress   = 0x50;
+    masterXfer.direction      = kI2C_Write;
+    masterXfer.subaddress     = (uint8_t)addr;
+    masterXfer.subaddressSize = 1;
+    masterXfer.data           = &byte;
+    masterXfer.dataSize       = 1;
+    masterXfer.flags          = kI2C_TransferDefaultFlag;
+
+    (void)I2C_MasterTransferBlocking(I2C1, &masterXfer);
+
+    SDK_DelayAtLeastUs(5000, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+*/
+}
+
+void eeprom_read_b(uint8_t *byte, uint8_t *addr) {
+/*
+    i2c_master_transfer_t masterXfer = {0};
+
+    masterXfer.slaveAddress   = 0x50;
+    masterXfer.direction      = kI2C_Read;
+    masterXfer.subaddress     = (uint8_t)addr;
+    masterXfer.subaddressSize = 1;
+    masterXfer.data           = byte;
+    masterXfer.dataSize       = 1;
+    masterXfer.flags          = kI2C_TransferDefaultFlag;
+
+    (void)I2C_MasterTransferBlocking(I2C1, &masterXfer);
+*/
+}
+
+void cl_sdk_load_gpio_e(cl_addr_t addr, cl_addr_t pin,void *port_char)
+{
+    /*
+	uint32_t pin_val;
+	switch(*(char *)port_char){
+		case 'a':
+		case 'A':
+			pin_val = GPIO_PinRead(GPIOA,(cl_int_t)pin);
+			break;
+		case 'b':
+		case 'B':
+			pin_val = GPIO_PinRead(GPIOB,(cl_int_t)pin);
+			break;
+		case 'c':
+		case 'C':
+			pin_val = GPIO_PinRead(GPIOC,(cl_int_t)pin);
+			break;
+		case 'd':
+		case 'D':
+			pin_val = GPIO_PinRead(GPIOD,(cl_int_t)pin);
+			break;
+	}
+	//PRINTF("\rValue that i read is %d\n",pin_val);
+	*addr = pin_val;
+    */
+}
+
+void cl_sdk_save_gpio_e(cl_int_t val, cl_addr_t pin, void *port_char)
+{
+    /*
+	//uint32_t val = *backup_addr;
+	switch(*(char *)port_char){
+			case 'a':
+			case 'A':
+				GPIO_PinWrite(GPIOA,(cl_int_t)pin, val);
+				break;
+			case 'b':
+			case 'B':
+				GPIO_PinWrite(GPIOB,(cl_int_t)pin,val);
+				break;
+			case 'c':
+			case 'C':
+				GPIO_PinWrite(GPIOC,(cl_int_t)pin,val);
+				break;
+			case 'd':
+			case 'D':
+				GPIO_PinWrite(GPIOD,(cl_int_t)pin,val);
+				break;
+		}
+    */
+}
+
+void cl_eeprom_save_e(cl_int_t w, cl_int_t *addr, void *not_used)
+{
+    uint8_t *dst = (uint8_t*)addr;
+
+    eeprom_write_b((uint8_t)( w        & 0xFF), dst);
+    eeprom_write_b((uint8_t)((w >> 8 ) & 0xFF), dst + 1);
+    eeprom_write_b((uint8_t)((w >> 16) & 0xFF), dst + 2);
+    eeprom_write_b((uint8_t)((w >> 24) & 0xFF), dst + 3);
+}
+
+
+void cl_eeprom_load_e(cl_int_t *w, cl_int_t *addr, void *not_used)
+{
+    uint8_t *src = (uint8_t*)addr;
+    uint8_t b0;
+    uint8_t b1;
+    uint8_t b2;
+    uint8_t b3;
+    eeprom_read_b(&b0,src);
+    eeprom_read_b(&b1,src + 1);
+    eeprom_read_b(&b2,src + 2);
+    eeprom_read_b(&b3,src + 3);
+    *w =  (uint32_t)b0 | ((uint32_t)b1 << 8) | ((uint32_t)b2 << 16) | ((uint32_t)b3 << 24);
+}
+
+
 #endif

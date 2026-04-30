@@ -12,6 +12,7 @@
  */
 #include "cl_layer1.h"
 #include "ulog.h"
+#include "context_lib_port.h"
 //#include "../../include/main/cl_layer1_priv.h"
 
 static void save_byte(uint8_t b, uint8_t *addr)
@@ -23,55 +24,6 @@ static void load_byte(uint8_t *b, uint8_t *addr)
    *b = *addr;
 }
 
-/*
-won't work because of missing MCUXpresso enviroment
-#include "cl_layer1.h"
-#include "ulog.h"
-#include "fsl_i2c.h"
-#include "fsl_common.h"
-#include "fsl_gpio.h"
-
-
-status_t eeprom_write_b(uint8_t byte, uint8_t *addr) {
-    i2c_master_transfer_t masterXfer;
-    memset(&masterXfer, 0, sizeof(masterXfer));
-    masterXfer.slaveAddress   = 0x50;
-    masterXfer.direction      = kI2C_Write;
-    masterXfer.subaddress     = (uint8_t)addr;
-    masterXfer.subaddressSize = 1;          // 24LC01B uses 1-byte addressing
-    masterXfer.data           = &byte;
-    masterXfer.dataSize       = 1;
-    masterXfer.flags          = kI2C_TransferDefaultFlag;
-    status_t result = I2C_MasterTransferBlocking(I2C1, &masterXfer);
-    SDK_DelayAtLeastUs(5000, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    return result;
-}
-
-status_t eeprom_read_b(uint8_t *byte, uint8_t *addr) {
-    i2c_master_transfer_t masterXfer;
-    memset(&masterXfer, 0, sizeof(masterXfer));
-
-    masterXfer.slaveAddress   = 0x50;
-    masterXfer.direction      = kI2C_Read;
-    masterXfer.subaddress     = (uint8_t)addr;
-    masterXfer.subaddressSize = 1;
-    masterXfer.data           = byte;
-    masterXfer.dataSize       = 1;
-    masterXfer.flags          = kI2C_TransferDefaultFlag;
-
-    return I2C_MasterTransferBlocking(I2C1, &masterXfer);
-}
-*/
-
-cl_int_t eeprom_write_b(uint8_t byte, uint8_t *addr)
-{
-    return 0;
-}
-
-status_t eeprom_read_b(uint8_t *byte, uint8_t *addr)
-{
-    return 0;
-}
 
 
 /* 
@@ -132,89 +84,7 @@ void raw_send_w(uint32_t w, uint32_t *addr, void *other_d)
 }
 
 
-void cl_eeprom_save_e(uint32_t w, uint32_t *addr, void *not_used)
-{
-    uint8_t *dst = (uint8_t*)addr;
 
-    eeprom_write_b((uint8_t)( w        & 0xFF), dst);
-    eeprom_write_b((uint8_t)((w >> 8 ) & 0xFF), dst + 1);
-    eeprom_write_b((uint8_t)((w >> 16) & 0xFF), dst + 2);
-    eeprom_write_b((uint8_t)((w >> 24) & 0xFF), dst + 3);
-}
-
-
-void cl_eeprom_load_e(uint32_t *w, uint32_t *addr, void *not_used)
-{
-    uint8_t *src = (uint8_t*)addr;
-    uint8_t b0;
-    uint8_t b1;
-    uint8_t b2;
-    uint8_t b3;
-    eeprom_read_b(&b0,src);
-    eeprom_read_b(&b1,src + 1);
-    eeprom_read_b(&b2,src + 2);
-    eeprom_read_b(&b3,src + 3);
-    *w =  (uint32_t)b0 | ((uint32_t)b1 << 8) | ((uint32_t)b2 << 16) | ((uint32_t)b3 << 24);
-}
-
-/*
-void cl_sdk_load_gpio_e(cl_addr_t addr, cl_addr_t pin,void *port_char)
-{
-	uint32_t pin_val;
-	switch(*(char *)port_char){
-		case 'a':
-		case 'A':
-			pin_val = GPIO_PinRead(GPIOA,(cl_int_t)pin);
-			break;
-		case 'b':
-		case 'B':
-			pin_val = GPIO_PinRead(GPIOB,(cl_int_t)pin);
-			break;
-		case 'c':
-		case 'C':
-			pin_val = GPIO_PinRead(GPIOC,(cl_int_t)pin);
-			break;
-		case 'd':
-		case 'D':
-			pin_val = GPIO_PinRead(GPIOD,(cl_int_t)pin);
-			break;
-	}
-	//PRINTF("\rValue that i read is %d\n",pin_val);
-	*addr = pin_val;
-}
-
-void cl_sdk_save_gpio_e(cl_int_t val, cl_addr_t pin, void *port_char)
-{
-	//uint32_t val = *backup_addr;
-	switch(*(char *)port_char){
-			case 'a':
-			case 'A':
-				GPIO_PinWrite(GPIOA,(cl_int_t)pin, val);
-				break;
-			case 'b':
-			case 'B':
-				GPIO_PinWrite(GPIOB,(cl_int_t)pin,val);
-				break;
-			case 'c':
-			case 'C':
-				GPIO_PinWrite(GPIOC,(cl_int_t)pin,val);
-				break;
-			case 'd':
-			case 'D':
-				GPIO_PinWrite(GPIOD,(cl_int_t)pin,val);
-				break;
-		}
-}
-*/
-
-void cl_sdk_load_gpio_e(cl_addr_t addr, cl_addr_t pin,void *port_char)
-{
-
-}
-void cl_sdk_save_gpio_e(cl_int_t val, cl_addr_t pin, void *port_char)
-{
-
-}
 
 void raw_save_dw(uint64_t dw, uint64_t *addr, void *not_used)
 {
@@ -336,62 +206,40 @@ void raw_rcv_dw(uint64_t *dw, uint64_t *addr, void *other_d)
                | ((uint64_t)b4 << 32) | ((uint64_t)b5 << 40)  | ((uint64_t)b6 << 48) | ((uint64_t)b7 << 56);
 }
 
-void a_save_e(uint64_t e, uint64_t *addr,void *not_used)
-{
-    uint64_t local_addr = (uint64_t)addr * 2 / 8;
-    //printf("A: LOCAL ADDRESS: %ld\n",local_addr);
-    if (local_addr > 32)
-    {
-        printf("a_save_e error: wrong address: %ld\n",local_addr);
-        return;
-    }
-    A_MEM[local_addr + 10] = 0xaa;
-    A_MEM[local_addr + 11] = e;
-    return;
-}
-    
-void a_load_e(uint64_t *e, uint64_t *addr, void *not_used)
-{
-    uint64_t local_addr = (uint64_t)addr * 2 / 8;
-    //printf("A: LOCAL ADDRESS: %ld\n",local_addr);
-    if (local_addr > 32)
-    {
-        printf("a_load_e error: wrong address: %ld\n",local_addr);
-        return;
-    }
-    A_MEM[local_addr + 10] = 0x00;
-    *e = A_MEM[local_addr + 11];
-    return;
-}
 
 
-void b_save_e(uint64_t e, uint64_t *addr, void *not_used)
+#ifdef CL_PLATFORM_PICO
+
+
+
+void cl_eeprom_pico_save_e(cl_int_t e, cl_addr_t addr, void *not_used)
 {
-    uint64_t local_addr = (uint64_t)addr / 8 + 11;
-    //printf("B: LOCAL ADDRESS: %ld\n",local_addr);
-    if (local_addr < 11 || local_addr > 15)
-    {
-        printf("b_save_e error: wrong address: %ld\n",local_addr);
-        return;
-    }
-    B_MEM[local_addr + 5] = 0xbb;
-    B_MEM[local_addr - 5] = 0xbb;
-    B_MEM[local_addr] = e;
-    return;
+   printf("EEPROM saving started\n");
+   uint8_t *dst = (uint8_t*)addr;
+   eeprom_write_byte((uint8_t)( e        & 0xFF), dst);
+   eeprom_write_byte((uint8_t)((e >> 8 ) & 0xFF), dst + 1);
+   eeprom_write_byte((uint8_t)((e >> 16) & 0xFF), dst + 2);
+   eeprom_write_byte((uint8_t)((e >> 24) & 0xFF), dst + 3);
+   printf("EEPROM saving ended\n");
 }
-    
-void b_load_e(uint64_t *e, uint64_t *addr, void *not_used)
+
+void cl_eeprom_pico_load_e(cl_addr_t e, cl_addr_t addr, void *not_used)
 {
-    uint64_t local_addr = (uint64_t)addr / 8 + 11;
-    //printf("B: LOCAL ADDRESS: %ld\n",local_addr);
-    if (local_addr < 11 || local_addr > 15)
-    {
-        printf("b_load_e error: wrong address: %ld\n",local_addr);
-        return;
-    }
-    *e = B_MEM[local_addr];
-    return;
+    printf("EEPROM loading started\n");
+    uint8_t *src = (uint8_t*)addr;
+    uint8_t b0;
+    uint8_t b1;
+    uint8_t b2;
+    uint8_t b3;
+    eeprom_read_byte(&b0,src);
+    eeprom_read_byte(&b1,src + 1);
+    eeprom_read_byte(&b2,src + 2);
+    eeprom_read_byte(&b3,src + 3);
+    *e =  (uint32_t)b0 | ((uint32_t)b1 << 8) | ((uint32_t)b2 << 16) | ((uint32_t)b3 << 24);
+    printf("EEPROM loading ended\n");
+
 }
+#endif
 
 
 // save element functions are chosen based on architecture size

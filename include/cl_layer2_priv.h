@@ -17,7 +17,8 @@
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "context_lib_port.h"
+//#include "context_lib_port.h"
+#include "types.h"
 
 #define HEAD_LENGTH 2
 
@@ -66,5 +67,8 @@ bool read_load_peripheral_area(const Cl_peripheral_area_t *dst_area, Cl_memory_a
 * one in layer 3. Implementation is chosen based on \c CL_ALLOW_L3 macro.
 */
 bool l3_init();
+
+
+
 
 #endif

@@ -10,6 +10,7 @@
 #include "cl_layer2_priv.h"
 #include "cl_layer1.h"
 #include "ulog.h"
+#include "context_lib_port.h"
 
    
 bool cl_clear_mem_area(Cl_memory_area_t area, void *custom_d)
@@ -189,14 +190,26 @@ cl_save_f_t sel_save_f(enum Bare_save_type save_type)
             return cl_raw_save_e;
         case CL_DEVICE:
             return cl_raw_send_e;
+        #ifdef CL_PLATFORM_POSIX
         case CL_A:
             return a_save_e;
+        #endif
+        #ifdef CL_PLATFORM_POSIX
         case CL_B:
             return b_save_e;
+        #endif
+        #ifdef CL_PLATFORM_FRDM
         case CL_MCUXPRESSO_GPIO:
         	return cl_sdk_save_gpio_e;
+        #endif
+        #ifdef CL_PLATFORM_FRDM
         case CL_EEPROM:
         	return cl_eeprom_save_e;
+        #endif
+        #ifdef CL_PLATFORM_PICO
+        case CL_EEPROM_PICO:
+            return cl_eeprom_pico_save_e;
+        #endif
 
         //add more cases here
         default:
@@ -211,14 +224,26 @@ cl_load_f_t sel_load_f(enum Bare_save_type save_type)
             return cl_raw_load_e;
         case CL_DEVICE:
             return cl_raw_rcv_e;
+        #ifdef CL_PLATFORM_POSIX
         case CL_A:
             return a_load_e;
+        #endif
+        #ifdef CL_PLATFORM_POSIX
         case CL_B:
             return b_load_e;
+        #endif
+        #ifdef CL_PLATFORM_FRDM
         case CL_MCUXPRESSO_GPIO:
         	return cl_sdk_load_gpio_e;
+        #endif
+        #ifdef CL_PLATFORM_FRDM
         case CL_EEPROM:
         	return cl_eeprom_load_e;
+        #endif
+        #ifdef CL_PLATFORM_PICO:
+            case CL_EEPROM_PICO:
+                return cl_eeprom_pico_load_e;
+        #endif
 
         //add more cases here
         default:
@@ -426,7 +451,7 @@ bool cl_init()
 
     #ifdef ULOG_CUSTOM_ENABLE
     // here, add your logging functions subscriptions
-    #endif ULOG_CUSTOM_ENABLE
+    #endif
     
     return true;
 }

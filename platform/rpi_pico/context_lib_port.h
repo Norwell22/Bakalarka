@@ -149,10 +149,11 @@ extern const Cl_memory_area_t memory_area_example2;
 extern const Cl_peripheral_area_t peripheral_area_example1;
 /*! @} */
 
+bool eeprom_write_byte(uint8_t data, uint8_t *addr);
+bool eeprom_read_byte(uint8_t *data_out, uint8_t *mem_addr);
 
-void cl_sdk_save_gpio_e(cl_int_t val, cl_addr_t pin, void *port_char);
-void cl_sdk_load_gpio_e(cl_addr_t addr, cl_addr_t pin,void *port_char);
-void cl_eeprom_save_e(cl_int_t w, cl_int_t *addr, void *not_used);
-void cl_eeprom_load_e(cl_int_t *w, cl_int_t *addr, void *not_used);
+
+//void cl_eeprom_pico_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+//void cl_eeprom_pico_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 
 #endif

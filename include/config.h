@@ -27,7 +27,7 @@
 * the library has been extensively tested.
 * \todo For final version, change this to 32.
 */
-#define ARCHITECTURE_BUS_SIZE 64
+#define ARCHITECTURE_BUS_SIZE 32
 
 /*!
 * \brief Allow logging
@@ -81,5 +81,6 @@ typedef enum {
 * functions
 */
 //#define CL_DEFAULT_PROTECT
+
 
 #endif

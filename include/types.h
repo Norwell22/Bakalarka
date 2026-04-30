@@ -75,7 +75,7 @@ typedef uint64_t cl_int_t;
 * in standard-C way by the CPU and DEVICE which means any other form of data storage.
 * \todo Port creator or user should probably have option to expand this enum.
 */
-enum Bare_save_type{ CL_CPU,CL_DEVICE, CL_A, CL_B, CL_MCUXPRESSO_GPIO, CL_EEPROM };
+enum Bare_save_type{ CL_CPU,CL_DEVICE, CL_A, CL_B, CL_MCUXPRESSO_GPIO, CL_EEPROM, CL_EEPROM_PICO };
 
 /*!
  * \struct Cl_memory_area_t

@@ -21,7 +21,8 @@
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "context_lib_port.h"
+//#include "context_lib_port.h"
+#include "types.h"
 
 
 /*!
@@ -29,13 +30,13 @@
 * @{
 * \brief Wrapper over saving functions that simply calls one of them based on bus size.
 * \todo This would work better as a macro
+* \note Most of them are platform specific and don't have definitions for most ports
 */
 void cl_raw_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
 void cl_raw_send_e(cl_int_t e, cl_addr_t addr, void *other_d);
-void a_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
-void b_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
 void cl_eeprom_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
-void cl_sdk_save_gpio_e(cl_int_t pin, cl_addr_t addr,void *port_char);
+//void cl_sdk_save_gpio_e(cl_int_t pin, cl_addr_t addr,void *port_char);
+void cl_eeprom_pico_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
 
 
 /*! @}*/
@@ -46,15 +47,23 @@ void cl_sdk_save_gpio_e(cl_int_t pin, cl_addr_t addr,void *port_char);
 * @{
 * \brief Wrapper over loading functions that simply calls one of them based on bus size.
 * \todo This would work better as a macro
+* \note Most of them are platform specific and don't have definitions for most ports
 */
 void cl_raw_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 void cl_raw_rcv_e(cl_addr_t e, cl_addr_t addr, void *other_d);
-void a_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-void b_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 void cl_eeprom_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
-void cl_sdk_load_gpio_e(cl_addr_t pin, cl_addr_t backup_addr, void *port_char);
+//void cl_sdk_load_gpio_e(cl_addr_t pin, cl_addr_t backup_addr, void *port_char);
+void cl_eeprom_pico_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 
 
 /*! @} */
+
+
+void cl_sdk_save_gpio_e(cl_int_t val, cl_addr_t pin, void *port_char);
+void cl_sdk_load_gpio_e(cl_addr_t addr, cl_addr_t pin,void *port_char);
+void cl_eeprom_save_e(cl_int_t w, cl_int_t *addr, void *not_used);
+void cl_eeprom_load_e(cl_int_t *w, cl_int_t *addr, void *not_used);
+
+
 
 #endif

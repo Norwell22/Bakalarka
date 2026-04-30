@@ -18,7 +18,8 @@
  * \author    Michal Zidzik
  * \date      02.03.2026
  */
-#include "context_lib_port.h"
+//#include "context_lib_port.h"
+#include "types.h"
 
 
 /*!
@@ -102,5 +103,6 @@ cl_save_f_t sel_save_f(enum Bare_save_type save_type);
 cl_load_f_t sel_load_f(enum Bare_save_type save_type);
 
 bool l3_init();
+
 
 #endif

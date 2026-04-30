@@ -188,5 +188,10 @@ extern const Cl_peripheral_area_t ma204;
 extern const Cl_memory_area_t ma150;
 extern const Cl_memory_area_t ma151;
 
+// context_lib_port.h
+void a_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+void b_save_e(cl_int_t e, cl_addr_t addr, void *not_used);
+void a_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
+void b_load_e(cl_addr_t e, cl_addr_t addr, void *not_used);
 
 #endif
